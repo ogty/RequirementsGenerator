@@ -1,4 +1,4 @@
-# Requirements Generator
+# Requirements.txt Generator
 
 Generate `requirements.txt`.
 By default, it targets the folder directly under Desktop.
