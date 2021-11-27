@@ -18,7 +18,7 @@ class ModuleExtractor:
         result = map(lambda d: d.replace(":", "").replace(";", ""), result)
         return result
 
-    def common(self, source, prefix) -> list:
+    def common(self, source: str, prefix: list) -> list:
         result = list()
         if len(prefix) >= 2:
             process_list = map(lambda x: f"line.startswith('{x}')", prefix)
@@ -55,11 +55,9 @@ class RequirementsGenerator:
             self.get_dirs(path)
             self.get_files()
             self.main()
-        else:
-            print("Error: The selected directory does not exist.")
 
     # Get all directories in the selected directory.
-    def get_dirs(self, path) -> list:
+    def get_dirs(self, path: str) -> list:
         middle = list()
         base = os.listdir(path)
         files_dir = [f for f in base if os.path.isdir(os.path.join(path, f))]
