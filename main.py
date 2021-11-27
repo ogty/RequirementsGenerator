@@ -7,16 +7,28 @@ from src.base import RequirementsGenerator
 app = Flask(__name__)
 
 
-@app.route("/", methods=["GET", "POST"])
-def main():
-    data = {}
-    if request.method == "POST":
-        language = request.form["language"]
-        dir_name = request.form["dir_name"]
-        RequirementsGenerator(dir_name, language)
-        return render_template("main.html", data=data)
-    else:
-        return render_template("main.html", data=data)
+@app.route("/generate", methods=["POST"])
+def generate():
+    language = request.form["language"]
+    dir_name = request.form["dir_name"]
+    # RequirementsGenerator(dir_name, language)
+
+    return_json = {
+        "message": f"{language}, {dir_name}"
+    }
+    return jsonify(values=json.dumps(return_json))
+
+
+@app.route("/")
+def base():
+    return render_template("main.html")
+
+@app.route('/show', methods=['POST'])
+def show():
+    return_json = {
+        "message": f"Hello, {request.form['username']}"
+    }
+    return jsonify(values=json.dumps(return_json))
 
 if __name__ == "__main__":
     app.run(debug=True)
