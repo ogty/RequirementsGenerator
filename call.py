@@ -1,3 +1,7 @@
+import json
+import os
+import platform
+
 from src.base import RequirementsGenerator
 
 
