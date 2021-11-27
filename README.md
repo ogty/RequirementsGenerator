@@ -47,7 +47,7 @@ class ModuleExtractor:
         result = map(lambda d: d.replace(":", "").replace(";", ""), result)
         return result
 
-    def common(self, source: str, prefix: str) -> list:
+    def common(self, source: str, prefix: list) -> list:
         result = list()
         if len(prefix) >= 2:
             process_list = map(lambda x: f"line.startswith('{x}')", prefix)
