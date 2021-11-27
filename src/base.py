@@ -58,7 +58,6 @@ class RequirementsGenerator:
         else:
             print("Error: The selected directory does not exist.")
 
-    # Of course I know that there is "os.walk". But...
     # Get all directories in the selected directory.
     def get_dirs(self, path) -> list:
         middle = list()
@@ -96,10 +95,5 @@ class RequirementsGenerator:
             data = "\n".join(module_list)
             f.write(data)
 
-
 data = open("./src/settings.json", "r")
 settings = json.load(data)
-
-os_name = platform.system()
-user_name = os.getlogin()
-base_path = settings["os"][os_name].replace("<user_name>", user_name)

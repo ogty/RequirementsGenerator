@@ -11,6 +11,14 @@
 </head>
 <body>
     <h1>Requirements.txt Generator</h1>
+    <p>
+        requirements.txtを生成します。<br>
+        デフォルトではDesktop直下のフォルダを対象にしていますが、<br>
+        settings.jsonの自分にあったOSのパスを変更することで、Desktop以外をカレントディレクトリに<br>
+        設定することもできます。<br>
+        現在の対応言語は、PythonとJuliaだけですが、自分で簡単に追加することもできます。<br>
+        その場合はsettings.jsonとbase.pyを書き換える必要がありますが、詳しくはREADME.mdをご覧ください。
+    </p>
 
     <form method="POST" onsubmit="return false;">
         <div class="select_language">
@@ -26,16 +34,18 @@
         let array = [];
         $.ajax({
             type: "GET",
-            url: "{{ url_for('static', filename='tree.json') }}",
+            // url: "{{ url_for('static', filename='tree.json') }}",
+            url: "../static/tree.json",
             dataType: "json"
         })
         .then(
             function(json) {
                 console.log("Success");
+                console.log(json)
                 createJSTree(json)
             },
             function() {
-                console.log("failure");
+                console.log("Failure");
             }
         );
 

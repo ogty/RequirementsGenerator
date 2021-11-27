@@ -10,7 +10,7 @@
         ]
     }, 
     "os": {
-        "Windows": "C:\\Users\\<user_name>\\",
-        "Darwin": "/Users/<user_name>/"
+        "Windows": "C:\\Users\\<user_name>\\Desktop",
+        "Darwin": "/Users/<user_name>/Desktop"
     }
 }
