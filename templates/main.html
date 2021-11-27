@@ -5,9 +5,10 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Requirements.txt Generator</title>
+
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.3.2/themes/default/style.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.3.2/jstree.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.3.2/themes/default/style.min.css">
 </head>
 <body>
     <h1>Requirements.txt Generator</h1>
@@ -55,6 +56,7 @@
             $('#select_now').empty();
         }
 
+        // Display the tree structure and store the selected values in "dirs"
         function createJSTree(jsondata) {
             $('#SimpleJSTree').jstree({
                 'core': {
