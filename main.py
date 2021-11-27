@@ -37,17 +37,20 @@ def generate_tree():
 
         main_data["data"].append(base_dict)
 
-    with open('./static/tree.json', 'w', encoding="utf-8") as f:
+    with open("./static/tree.json", "w", encoding="utf-8") as f:
         json.dump(main_data, f, ensure_ascii=False, indent=2)
 
-@app.route("/generate", methods=["GET", "POST"])
+@app.route("/generate", methods=["POST"])
 def generate():
     language = request.form["language"]
     selected_dirs = request.form["dir_list"]
     dirs = set(selected_dirs.split(","))
 
+    print("------------------------------------------")
     print(language)
     print(dirs)
+    print("------------------------------------------")
+
     # for dir in dirs:
     #     RequirementsGenerator(dir, language)
 
