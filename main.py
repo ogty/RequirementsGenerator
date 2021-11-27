@@ -18,17 +18,9 @@ def generate():
     }
     return jsonify(values=json.dumps(return_json))
 
-
 @app.route("/")
 def base():
     return render_template("main.html")
-
-@app.route('/show', methods=['POST'])
-def show():
-    return_json = {
-        "message": f"Hello, {request.form['username']}"
-    }
-    return jsonify(values=json.dumps(return_json))
 
 if __name__ == "__main__":
     app.run(debug=True)
