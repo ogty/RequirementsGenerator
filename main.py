@@ -44,12 +44,7 @@ def generate_tree():
 def generate():
     language = request.form["language"]
     selected_dirs = request.form["dir_list"]
-    dirs = set(selected_dirs.split(","))
-
-    print("------------------------------------------")
-    print(language)
-    print(dirs)
-    print("------------------------------------------")
+    dirs = list(set(selected_dirs.split(",")))
 
     # for dir in dirs:
     #     RequirementsGenerator(dir, language)
