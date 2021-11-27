@@ -88,7 +88,7 @@ class RequirementsGenerator:
 
 
 # Load settings.json
-data = open("./src/settings.json", "r")
+data = open("./settings.json", "r")
 settings = json.load(data)
 
 # Get OS name and User name
