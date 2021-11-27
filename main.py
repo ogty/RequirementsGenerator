@@ -43,13 +43,13 @@ def generate_tree():
 @app.route("/generate", methods=["POST"])
 def generate():
     language = request.form["language"]
-    dir_list = request.form["dir_list"]
-    print(dir_list)
-    # RequirementsGenerator(dir_name, language)
+    selected_dirs = request.form["dir_list"]
+    dirs = set(selected_dirs.split(","))
 
-    return_json = {
-        "message": f"{language}, {dir_list}"
-    }
+    for dir in dirs:
+        RequirementsGenerator(dir, language)
+
+    return_json = {"message": "Success"}
     return jsonify(values=json.dumps(return_json))
 
 @app.route("/")
