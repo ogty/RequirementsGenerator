@@ -96,10 +96,14 @@ os_name = platform.system()
 user_name = os.getlogin()
 
 # Set path
-path = settings["os"][os_name].replace("<user_name>", user_name)
+base_path = settings["os"][os_name].replace("<user_name>", user_name)
 
 # Run
 example_dir = "Desktop/myapp"
 example_lang = "python"
+path = base_path + example_dir
 
-RequirementsGenerator(path + example_dir, example_lang)
+if os.path.exists(path):
+    RequirementsGenerator(path, example_lang)
+else:
+    print("Error: The selected directory does not exist.")
