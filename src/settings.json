@@ -1,0 +1,16 @@
+{
+    "languages": {
+        "python": [
+            "py",
+            ["import", "from"]
+        ], 
+        "julia": [
+            "jl",
+            ["using"]
+        ]
+    }, 
+    "os": {
+        "Windows": "C:\\Users\\<user_name>\\",
+        "Darwin": "/Users/<user_name>/"
+    }
+}

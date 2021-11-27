@@ -1,46 +1,40 @@
 import autopep8
-from flask import Flask
-from flask import render_template, request
+import json
 import os
 import platform
 
-app = Flask(__name__)
-
-
-language = {
-    "python": "py",
-    "julia": "jl",
-}
 
 # Module Extractor
 class ModuleExtractor:
-    def python(self, source) -> list:
+    def python(self, source: str, lang: str) -> list:
+        prefix = settings["languages"][lang][1]
         fixed_source = autopep8.fix_code(source)
+        result = self.common(fixed_source, prefix)
+        return result
+
+    def julia(self, source: str, lang: str) -> list:
+        prefix = settings["languages"][lang][1]
+        result = self.common(source, prefix)
+        result = map(lambda d: d.replace(":", "").replace(";", ""), result)
+        return result
+
+    def common(self, source, prefix) -> list:
         result = list()
-        source_list = fixed_source.split("\n")
+        if len(prefix) >= 2:
+            process_list = map(lambda x: f"line.startswith('{x}')", prefix)
+            process = " or ".join(process_list)
+        elif len(prefix) == 1:
+            process = "line.startswith('{prefix[0]}')"
+
+        source_list = source.split("\n")
         for line in source_list:
-            if line.startswith("import") or line.startswith("from"):
+            if eval(process):
                 module = line.split(" ")[1]
                 if not module.startswith("."):
                     module = module.split(".")[0]
                     result.append(module)
 
         return result
-
-    def julia(self, source) -> list:
-        result = list()
-        source_list = source.split("\n")
-        for line in source_list:
-            if line.startswith("using"):
-                module = line.split(" ")[1]
-                if not module.startswith("."):
-                    module = module.split(".")[0]
-                    module = module.replace(":", "").replace(";", "")
-                    result.append(module)   
-
-        return result             
-
-replacement = lambda d: d.replace(":", "").replace(";", "")
 
 class RequirementsGenerator:
     # initialize valiables and run function
@@ -71,7 +65,7 @@ class RequirementsGenerator:
         for dir in self.all_dir:
             base = os.listdir(dir)
             files = [f for f in base if os.path.isfile(os.path.join(dir, f))]
-            files = list(filter(lambda f: f.endswith(language[self.lang]), files))
+            files = list(filter(lambda f: f.endswith(settings["languages"][self.lang][0]), files))
             files = list(map(lambda f: f"{dir}/{f}", files))
             self.all_file += files
 
@@ -83,7 +77,7 @@ class RequirementsGenerator:
         for file_path in self.all_file:
             with open(file_path, "r", encoding="utf-8") as f:
                 source = f.read()
-            module_list += getattr(module_extractor, self.lang)(source)
+            module_list += getattr(module_extractor, self.lang)(source, self.lang)
 
         # Generate
         module_list = list(set(module_list))
@@ -92,36 +86,20 @@ class RequirementsGenerator:
             data = "\n".join(module_list)
             f.write(data)
 
-# Get all tree
-def all_tree() -> list:
-    user_name = os.getlogin()
-    os_name = platform.system()
 
-    if os_name == "Windows":
-        path = f"C:\\Users\\{user_name}\\"
-        result = os.walk(path)
-    elif os_name == "Darwin":
-        path = f"/Users/{user_name}/"
-        result = os.walk(path)
+# Load settings.json
+data = open("./src/settings.json", "r")
+settings = json.load(data)
 
-    return result
+# Get OS name and User name
+os_name = platform.system()
+user_name = os.getlogin()
 
-@app.route("/", methods=["GET", "POST"])
-def main():
-    data = {
-        "tree": list(),
-        "error": "Error"
-    }
-    if request.method == "POST":
-        base_dir = request.form["dirname"]
-        language = request.form["language"]
-        # RequirementsGenerator(base_dir, language)
-        return render_template("main.html", data=data)
-    else:
-        result = all_tree()
-        data["tree"] = result
-        return render_template("main.html", data=data)
+# Set path
+path = settings["os"][os_name].replace("<user_name>", user_name)
 
+# Run
+example_dir = "Desktop/myapp"
+example_lang = "python"
 
-if __name__ == "__main__":
-    app.run(debug=True)
+RequirementsGenerator(path + example_dir, example_lang)
