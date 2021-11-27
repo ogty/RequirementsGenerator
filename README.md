@@ -32,6 +32,7 @@ But before calling it, each one performs its own processing; in Python, the lint
 So it is easy to add a new language and implement your own processing.
 
 The common function is probably supposed to be somewhat similar in all languages, so if it is different, you may want to change it.
+
 ```python
 class ModuleExtractor:
     def python(self, source: str, lang: str) -> list:
@@ -46,7 +47,7 @@ class ModuleExtractor:
         result = map(lambda d: d.replace(":", "").replace(";", ""), result)
         return result
 
-    def common(self, source, prefix) -> list:
+    def common(self, source: str, prefix: str) -> list:
         result = list()
         if len(prefix) >= 2:
             process_list = map(lambda x: f"line.startswith('{x}')", prefix)
