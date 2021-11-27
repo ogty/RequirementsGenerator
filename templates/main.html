@@ -8,5 +8,22 @@
 </head>
 <body>
     <h1>Requirements Generator</h1>
+    <p>
+        note: Handles folders directly under the user directory. <br>
+    </p>
+    <h3>Supported languages</h3>
+    <ul>
+        <li>Python</li>
+        <li>Julia</li>
+    </ul>
+
+    <form action="" method="POST">
+        <label>Directory Name: </label><input type="text" name="dirname"><br>
+        <label>Language: </label><input type="text" name="language"><br>
+        <button type="submit">Generate</button>
+    </form>
+
+    {{ data.tree }}
+
 </body>
 </html>

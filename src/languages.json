@@ -1,0 +1,11 @@
+{
+    "Python": [
+        "py",
+        ["import", "from"]
+    ],
+    "Julia": [
+        "jl",
+        ["using"],
+        ["module.split('.')[0]"]
+    ]
+}
