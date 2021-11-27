@@ -7,7 +7,7 @@
     <title>Requirements Generator</title>
 </head>
 <body>
-    <h1>Requirements Generator</h1>
+    <h1>Requirements.txt Generator</h1>
 
     <h3>Supported languages</h3>
     <ul>
@@ -15,9 +15,16 @@
         <li>Julia</li>
     </ul>
 
-    <form action="" method="POST">
-        <label>Directory Name: </label><input type="text" name="dirname"><br>
-        <label>Language: </label><input type="text" name="language"><br>
+    <hr>
+
+    <form method="POST">
+        <div class="select_language">
+            <input type="radio" name="language" value="python" checked>Python<br>
+            <input type="radio" name="language" value="julia">Julia
+        </div>
+        <div class="select_dir">
+            <label>Directory Name: </label><input type="text" name="dir_name">
+        </div>
         <button type="submit">Generate</button>
     </form>
 </body>

@@ -39,14 +39,24 @@ class ModuleExtractor:
 class RequirementsGenerator:
     # initialize valiables and run function
     def __init__(self, dir_name: str, lang: str) -> None:
-        self.all_dir: list = [dir_name]
+        # Get system information and set path
+        os_name = platform.system()
+        user_name = os.getlogin()
+        base_path = settings["os"][os_name].replace("<user_name>", user_name)
+        path = base_path + dir_name
+
+        self.path = path
+        self.all_dir: list = [path]
         self.all_file = list()
-        self.base_dir = dir_name
         self.lang = lang
 
-        self.get_dirs(dir_name)
-        self.get_files()
-        self.main()
+        # Run
+        if os.path.exists(path):
+            self.get_dirs(path)
+            self.get_files()
+            self.main()
+        else:
+            print("Error: The selected directory does not exist.")
 
     # Of course I know that there is "os.walk". But...
     # Get all directories in the selected directory.
@@ -82,28 +92,14 @@ class RequirementsGenerator:
         # Generate
         module_list = list(set(module_list))
         module_list.sort()
-        with open(f"{self.base_dir}/requirements.txt", "w", encoding="utf-8") as f:
+        with open(f"{self.path}/requirements.txt", "w", encoding="utf-8") as f:
             data = "\n".join(module_list)
             f.write(data)
 
 
-# Load settings.json
-data = open("./settings.json", "r")
+data = open("./src/settings.json", "r")
 settings = json.load(data)
 
-# Get OS name and User name
 os_name = platform.system()
 user_name = os.getlogin()
-
-# Set path
 base_path = settings["os"][os_name].replace("<user_name>", user_name)
-
-# Run
-example_dir = "Desktop/myapp"
-example_lang = "python"
-path = base_path + example_dir
-
-if os.path.exists(path):
-    RequirementsGenerator(path, example_lang)
-else:
-    print("Error: The selected directory does not exist.")
