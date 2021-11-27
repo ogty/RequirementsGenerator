@@ -1,0 +1,11 @@
+{
+    "data": [
+        {"id": "root", "parent": "#", "text": "Root"},
+        {"id": "ajson1", "parent": "root", "text": "Simple root node"},
+        {"id": "ajson2", "parent": "root", "text": "Root node 2"},
+        {"id": "ajson3", "parent": "ajson2", "text": "Child 1"},
+        {"id": "ajson4", "parent": "ajson2", "text": "Child 2"},
+        {"id": "ajson5", "parent": "ajson3", "text": "Child 2"},
+        {"id": "ajson6", "parent": "ajson3", "text": "Child 2"}
+    ]
+}

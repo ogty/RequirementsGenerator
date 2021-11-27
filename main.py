@@ -10,11 +10,11 @@ app = Flask(__name__)
 @app.route("/generate", methods=["POST"])
 def generate():
     language = request.form["language"]
-    dir_name = request.form["dir_name"]
+    dir_list = request.form["dir_list"]
     # RequirementsGenerator(dir_name, language)
 
     return_json = {
-        "message": f"{language}, {dir_name}"
+        "message": f"{language}, {dir_list}"
     }
     return jsonify(values=json.dumps(return_json))
 

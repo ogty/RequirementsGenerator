@@ -23,28 +23,33 @@
     <div id="result"></div>
 
     <script>
-        $(function () {
-            var jsondata = [
-                {"id": "root", "parent": "#", "text": "Root"},
-                {"id": "ajson1", "parent": "root", "text": "Simple root node"},
-                {"id": "ajson2", "parent": "root", "text": "Root node 2"},
-                {"id": "ajson3", "parent": "ajson2", "text": "Child 1"},
-                {"id": "ajson4", "parent": "ajson2", "text": "Child 2"},
-                {"id": "ajson5", "parent": "ajson3", "text": "Child 2"},
-                {"id": "ajson6", "parent": "ajson3", "text": "Child 2"},
-            ];
-            createJSTree(jsondata);
-        });
+        let array = [];
+        $.ajax({
+            type: "GET",
+            url: "{{ url_for('static', filename='tree.json') }}",
+            dataType: "json"
+        })
+        .then(
+            function(json) {
+                console.log("Success");
+                createJSTree(json)
+            },
+            function() {
+                console.log("failure");
+            }
+        );
 
         function createJSTree(jsondata) {
             $('#SimpleJSTree').jstree({
                 'core': {
-                    'data': jsondata
+                    'data': jsondata["data"]
                 },
-                checkbox: {
-                    "keep_selected_style": false
-                },
-                plugins: ['checkbox']
+            })
+            .on('changed.jstree', function (e, data) {
+                for(let i = 0; i < data.selected.length; i++) {
+                    array.push(data.instance.get_node(data.selected[i]).text);
+                }
+                console.log(array.join(','));
             })
         }
 
@@ -53,7 +58,7 @@
                 type: "POST",
                 data: {
                     "language": $("input:radio[name='lang']:checked").val(),
-                    "dir_name": $('#SimpleJSTree').jstree().get_selected(true)[0].text
+                    "dir_list": array.join(',')
                 },
                 dataType: "json",
             }).done(function(data) {
@@ -62,7 +67,7 @@
                 console.log("Communication successful.");
             }).fail(function(data) {
                 console.log("Communication failed.");
-        });
+            });
         }
     </script>
 </body>
