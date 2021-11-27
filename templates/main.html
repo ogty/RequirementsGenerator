@@ -22,7 +22,7 @@
     </form>
     <div id="result"></div>
 
-    <script type="text/javascript">
+    <script>
         $(function () {
             var jsondata = [
                 {"id": "root", "parent": "#", "text": "Root"},
@@ -62,7 +62,7 @@
                 console.log("Communication successful.");
             }).fail(function(data) {
                 console.log("Communication failed.");
-          });
+        });
         }
     </script>
 </body>
