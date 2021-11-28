@@ -39,6 +39,8 @@ However, it is easier to run "install.bat".
 
 The built executable will be generated directly under dist.
 
+I don't know, I haven't tried it yet, but you may be able to use the application by downloading this repository and running the exe file...
+
 ***
 
 ## To add a language
