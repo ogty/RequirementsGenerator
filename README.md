@@ -5,6 +5,7 @@
  [![Download Now](https://img.shields.io/badge/-Download%20Now!-%2322A6F2)](https://github.com/ogty/RequirementsGenerator/releases/download/v1.0.1/ReqirementsGenerator.zip)
 
 </div>
+
 ## Demo
 
 ![demo](./static/demo.gif)
