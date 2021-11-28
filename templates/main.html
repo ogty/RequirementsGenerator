@@ -47,12 +47,12 @@
                     </div>
                     
                     <!-- button -->
-                    <div id="setting_box" class="btn-group-vertical">
+                    <div id="setting_box" class="btn-group">
                         <button onclick="value_reset()" class="btn btn-outline-dark">Reset</button>
                         <button onclick="generate()" class="btn btn-outline-dark">Generate</button>
                     </div>
                 </div>
-                
+
                 <!-- display tree -->
                 <div class="select_dirs">
                     <div id="SimpleJSTree"></div>
@@ -128,10 +128,12 @@
                 })
             }
 
+            // close message function
+            function close_message() {
+                $(".message").empty();
+            }
             // Function to send data to the backend(Main Function)
             function generate() {
-                console.log($("input:radio[name='lang']:checked").val());
-                console.log(dirs.join(','));
                 $.ajax("/generate", {
                     type: "POST",
                     data: {
@@ -141,13 +143,15 @@
                     dataType: "json",
                 }).done(function (data) {
                     const message = "Communication successful!"
+                    const close_btn = "<button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close' onclick='close_message()'></button>"
                     $(".message").empty();
-                    $(".message").append("<div class='alert alert-success' role='alert'>" + message + "</div>");
+                    $(".message").append("<div class='alert alert-success alert-dismissible fade show' role='alert'>" + message + close_btn + "</div>");
                     console.log("Communication successful!");
                 }).fail(function (data) {
                     const message = "Communication failed!"
+                    const close_btn = "<button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close' onclick='close_message()'></button>"
                     $(".message").empty();
-                    $(".message").append("<div class='alert alert-danger' role='alert'>" + message + "</div>");
+                    $(".message").append("<div class='alert alert-danger alert-dismissible fade show' role='alert'>" + message + close_btn + "</div>");
                     console.log("Communication failed!");
                 });
             }
