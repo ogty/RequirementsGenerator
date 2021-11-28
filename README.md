@@ -34,15 +34,21 @@
 
 To build the application and install the required libraries, run the following command. The generated file will be in "exe" format and will work only on Windows. It will take a few minutes to complete execution.
 
+ - `>` : Windows
+ - `$` : Mac
+
 ```bash
 > pip install -r requirements.txt
 > pyinstaller -w -F --add-data "templates;templates" --add-data "static;static" --add-data "src;src" main.py
+$ pip3 install -r requirements.txt
+$ pyinstaller -w -F main.py
 ```
 
 However, it is easier to run "install.bat".
 
 ```bash
 > install.bat
+$ source install.sh
 ```
 
 The built executable will be generated directly under dist.
