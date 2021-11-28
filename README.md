@@ -85,7 +85,7 @@ The language name has an array, where the first index contains the extension. Th
     }, 
     "os": {
         "Windows": "C:\\Users\\<user_name>\\Desktop",
-        "Darwin": "/Users/<user_name>/Desktop"
+        "Darwin": "//Users//<user_name>//Desktop"
     }
 }
 ```
