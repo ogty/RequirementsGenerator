@@ -10,6 +10,7 @@
  - [x] Basic Features
  - [ ] Display detailed information about the selected directory.
  - [ ] Feature to select a library
+ - [ ] Can be built on MacOS
 
 ***
 
