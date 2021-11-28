@@ -91,5 +91,5 @@ class RequirementsGenerator:
             data = "\n".join(module_list)
             f.write(data)
 
-data = open("./src/settings.json", "r")
+data = open("../src/settings.json", "r")
 settings = json.load(data)

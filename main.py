@@ -3,6 +3,7 @@ from flask import render_template, request, jsonify
 import json
 import os
 import platform
+from pyfladesk import init_gui
 
 from src.base import RequirementsGenerator
 
@@ -35,7 +36,7 @@ def generate_tree(settings: dict):
 
         main_data["data"].append(base_dict)
 
-    with open("./static/tree.json", "w", encoding="utf-8") as f:
+    with open("../static/tree.json", "w", encoding="utf-8") as f:
         json.dump(main_data, f, ensure_ascii=False, indent=2)
 
 @app.route("/generate", methods=["POST"])
@@ -52,12 +53,12 @@ def generate():
 
 @app.route("/")
 def base():
-    data = open("./src/settings.json", "r")
+    data = open("../src/settings.json", "r")
     settings = json.load(data)
-    generate_tree(settings)
 
+    generate_tree(settings)
     lang_data = {lang.capitalize(): lang for lang in settings["languages"]}
     return render_template("main.html", data=lang_data)
 
 if __name__ == "__main__":
-    app.run()
+    init_gui(app, window_title="Requirements.txt Generator")

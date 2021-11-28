@@ -67,3 +67,19 @@ class ModuleExtractor:
 
         return result
 ```
+
+To build the application, execute the following command. The generated file will be in "exe" format and will run on windows only. It will take a few minutes to finish running.
+
+```bash
+> pip install pyfladesk
+> pip install pyinstaller
+> pyinstaller -w -F --add-data "templates;templates" --add-data "static;static" --add-data "src;src" main.py
+```
+
+However, it is easier to run "install.bat".
+
+```bash
+> install.bat
+```
+
+The built executable will be generated directly under dist.
