@@ -1,7 +1,7 @@
 # Requirements.txt Generator
 
 [![Download Now](https://img.shields.io/badge/-Download%20Now!-%2322A6F2)](https://github.com/ogty/RequirementsGenerator/releases)
-
+[![GitHub tag (latest SemVer)](https://img.shields.io/github/v/tag/coreybutler/nvm-windows?label=Latest%20Release&style=social&x=1)]((https://github.com/ogty/RequirementsGenerator/releases))
 ## Demo
 
 ![demo](./static/demo.gif)
