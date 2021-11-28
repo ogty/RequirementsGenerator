@@ -83,3 +83,9 @@ However, it is easier to run "install.bat".
 ```
 
 The built executable will be generated directly under dist.
+
+
+Features to be implemented
+ - [x] Basic Features
+ - [ ] Display detailed information about the selected directory.
+ - [ ] Feature to select a library
