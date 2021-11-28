@@ -69,4 +69,5 @@ def base():
     return render_template("main.html", data=lang_data)
 
 if __name__ == "__main__":
+    # app.run(debug=True)
     init_gui(app, window_title="Requirements.txt Generator")
