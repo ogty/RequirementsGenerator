@@ -37,17 +37,23 @@ To build the application and install the required libraries, run the following c
  - `>` : Windows
  - `$` : Mac
 
-```bash
+```console
 > pip install -r requirements.txt
 > pyinstaller -w -F --add-data "templates;templates" --add-data "static;static" --add-data "src;src" main.py
+```
+
+```bash
 $ pip3 install -r requirements.txt
 $ pyinstaller -w -F main.py
 ```
 
 However, it is easier to run "install.bat".
 
-```bash
+```console
 > install.bat
+```
+
+```bash
 $ source install.sh
 ```
 
