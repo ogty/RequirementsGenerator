@@ -4,7 +4,7 @@
 
  [![Download Now](https://img.shields.io/badge/-Download%20Now!-%2322A6F2)](https://github.com/ogty/RequirementsGenerator/releases/download/v1.0.1/ReqirementsGenerator.zip)
  ![release](https://img.shields.io/github/v/release/ogty/RequirementsGenerator?style=social)
- ![size](<img alt="GitHub code size in bytes" src="https://img.shields.io/github/languages/code-size/ogty/RequirementsGenerator?style=social">)
+ ![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/ogty/RequirementsGenerator?style=social)
  
 </div>
 
