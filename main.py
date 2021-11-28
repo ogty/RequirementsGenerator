@@ -22,9 +22,17 @@ def generate_tree(settings: dict):
             "parent": "",
             "text": ""
             }
-        dir_constract = data[0]
-        dir_list = dir_constract.split("\\")
-        parent = "\\".join(dir_list[:-1])
+        
+        if os_name == "Windows":
+            dir_constract = data[0]
+            dir_list = dir_constract.split("\\")
+            parent = "\\".join(dir_list[:-1])
+
+        elif os_name == "Darwin":
+            dir_constract = data[0].replace("/", "//")
+            dir_list = dir_constract.split("//")
+            parent = "//".join(dir_list[:-1])
+            
         child = dir_list[-1]
 
         base_dict["id"] = dir_constract
