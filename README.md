@@ -1,5 +1,7 @@
 # Requirements.txt Generator
 
+[![Download Now](https://img.shields.io/badge/-Download%20Now!-%2322A6F2)](https://github.com/ogty/RequirementsGenerator/releases)
+
 ## Demo
 
 ![demo](./static/demo.gif)
