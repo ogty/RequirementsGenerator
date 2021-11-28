@@ -45,7 +45,6 @@ def generate():
     language = request.form["language"]
     selected_dirs = request.form["dir_list"]
     dirs = list(set(selected_dirs.split(",")))
-    print(dirs)
 
     for dir in dirs:
         print(dir, language)

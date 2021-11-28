@@ -1,5 +1,7 @@
 # Requirements.txt Generator
 
+![demo](./static/demo.gif)
+
 Generate `requirements.txt`.
 By default, it targets the folder directly under Desktop.
 However, you can also set a directory other than Desktop as the current directory by changing the path of the OS that suits you in `settings.json`.
