@@ -9,9 +9,7 @@ from src.base import RequirementsGenerator
 app = Flask(__name__)
 
 
-def generate_tree():
-    data = open("./src/settings.json", "r")
-    settings = json.load(data)
+def generate_tree(settings: dict):
     os_name = platform.system()
     user_name = os.getlogin()
     path = settings["os"][os_name].replace("<user_name>", user_name)
@@ -50,13 +48,16 @@ def generate():
         print(dir, language)
         RequirementsGenerator(dir, language)
 
-    return_json = {"message": "Success"}
-    return jsonify(values=json.dumps(return_json))
+    return jsonify()
 
 @app.route("/")
 def base():
-    generate_tree()
-    return render_template("main.html")
+    data = open("./src/settings.json", "r")
+    settings = json.load(data)
+    generate_tree(settings)
+
+    lang_data = {lang.capitalize(): lang for lang in settings["languages"]}
+    return render_template("main.html", data=lang_data)
 
 if __name__ == "__main__":
     app.run()
