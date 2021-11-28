@@ -10,6 +10,8 @@
  - [x] Basic Features
  - [ ] Display detailed information about the selected directory.
  - [ ] Feature to select a library
+ - [x] Can be built on Windows
+ - [ ] Can be built on MacOS
 
 ***
 
