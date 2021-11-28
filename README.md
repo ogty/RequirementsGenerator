@@ -22,7 +22,7 @@
 
 ***
 
-## Install and build the library
+## Install the library and build the app
 
 To build the application and install the required libraries, run the following command. The generated file will be in "exe" format and will work only on Windows. It will take a few minutes to complete execution.
 
