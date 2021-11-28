@@ -1,6 +1,38 @@
 # Requirements.txt Generator
 
+## Demo
+
 ![demo](./static/demo.gif)
+
+***
+
+## Features
+ - [x] Basic Features
+ - [ ] Display detailed information about the selected directory.
+ - [ ] Feature to select a library
+
+***
+
+## Install and build the library
+
+To build the application and install the required libraries, run the following command. The generated file will be in "exe" format and will work only on Windows. It will take a few minutes to complete execution.
+
+```bash
+> pip install -r requirements.txt
+> pyinstaller -w -F --add-data "templates;templates" --add-data "static;static" --add-data "src;src" main.py
+```
+
+However, it is easier to run "install.bat".
+
+```bash
+> install.bat
+```
+
+The built executable will be generated directly under dist.
+
+***
+
+## To add a language
 
 Generate `requirements.txt`.
 By default, it targets the folder directly under Desktop.
@@ -67,25 +99,3 @@ class ModuleExtractor:
 
         return result
 ```
-
-To build the application, execute the following command. The generated file will be in "exe" format and will run on windows only. It will take a few minutes to finish running.
-
-```bash
-> pip install pyfladesk
-> pip install pyinstaller
-> pyinstaller -w -F --add-data "templates;templates" --add-data "static;static" --add-data "src;src" main.py
-```
-
-However, it is easier to run "install.bat".
-
-```bash
-> install.bat
-```
-
-The built executable will be generated directly under dist.
-
-
-Features to be implemented
- - [x] Basic Features
- - [ ] Display detailed information about the selected directory.
- - [ ] Feature to select a library
