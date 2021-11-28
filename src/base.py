@@ -38,12 +38,11 @@ class ModuleExtractor:
 
 class RequirementsGenerator:
     # initialize valiables and run function
-    def __init__(self, dir_name: str, lang: str) -> None:
+    def __init__(self, path: str, lang: str) -> None:
         # Get system information and set path
         os_name = platform.system()
         user_name = os.getlogin()
         base_path = settings["os"][os_name].replace("<user_name>", user_name)
-        path = base_path + dir_name
 
         self.path = path
         self.all_dir: list = [path]
@@ -51,10 +50,9 @@ class RequirementsGenerator:
         self.lang = lang
 
         # Run
-        if os.path.exists(path):
-            self.get_dirs(path)
-            self.get_files()
-            self.main()
+        self.get_dirs(path)
+        self.get_files()
+        self.main()
 
     # Get all directories in the selected directory.
     def get_dirs(self, path: str) -> list:

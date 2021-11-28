@@ -69,7 +69,7 @@
         <script>
             // Array to store the selected directory names.
             let dirs = [];
-    
+            let send_dirs = [];
             // Asynchronous processing for JSON data acquisition
             $.ajax({
                 type: "GET",
@@ -90,6 +90,7 @@
             // Clear the selected value.
             function value_reset() {
                 dirs = [];
+                send_dirs = [];
                 $("#select_now").empty();
             }
     
@@ -120,6 +121,7 @@
                 .on("changed.jstree", function (e, data) {
                     for (let i = 0; i < data.selected.length; i++) {
                         dirs.push(data.instance.get_node(data.selected[i]).text);
+                        send_dirs.push(data.instance.get_node(data.selected[i]).id);
                     }
                     $("#select_now").empty();
                     for (let i = 0; i < dirs.length; i++) {
@@ -138,7 +140,7 @@
                     type: "POST",
                     data: {
                         "language": $("input:radio[name='lang']:checked").val(),
-                        "dir_list": dirs.join(',')
+                        "dir_list": send_dirs.join(',')
                     },
                     dataType: "json",
                 }).done(function (data) {
