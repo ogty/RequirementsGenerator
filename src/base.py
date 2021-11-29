@@ -1,4 +1,3 @@
-from re import split
 import autopep8
 import json
 import os
