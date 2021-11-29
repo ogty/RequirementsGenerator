@@ -10,16 +10,19 @@ class ModuleExtractor:
         prefix = settings["languages"][lang][1]
         fixed_source = autopep8.fix_code(source)
         result = self.common(fixed_source, prefix)
+        
         return result
 
     def julia(self, source: str, lang: str) -> list:
         prefix = settings["languages"][lang][1]
         result = self.common(source, prefix)
         result = map(lambda d: d.replace(":", "").replace(";", ""), result)
+
         return result
 
     def common(self, source: str, prefix: list) -> list:
         result = list()
+
         if len(prefix) >= 2:
             process_list = map(lambda x: f"line.startswith('{x}')", prefix)
             process = " or ".join(process_list)
@@ -91,5 +94,5 @@ class RequirementsGenerator:
             data = "\n".join(module_list)
             f.write(data)
 
-data = open("../src/settings.json", "r")
+data = open(f"{os.getcwd()}\\src\\settings.json", "r")
 settings = json.load(data)
