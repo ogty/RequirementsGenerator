@@ -11,10 +11,12 @@ app = Flask(__name__)
 
 
 def generate_tree(settings: dict):
+    # Get all directory information directly under the default path written in settings.json
     os_name = platform.system()
     user_name = os.getlogin()
     path = settings["os"][os_name].replace("<user_name>", user_name)
     
+    # Store the retrieved information in a dict
     main_data = {"data": list()}
     for data in os.walk(path):
         base_dict = {
@@ -47,6 +49,7 @@ def generate_tree(settings: dict):
     with open(f"{os.getcwd()}\\static\\tree.json", "w", encoding="utf-8") as f:
         json.dump(main_data, f, ensure_ascii=False, indent=2)
 
+# generate requirements.txt(main)
 @app.route("/generate", methods=["POST"])
 def generate():
     language = request.form["language"]
@@ -58,10 +61,12 @@ def generate():
 
     return jsonify()
 
+# update directory information
 @app.route("/update", methods=["POST"])
 def update():
     data = open(f"{os.getcwd()}\\src\\settings.json", "r")
     settings = json.load(data)
+
     generate_tree(settings)
 
     return jsonify()
@@ -71,10 +76,12 @@ def base():
     data = open(f"{os.getcwd()}\\src\\settings.json", "r")
     settings = json.load(data)
 
+    # initialization
     if not os.path.exists(f"{os.getcwd()}\\static\\tree.json"):
         generate_tree(settings)
 
     lang_data = {lang.capitalize(): lang for lang in settings["languages"]}
+
     return render_template("main.html", data=lang_data)
 
 if __name__ == "__main__":

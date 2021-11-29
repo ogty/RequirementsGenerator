@@ -67,11 +67,14 @@
         </form>
     </main>
     <footer>
+        <!-- I'll put a link to my github account somehow. -->
         <div class="outer">
             <div class="inner">
                 <a href="https://github.com/ogty/" target="_blank"><i class="fab fa-github"></i><span class="name">ogty</span></a>
             </div>
         </div>
+
+        <!-- Here's the javascript -->
         <script>
             // Array to store the selected directory names.
             let dirs = [];
@@ -153,7 +156,7 @@
                     const message = "Communication successful!"
                     const close_btn = "<button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close' onclick='close_message()'></button>"
 
-                    $("#select_now").empty();
+                    value_reset()
                     $(".message").empty();
                     $(".message").append("<div class='alert alert-success alert-dismissible fade show' role='alert'>" + message + close_btn + "</div>");
 
