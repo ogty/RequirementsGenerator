@@ -140,3 +140,5 @@ class ModuleExtractor:
         map(lambda x: result.pop(x), embedded)
         return result
 ```
+
+Note: This RequirementsGenerator is based on the assumption that users will write some clean code.

@@ -81,4 +81,5 @@ data = open(f"{os.getcwd()}\\src\\settings.json", "r")
 settings = json.load(data)
 
 if __name__ == "__main__":
+    # os.chdir('../')
     init_gui(app, window_title="Requirements.txt Generator")

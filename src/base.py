@@ -1,3 +1,4 @@
+from re import split
 import autopep8
 import json
 import os
@@ -12,12 +13,30 @@ class ModuleExtractor:
 
     def julia(self, source: str, lang: str) -> list:
         result = self.common(lang, source)
-        result = map(lambda d: d.replace(":", "").replace(";", ""), result)
+        result = list(map(lambda d: d.replace(":", "").replace(";", ""), result))
         return result
 
     def go(self, source: str, lang: str) -> list:
-        # This language requires a lot of processing.
-        result = self.common(lang, source)
+        result = list()
+        embedded = settings["languages"][lang][2]
+
+        splited_source = source.split()
+        start = splited_source.index("import")
+
+        if splited_source[start + 1] == "(":
+            count = start + 2
+            while True:
+                module = splited_source[count]
+                if module == ")":
+                    break
+                result.append(module)
+                count += 1
+        else:
+            result.append(splited_source[start + 1])
+
+        result = list(map(lambda x: x.replace("\"", ""), result))
+        result = list(map(lambda x: "" if x.split("/")[0] in embedded else x, result))
+
         return result
 
     def common(self, lang: str, source: str) -> list:
@@ -26,10 +45,10 @@ class ModuleExtractor:
         embedded = settings["languages"][lang][2]
 
         if len(prefix) >= 2:
-            process_list = map(lambda x: f"line.startswith('{x}')", prefix)
+            process_list = list(map(lambda x: f"line.startswith('{x}')", prefix))
             process = " or ".join(process_list)
         elif len(prefix) == 1:
-            process = "line.startswith('{prefix[0]}')"
+            process = f"line.startswith('{prefix[0]}')"
 
         source_list = source.split("\n")
         for line in source_list:
@@ -40,7 +59,7 @@ class ModuleExtractor:
                     result.append(module)
 
         # Remove embedded libraries
-        map(lambda x: result.pop(x), embedded)
+        result = list(map(lambda x: None if x in embedded else x, result))
         return result
 
 class RequirementsGenerator(ModuleExtractor):
@@ -79,17 +98,24 @@ class RequirementsGenerator(ModuleExtractor):
         # Module extract
         module_extractor = ModuleExtractor()
         module_list = list()
+
         for file_path in self.all_file:
             with open(file_path, "r", encoding="utf-8") as f:
                 source = f.read()
+
             module_list += getattr(module_extractor, self.lang)(source, self.lang)
 
         # Generate
         module_list = list(set(module_list))
         module_list.sort()
+
+        # If an error occurs, generate a file with the string from
         with open(f"{self.path}/requirements.txt", "w", encoding="utf-8") as f:
-            data = "\n".join(module_list)
-            f.write(data)
+            try:
+                data = "\n".join(module_list)
+                f.write(data)
+            except TypeError:
+                f.write("")
 
 data = open(f"{os.getcwd()}\\src\\settings.json", "r")
 settings = json.load(data)
