@@ -69,9 +69,9 @@ class RequirementsGenerator(ModuleExtractor):
     def get_files(self) -> None:
         for dir in self.all_dir:
             base = os.listdir(dir)
-            files = [f for f in base if os.path.isfile(os.path.join(dir, f))]                           # get only files
+            files = [f for f in base if os.path.isfile(os.path.join(dir, f))]                      # get only files
             files = list(filter(lambda f: f.endswith(settings["languages"][self.lang][0]), files)) # extension
-            files = list(map(lambda f: f"{dir}/{f}", files))                                            # create absolute path
+            files = list(map(lambda f: f"{dir}/{f}", files))                                       # create absolute path
             self.all_file += files
 
     # Main process(generate)
