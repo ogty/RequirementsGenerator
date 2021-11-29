@@ -1,27 +1,34 @@
 import autopep8
 import json
 import os
-import platform
 
 
 # Module Extractor
 class ModuleExtractor:
+    def __init__(self) -> None:
+        data = open(f"{os.getcwd()}\\src\\settings.json", "r")
+        settings = json.load(data)
+        self.settings = settings
+
     def python(self, source: str, lang: str) -> list:
-        prefix = settings["languages"][lang][1]
         fixed_source = autopep8.fix_code(source)
-        result = self.common(fixed_source, prefix)
-        
+        result = self.common(lang, fixed_source)
         return result
 
     def julia(self, source: str, lang: str) -> list:
-        prefix = settings["languages"][lang][1]
-        result = self.common(source, prefix)
+        result = self.common(lang, source)
         result = map(lambda d: d.replace(":", "").replace(";", ""), result)
-
         return result
 
-    def common(self, source: str, prefix: list) -> list:
+    def go(self, source: str, lang: str) -> list:
+        # This language requires a lot of processing.
+        result = self.common(lang, source)
+        return result
+
+    def common(self, lang: str, source: str) -> list:
         result = list()
+        prefix = self.settings["languages"][lang][1]
+        embedded = self.settings["languages"][lang][2]
 
         if len(prefix) >= 2:
             process_list = map(lambda x: f"line.startswith('{x}')", prefix)
@@ -37,16 +44,13 @@ class ModuleExtractor:
                     module = module.split(".")[0]
                     result.append(module)
 
+        # Remove embedded libraries
+        map(lambda x: result.pop(x), embedded)
         return result
 
-class RequirementsGenerator:
+class RequirementsGenerator(ModuleExtractor):
     # initialize valiables and run function
     def __init__(self, path: str, lang: str) -> None:
-        # Get system information and set path
-        os_name = platform.system()
-        user_name = os.getlogin()
-        base_path = settings["os"][os_name].replace("<user_name>", user_name)
-
         self.path = path
         self.all_dir: list = [path]
         self.all_file = list()
@@ -73,7 +77,7 @@ class RequirementsGenerator:
         for dir in self.all_dir:
             base = os.listdir(dir)
             files = [f for f in base if os.path.isfile(os.path.join(dir, f))]
-            files = list(filter(lambda f: f.endswith(settings["languages"][self.lang][0]), files))
+            files = list(filter(lambda f: f.endswith(self.settings["languages"][self.lang][0]), files)) # extension
             files = list(map(lambda f: f"{dir}/{f}", files))
             self.all_file += files
 
@@ -93,6 +97,3 @@ class RequirementsGenerator:
         with open(f"{self.path}/requirements.txt", "w", encoding="utf-8") as f:
             data = "\n".join(module_list)
             f.write(data)
-
-data = open(f"{os.getcwd()}\\src\\settings.json", "r")
-settings = json.load(data)

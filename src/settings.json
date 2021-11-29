@@ -2,15 +2,18 @@
     "languages": {
         "python": [
             "py",
-            ["import", "from"]
+            ["import", "from"],
+            ["os", "sys", "datetime"]
         ], 
         "julia": [
             "jl",
-            ["using", "import"]
+            ["using", "import"],
+            ["Base"]
         ], 
         "go": [
             "go",
-            ["import"]
+            ["import"],
+            ["fmt", "string"]
         ]
     }, 
     "os": {

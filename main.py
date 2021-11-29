@@ -10,7 +10,7 @@ from src.base import RequirementsGenerator
 app = Flask(__name__)
 
 
-def generate_tree(settings: dict):
+def generate_tree():
     # Get all directory information directly under the default path written in settings.json
     os_name = platform.system()
     user_name = os.getlogin()
@@ -64,25 +64,21 @@ def generate():
 # update directory information
 @app.route("/update", methods=["POST"])
 def update():
-    data = open(f"{os.getcwd()}\\src\\settings.json", "r")
-    settings = json.load(data)
-
-    generate_tree(settings)
-
+    generate_tree()
     return jsonify()
 
+# base
 @app.route("/")
 def base():
-    data = open(f"{os.getcwd()}\\src\\settings.json", "r")
-    settings = json.load(data)
-
-    # initialization
     if not os.path.exists(f"{os.getcwd()}\\static\\tree.json"):
-        generate_tree(settings)
+        generate_tree()
 
     lang_data = {lang.capitalize(): lang for lang in settings["languages"]}
-
     return render_template("main.html", data=lang_data)
+
+# Global variables are currently more efficient. maybe...
+data = open(f"{os.getcwd()}\\src\\settings.json", "r")
+settings = json.load(data)
 
 if __name__ == "__main__":
     app.run(debug=True)
