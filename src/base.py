@@ -61,16 +61,15 @@ class ModuleExtractor:
         result = list(map(lambda x: "" if x in embedded else x, result))
         return result
 
-class RequirementsGenerator(ModuleExtractor):
+class RequirementsGenerator:
     # initialize valiables and run function
     def __init__(self, path: str, lang: str) -> None:
         self.path = path
-        self.all_dir: list = [path]
-        self.all_file = list()
         self.lang = lang
+        self.all_file = list()
+        self.all_dir: list = [path]
 
-        # run
-        self.get_dirs(path)
+        self.get_dirs(self.path)
         self.get_files()
         self.main()
 

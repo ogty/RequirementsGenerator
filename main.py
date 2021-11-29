@@ -49,6 +49,9 @@ def generate_tree():
     with open(f"{os.getcwd()}\\static\\tree.json", "w", encoding="utf-8") as f:
         json.dump(main_data, f, ensure_ascii=False, indent=2)
 
+def get_detail(dirs: list):
+    pass
+
 # generate requirements.txt(main)
 @app.route("/generate", methods=["POST"])
 def generate():
@@ -66,6 +69,14 @@ def generate():
 def update():
     generate_tree()
     return jsonify()
+
+# get selected directory detail
+@app.route("/detail", methods=["POST"])
+def detail():
+    selected_dirs = request.form["dir_list"]
+    dirs = list(set(selected_dirs.split(",")))
+    detail_data = {"detail_data": ""}
+    return jsonify(values=json.dumps(detail_data))
 
 # base
 @app.route("/")
