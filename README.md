@@ -27,6 +27,7 @@
 
  - Python
  - Julia
+ - Go
 
 ***
 
@@ -76,11 +77,13 @@ The language name has an array, where the first index contains the extension. Th
     "languages": {
         "python": [
             "py",
-            ["import", "from"]
+            ["import", "from"],
+            ["os", "sys", "time"]
         ], 
         "julia": [
             "jl",
-            ["using"]
+            ["using"],
+            ["Base"]
         ]
     }, 
     "os": {
@@ -101,19 +104,20 @@ The common function is probably supposed to be somewhat similar in all languages
 ```python
 class ModuleExtractor:
     def python(self, source: str, lang: str) -> list:
-        prefix = settings["languages"][lang][1]
         fixed_source = autopep8.fix_code(source)
-        result = self.common(fixed_source, prefix)
+        result = self.common(lang, fixed_source)
         return result
 
     def julia(self, source: str, lang: str) -> list:
-        prefix = settings["languages"][lang][1]
-        result = self.common(source, prefix)
+        result = self.common(lang, source)
         result = map(lambda d: d.replace(":", "").replace(";", ""), result)
         return result
 
-    def common(self, source: str, prefix: list) -> list:
+    def common(self, lang: str, source: str) -> list:
         result = list()
+        prefix = settings["languages"][lang][1]
+        embedded = settings["languages"][lang][2]
+
         if len(prefix) >= 2:
             process_list = map(lambda x: f"line.startswith('{x}')", prefix)
             process = " or ".join(process_list)
@@ -128,5 +132,6 @@ class ModuleExtractor:
                     module = module.split(".")[0]
                     result.append(module)
 
+        map(lambda x: result.pop(x), embedded)
         return result
 ```
