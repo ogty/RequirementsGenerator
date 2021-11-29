@@ -1,3 +1,4 @@
+from logging import debug
 from flask import Flask
 from flask import render_template, request, jsonify
 import json
@@ -81,4 +82,4 @@ data = open(f"{os.getcwd()}\\src\\settings.json", "r")
 settings = json.load(data)
 
 if __name__ == "__main__":
-    init_gui(app, window_title="Requirements.txt Generator")
+    app.run(debug=True)
