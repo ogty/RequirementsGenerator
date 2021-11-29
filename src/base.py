@@ -5,11 +5,6 @@ import os
 
 # Module Extractor
 class ModuleExtractor:
-    def __init__(self) -> None:
-        data = open(f"{os.getcwd()}\\src\\settings.json", "r")
-        settings = json.load(data)
-        self.settings = settings
-
     def python(self, source: str, lang: str) -> list:
         fixed_source = autopep8.fix_code(source)
         result = self.common(lang, fixed_source)
@@ -27,8 +22,8 @@ class ModuleExtractor:
 
     def common(self, lang: str, source: str) -> list:
         result = list()
-        prefix = self.settings["languages"][lang][1]
-        embedded = self.settings["languages"][lang][2]
+        prefix = settings["languages"][lang][1]
+        embedded = settings["languages"][lang][2]
 
         if len(prefix) >= 2:
             process_list = map(lambda x: f"line.startswith('{x}')", prefix)
@@ -56,29 +51,27 @@ class RequirementsGenerator(ModuleExtractor):
         self.all_file = list()
         self.lang = lang
 
-        # Run
+        # run
         self.get_dirs(path)
         self.get_files()
         self.main()
 
     # Get all directories in the selected directory.
-    def get_dirs(self, path: str) -> list:
-        middle = list()
+    def get_dirs(self, path: str) -> None:
         base = os.listdir(path)
         files_dir = [f for f in base if os.path.isdir(os.path.join(path, f))]
+
         for dir in files_dir:
             self.all_dir.append(f"{path}/{dir}")
-            middle += self.get_dirs(f"{path}/{dir}")
-
-        return middle
+            self.get_dirs(f"{path}/{dir}")
 
     # Retrieves a specific file in the retrieved directory.
     def get_files(self) -> None:
         for dir in self.all_dir:
             base = os.listdir(dir)
-            files = [f for f in base if os.path.isfile(os.path.join(dir, f))]
-            files = list(filter(lambda f: f.endswith(self.settings["languages"][self.lang][0]), files)) # extension
-            files = list(map(lambda f: f"{dir}/{f}", files))
+            files = [f for f in base if os.path.isfile(os.path.join(dir, f))]                           # get only files
+            files = list(filter(lambda f: f.endswith(settings["languages"][self.lang][0]), files)) # extension
+            files = list(map(lambda f: f"{dir}/{f}", files))                                            # create absolute path
             self.all_file += files
 
     # Main process(generate)
@@ -97,3 +90,6 @@ class RequirementsGenerator(ModuleExtractor):
         with open(f"{self.path}/requirements.txt", "w", encoding="utf-8") as f:
             data = "\n".join(module_list)
             f.write(data)
+
+data = open(f"{os.getcwd()}\\src\\settings.json", "r")
+settings = json.load(data)
