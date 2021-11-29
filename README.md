@@ -24,6 +24,7 @@
  - [ ] Library selection
  - [ ] Execution by command
  - [ ] Display not only folders but also requirements.txt
+ - [ ] Search function
 
 ***
 
