@@ -3,7 +3,13 @@
         "python": [
             "py",
             ["import", "from"],
-            ["os", "sys", "datetime"]
+            ["os", "sys", "datetime", 
+             "re", "math", "statistics", 
+             "random", "csv", "glob", 
+             "tkinter", "time", "shutil", 
+             "socket", "pathlib", "email", 
+             "zipfile", "timeit", "locale", 
+             "sqlite3", "pprint", "textwrap"]
         ], 
         "julia": [
             "jl",
