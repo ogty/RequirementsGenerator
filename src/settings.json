@@ -27,7 +27,10 @@
                 "locale",
                 "sqlite3",
                 "pprint",
-                "textwrap"
+                "textwrap",
+                "json",
+                "logging",
+                "platform"
             ]
         ],
         "julia": [

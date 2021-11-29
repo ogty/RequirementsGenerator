@@ -58,7 +58,7 @@ class ModuleExtractor:
                     result.append(module)
 
         # Remove embedded libraries
-        result = list(map(lambda x: None if x in embedded else x, result))
+        result = list(map(lambda x: "" if x in embedded else x, result))
         return result
 
 class RequirementsGenerator(ModuleExtractor):
