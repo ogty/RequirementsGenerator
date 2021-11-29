@@ -10,13 +10,13 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous"/>
     
-    <link rel="stylesheet" href="../static/style.min.css">
-    <link rel="stylesheet" href="../static/main.css">
-    <script src="../static/jstree.min.js"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.min.css') }}">
+    <script src="{{ url_for('static', filename='jstree.min.js') }}"></script>
 </head>
 <body>
-    <header>
-        <h1>Requirements.txt Generator</h1>
+    <header style="padding: 20px;">
+        <h1><a href="\" style="color: black;">Requirements.txt Generator</a></h1>
     </header>
     <main>
         <!-- message -->
@@ -29,10 +29,17 @@
                     <span class="setting_title">Language</span>
                     <div class="select_language">
                         {% for k, v in data.items() %}
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" name="lang" id="{{ v }}" value="{{ v }}" checked>
-                                <label class="form-check-label" for="{{ v }}">{{ k }}</label>
-                            </div>
+                            {% if k == "Python" %}
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="lang" id="{{ v }}" value="{{ v }}" checked>
+                                    <label class="form-check-label" for="{{ v }}">{{ k }}</label>
+                                </div>
+                            {% else %}
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="lang" id="{{ v }}" value="{{ v }}">
+                                    <label class="form-check-label" for="{{ v }}">{{ k }}</label>
+                                </div>
+                            {% endif %}
                         {% endfor %}
                     </div>
                     
@@ -48,6 +55,7 @@
                     <div id="setting_box" class="btn-group">
                         <button onclick="value_reset()" class="btn btn-outline-dark">Reset</button>
                         <button onclick="generate()" class="btn btn-outline-dark">Generate</button>
+                        <button onclick="update()" class="btn btn-outline-dark">Update</button>
                     </div>
                 </div>
 
@@ -68,11 +76,11 @@
             // Array to store the selected directory names.
             let dirs = [];
             let send_dirs = [];
+
             // Asynchronous processing for JSON data acquisition
             $.ajax({
                 type: "GET",
-                // url: "{{ url_for('static', filename='tree.json') }}",
-                url: "../static/tree.json",
+                url: "{{ url_for('static', filename='tree.json') }}",
                 dataType: "json"
             })
             .then(
@@ -144,15 +152,44 @@
                 }).done(function (data) {
                     const message = "Communication successful!"
                     const close_btn = "<button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close' onclick='close_message()'></button>"
+
+                    $("#select_now").empty();
                     $(".message").empty();
                     $(".message").append("<div class='alert alert-success alert-dismissible fade show' role='alert'>" + message + close_btn + "</div>");
+
                     console.log("Communication successful!");
                 }).fail(function (data) {
                     const message = "Communication failed!"
                     const close_btn = "<button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close' onclick='close_message()'></button>"
+
                     $(".message").empty();
                     $(".message").append("<div class='alert alert-danger alert-dismissible fade show' role='alert'>" + message + close_btn + "</div>");
+                    
                     console.log("Communication failed!");
+                });
+            }
+            
+            // update directory information
+            function update() {
+                $.ajax("/update", {
+                    type: "POST",
+                    dataType: "json",
+                }).done(function (data) {
+                    const message = "Update directory successful!"
+                    const close_btn = "<button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close' onclick='close_message()'></button>"
+                    
+                    $(".message").empty();
+                    $(".message").append("<div class='alert alert-success alert-dismissible fade show' role='alert'>" + message + close_btn + "</div>");
+                    
+                    console.log("Update directory successful!");
+                }).fail(function (data) {
+                    const message = "Update directory failed!"
+                    const close_btn = "<button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close' onclick='close_message()'></button>"
+                    
+                    $(".message").empty();
+                    $(".message").append("<div class='alert alert-danger alert-dismissible fade show' role='alert'>" + message + close_btn + "</div>");
+                    
+                    console.log("Update directory failed!");
                 });
             }
         </script>

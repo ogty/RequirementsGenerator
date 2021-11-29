@@ -44,7 +44,7 @@ def generate_tree(settings: dict):
 
         main_data["data"].append(base_dict)
 
-    with open("../static/tree.json", "w", encoding="utf-8") as f:
+    with open(f"{os.getcwd()}\\static\\tree.json", "w", encoding="utf-8") as f:
         json.dump(main_data, f, ensure_ascii=False, indent=2)
 
 @app.route("/generate", methods=["POST"])
@@ -54,20 +54,29 @@ def generate():
     dirs = list(set(selected_dirs.split(",")))
 
     for dir in dirs:
-        print(dir, language)
         RequirementsGenerator(dir, language)
+
+    return jsonify()
+
+@app.route("/update", methods=["POST"])
+def update():
+    data = open(f"{os.getcwd()}\\src\\settings.json", "r")
+    settings = json.load(data)
+    generate_tree(settings)
 
     return jsonify()
 
 @app.route("/")
 def base():
-    data = open("../src/settings.json", "r")
+    data = open(f"{os.getcwd()}\\src\\settings.json", "r")
     settings = json.load(data)
 
-    generate_tree(settings)
+    if not os.path.exists(f"{os.getcwd()}\\static\\tree.json"):
+        generate_tree(settings)
+
     lang_data = {lang.capitalize(): lang for lang in settings["languages"]}
     return render_template("main.html", data=lang_data)
 
 if __name__ == "__main__":
-    # app.run(debug=True)
-    init_gui(app, window_title="Requirements.txt Generator")
+    app.run(debug=True)
+    # init_gui(app, window_title="Requirements.txt Generator")
