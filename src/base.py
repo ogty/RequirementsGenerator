@@ -9,9 +9,9 @@ class ModuleExtractor:
     def python(self, source: str, lang: str) -> list:
         embedded: list = settings["languages"][lang][1]
         fixed_source = autopep8.fix_code(source)
-        splited_source = fixed_source.split()
-
-        modules = [splited_source[i+1] for i, x in enumerate(splited_source) if x == "from" or x == "import"]
+        splited_source = fixed_source.split("\n")
+        module_line = [x for x in splited_source if x.startswith("import") or x.startswith("from")]
+        modules = list(map(lambda m: m.split()[1], module_line))
         result = list(filter(lambda m: m.split(".")[0] if not m.startswith(".") else "", modules))
         result = list(map(lambda m: "" if m in embedded else m, result))
 
@@ -19,9 +19,9 @@ class ModuleExtractor:
     
     def julia(self, source: str, lang: str) -> list:
         embedded: list = settings["languages"][lang][1]
-        splited_source = source.split()
-
-        modules = [splited_source[i+1] for i, x in enumerate(splited_source) if x == "using" or x == "import"]
+        splited_source = source.split("\n")
+        module_line = [x for x in splited_source if x.startswith("import") or x.startswith("using")]
+        modules = list(map(lambda m: m.split()[1], module_line))
         result = list(filter(lambda m: m.split(".")[0] if not m.startswith(".") else "", modules))
         result = list(map(lambda m: m.replace(":", "").replace(";", ""), result))
         result = list(map(lambda m: "" if m in embedded else m, result))
