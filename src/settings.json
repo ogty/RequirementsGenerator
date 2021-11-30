@@ -3,10 +3,6 @@
         "python": [
             "py",
             [
-                "import",
-                "from"
-            ],
-            [
                 "os",
                 "sys",
                 "datetime",
@@ -30,25 +26,17 @@
                 "textwrap",
                 "json",
                 "logging",
-                "platform",
-                "with"
+                "platform"
             ]
         ],
         "julia": [
             "jl",
-            [
-                "using",
-                "import"
-            ],
             [
                 "Base"
             ]
         ],
         "go": [
             "go",
-            [
-                "import"
-            ],
             [
                 "archive",
                 "tar",

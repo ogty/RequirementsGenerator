@@ -7,30 +7,30 @@ import platform
 # Module Extractor
 class ModuleExtractor:
     def python(self, source: str, lang: str) -> list:
-        embedded: list = settings["languages"][lang][2]
+        embedded: list = settings["languages"][lang][1]
         fixed_source = autopep8.fix_code(source)
         splited_source = fixed_source.split()
 
         modules = [splited_source[i+1] for i, x in enumerate(splited_source) if x == "from" or x == "import"]
         result = list(filter(lambda m: m.split(".")[0] if not m.startswith(".") else "", modules))
-        result = list(map(lambda x: "" if x in embedded else x, result))
+        result = list(map(lambda m: "" if m in embedded else m, result))
 
         return result
     
     def julia(self, source: str, lang: str) -> list:
-        embedded: list = settings["languages"][lang][2]
+        embedded: list = settings["languages"][lang][1]
         splited_source = source.split()
 
         modules = [splited_source[i+1] for i, x in enumerate(splited_source) if x == "using" or x == "import"]
         result = list(filter(lambda m: m.split(".")[0] if not m.startswith(".") else "", modules))
         result = list(map(lambda m: m.replace(":", "").replace(";", ""), result))
-        result = list(map(lambda x: "" if x in embedded else x, result))
+        result = list(map(lambda m: "" if m in embedded else m, result))
 
         return result
 
     def go(self, source: str, lang: str) -> list:
         result = list()
-        embedded = settings["languages"][lang][2]
+        embedded = settings["languages"][lang][1]
 
         splited_source = source.split()
         start = splited_source.index("import")
@@ -97,16 +97,13 @@ class RequirementsGenerator:
             module_list += getattr(module_extractor, self.lang)(source, self.lang)
 
         # Generate
-        module_list = list(set(module_list))
-        module_list.sort()
+        if module_list:
+            module_list = list(set(module_list))
+            module_list.sort()
 
-        # If an error occurs, generate a file with the string from
-        with open(f"{self.path}/requirements.txt", "w", encoding="utf-8") as f:
-            try:
+            with open(f"{self.path}/requirements.txt", "w", encoding="utf-8") as f:
                 data = "\n".join(module_list)
                 f.write(data)
-            except TypeError:
-                f.write("")
 
 
 def generate_tree():
