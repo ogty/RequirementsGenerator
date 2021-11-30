@@ -61,10 +61,24 @@
 
                     <!-- show detail -->
                     <div id="setting_box">
-                        
+                        <figure>
+                            <div class="graphic">
+                                <div class="row_group">
+                                </div>
+                            </div>
+              
+                            <div class="x-axis">
+                                <h3>Language</h3>
+                                <ul class="legend">
+                                    <li>Python</li>
+                                    <li>Julia</li>
+                                    <li>Go</li>
+                                    <li>Ohter</li>
+                                </ul>
+                            </div>
+                        </figure>
                     </div>
                 </div>
-
                 <!-- display tree -->
                 <div class="select_dirs">
                     <div id="SimpleJSTree"></div>
@@ -81,6 +95,14 @@
         </div>
 
         <!-- Here's the javascript -->
+        <script>
+            $('.value').each(function() {
+                var text = $(this).text();
+                $(this).parent().css('width', text);
+            });
+
+            $('.block').tooltip();
+        </script>
         <script>
             // Array to store the selected directory names.
             let dirs = [];
@@ -217,22 +239,40 @@
                         "dir_list": send_dirs.join(',')
                     }
                 }).done(function (data) {
-                    const detail_data = JSON.parse(data.values).detail_data
-                    
-                    const message = "Detail directory successful!"
-                    const close_btn = "<button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close' onclick='close_message()'></button>"
-                    
-                    $(".message").empty();
-                    $(".message").append("<div class='alert alert-success alert-dismissible fade show' role='alert'>" + message + close_btn + "</div>");
-                    
+                    const result = JSON.parse(data.values)
+                    $(".row_group").empty();
+                    Object.keys(result).forEach( function(value) {
+                        console.log( value + '：' + this[value] );
+                        let path = value;
+                        let python = 0;
+                        let julia = 0;
+                        let go = 0;
+                        let other = 0;
+
+                        Object.keys(this[value]).forEach( function(value) {
+                            switch (value) {
+                                case "py":
+                                    python = this[value];
+                                case "jl":
+                                    julia = this[value];
+                                case "go":
+                                    go = this[value];
+                                case "other":
+                                    other = this[value];
+                            }
+                        }, this[value])
+
+                        $(".row_group").append("<div class='row'><h6>"
+                            + value + "</h6><div class='chart'><span class='block' title='Python' style='width:" + python + "%;'><span class='value'>"
+                            + python + "%</span></span><span class='block' title='Julia' style='width:" + julia + "%;'><span class='value'>"
+                            + julia + "%</span></span><span class='block' title='Go' style='width:" + go + "%;'><span class='value'>"
+                            + go + "%</span></span><span class='block' title='Go' style='width:" + other + "%;'><span class='value'>"
+                            + other + "%</span></span><span class='block' title='Other' style='width:" + other + "%;'><span class='value'></div></div>");
+
+                    }, result)
+                        
                     console.log("Detail directory successful!");
                 }).fail(function (data) {
-                    const message = "Detail directory failed!"
-                    const close_btn = "<button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close' onclick='close_message()'></button>"
-                    
-                    $(".message").empty();
-                    $(".message").append("<div class='alert alert-danger alert-dismissible fade show' role='alert'>" + message + close_btn + "</div>");
-                    
                     console.log("Detail directory failed!");
                 });
             }

@@ -20,7 +20,7 @@
  - [x] Can be built on Windows
  - [ ] Can be built on MacOS
  - [ ] Creation of original icons
- - [ ] Percentage display
+ - [x] Percentage display
  - [ ] Library selection
  - [ ] Execution by command
  - [ ] Display not only folders but also requirements.txt

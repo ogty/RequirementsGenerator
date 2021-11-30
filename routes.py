@@ -16,7 +16,7 @@ def generate():
     dirs = list(set(selected_dirs.split(",")))
 
     for dir in dirs:
-        RequirementsGenerator(dir, language)
+        RequirementsGenerator(dir, language).generate()
 
     return jsonify()
 
@@ -31,7 +31,10 @@ def update():
 def detail():
     selected_dirs = request.form["dir_list"]
     dirs = list(set(selected_dirs.split(",")))
-    detail_data = {"detail_data": ""}
+
+    detail_data = RequirementsGenerator().detail(dirs=dirs)
+    data = {"detail_data": dict()}
+    data["detail_data"] = detail_data
     return jsonify(values=json.dumps(detail_data))
 
 # base
