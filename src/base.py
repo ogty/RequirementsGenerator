@@ -2,35 +2,26 @@ import autopep8
 import json
 import os
 import platform
+import inspect
 
 
 # Module Extractor
 class ModuleExtractor:
-    def python(self, source: str, lang: str) -> list:
-        embedded: list = settings["languages"][lang][1]
+    def python(self, source: str) -> list:
         fixed_source = autopep8.fix_code(source)
-        splited_source = fixed_source.split("\n")
-        module_line = [x for x in splited_source if x.startswith("import") or x.startswith("from")]
-        modules = list(map(lambda m: m.split()[1], module_line))
-        result = list(filter(lambda m: m.split(".")[0] if not m.startswith(".") else "", modules))
+        result, embedded = self.common(fixed_source)
         result = list(map(lambda m: "" if m in embedded else m, result))
-
         return result
     
-    def julia(self, source: str, lang: str) -> list:
-        embedded: list = settings["languages"][lang][1]
-        splited_source = source.split("\n")
-        module_line = [x for x in splited_source if x.startswith("import") or x.startswith("using")]
-        modules = list(map(lambda m: m.split()[1], module_line))
-        result = list(filter(lambda m: m.split(".")[0] if not m.startswith(".") else "", modules))
+    def julia(self, source: str) -> list:
+        result, embedded = self.common(source)
         result = list(map(lambda m: m.replace(":", "").replace(";", ""), result))
         result = list(map(lambda m: "" if m in embedded else m, result))
-
         return result
 
     def go(self, source: str, lang: str) -> list:
         result = list()
-        embedded = settings["languages"][lang][1]
+        embedded = settings["languages"][lang][2]
 
         splited_source = source.split()
         start = splited_source.index("import")
@@ -50,6 +41,18 @@ class ModuleExtractor:
         result = list(map(lambda x: "" if x.split("/")[0] in embedded else x, result))
 
         return result
+
+    def common(self, source: str) -> tuple:
+        prefixes: list = settings["languages"][str(inspect.stack()[1].function)][1]
+        embedded: list = settings["languages"][str(inspect.stack()[1].function)][2]
+        process = [f"x.startswith('{prefix}')" for prefix in prefixes]
+        process_word = " or ".join(process)
+
+        splited_source = source.split("\n")
+        module_line = [x for x in splited_source if eval(process_word)]
+        modules = list(map(lambda m: m.split()[1], module_line))
+        result = list(filter(lambda m: m.split(".")[0] if not m.startswith(".") else "", modules))
+        return (result, embedded)
 
 class RequirementsGenerator:
     # initialize valiables and run function
@@ -94,7 +97,7 @@ class RequirementsGenerator:
             with open(file_path, "r", encoding="utf-8") as f:
                 source = f.read()
 
-            module_list += getattr(module_extractor, self.lang)(source, self.lang)
+            module_list += getattr(module_extractor, self.lang)(source)
 
         # Generate
         if module_list:
@@ -104,7 +107,6 @@ class RequirementsGenerator:
             with open(f"{self.path}/requirements.txt", "w", encoding="utf-8") as f:
                 data = "\n".join(module_list)
                 f.write(data)
-
 
 def generate_tree():
     # Get all directory information directly under the default path written in settings.json

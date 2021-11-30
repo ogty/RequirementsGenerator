@@ -2,6 +2,7 @@
     "languages": {
         "python": [
             "py",
+            ["import", "from"],
             [
                 "os",
                 "sys",
@@ -31,12 +32,14 @@
         ],
         "julia": [
             "jl",
+            ["import", "using"],
             [
                 "Base"
             ]
         ],
         "go": [
             "go",
+            ["import"],
             [
                 "archive",
                 "tar",
