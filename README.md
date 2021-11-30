@@ -10,7 +10,7 @@
 
 ## Demo
 
-![demo](./static/demo.gif)
+![demo](./static/sample.gif)
 
 ***
 
