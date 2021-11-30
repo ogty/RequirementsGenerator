@@ -30,7 +30,8 @@
                 "textwrap",
                 "json",
                 "logging",
-                "platform"
+                "platform",
+                "with"
             ]
         ],
         "julia": [
@@ -208,7 +209,7 @@
         ]
     },
     "os": {
-        "Windows": "C:\\Users\\<user_name>\\Desktop",
-        "Darwin": "//Users//<user_name>//Desktop"
+        "Windows": ["C:\\Users\\<user_name>\\Desktop", "\\"],
+        "Darwin": ["//Users//<user_name>//Desktop", "/"]
     }
 }
