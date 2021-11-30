@@ -27,7 +27,8 @@
                 "textwrap",
                 "json",
                 "logging",
-                "platform"
+                "platform",
+                "inspect"
             ]
         ],
         "julia": [

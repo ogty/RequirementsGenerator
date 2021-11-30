@@ -2,4 +2,3 @@ autopep8
 flask
 pyfladesk
 pyinstaller
-inspect

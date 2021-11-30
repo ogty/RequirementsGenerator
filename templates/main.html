@@ -43,9 +43,16 @@
                         {% endfor %}
                     </div>
                     
+                    <div id="setting_box">
+                        <div class="mb-3">
+                            <span class="setting_title">Search directory</span>
+                            <input id="deliverable_search" class="form-control" type="text">
+                        </div>
+                    </div>
+
                     <!-- show selected directory -->
                     <div id="setting_box">
-                        <span class="setting_title">Selected Directory</span>
+                        <span class="setting_title">Selected directory</span>
                         <div>
                             <ul id="select_now" class="list-group"></ul>
                         </div>
@@ -68,13 +75,6 @@
                             </div>
               
                             <div class="x-axis">
-                                <h3>Language</h3>
-                                <ul class="legend">
-                                    <li>Python</li>
-                                    <li>Julia</li>
-                                    <li>Go</li>
-                                    <li>Ohter</li>
-                                </ul>
                             </div>
                         </figure>
                     </div>
@@ -129,6 +129,8 @@
                 dirs = [];
                 send_dirs = [];
                 $("#select_now").empty();
+                $(".row_group").empty();
+                $(".x-axis").empty();
             }
 
             // Display the tree structure and store the selected values in "dirs"
@@ -142,6 +144,10 @@
                             "icon": "far fa-folder",
                             "leaf": "far fa-folder"
                         }
+                    },
+                    "search": {
+                        "case_insensitive": true,
+                        "show_only_matches": true
                     },
                     "plugins" : [
                         "themes", 
@@ -165,7 +171,16 @@
                         $("#select_now").append("<li class='list-group-item'>" + dirs[i] + "</li>");
                     }
                 })
+                .on("search.jstree", function (nodes, str, res) {
+                    if (str.nodes.length === 0) {
+                        $("#deliverables").jstree(true).hide_all()
+                    }
+                })
             }
+            $('#deliverable_search').keyup(function(){
+                $('#SimpleJSTree').jstree(true).show_all();
+                $('#SimpleJSTree').jstree('search', $(this).val());
+            });            
 
             // close message function
             function close_message() {
@@ -241,6 +256,8 @@
                 }).done(function (data) {
                     const result = JSON.parse(data.values)
                     $(".row_group").empty();
+                    $(".x-axis").empty();
+
                     Object.keys(result).forEach( function(value) {
                         console.log( value + '：' + this[value] );
                         let path = value;
@@ -268,9 +285,9 @@
                             + julia + "%</span></span><span class='block' title='Go' style='width:" + go + "%;'><span class='value'>"
                             + go + "%</span></span><span class='block' title='Other' style='width:" + other + "%;'><span class='value'>"
                             + other + "%</span></span></div></div>");
-
                     }, result)
-                        
+
+                    $(".x-axis").append("<h3>Language</h3><ul class='legend'><li>Python</li><li>Julia</li><li>Go</li><li>Ohter</li></ul>");
                     console.log("Detail directory successful!");
                 }).fail(function (data) {
                     console.log("Detail directory failed!");
