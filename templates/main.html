@@ -101,14 +101,14 @@
                     console.log("Failure");
                 }
             );
-    
+
             // Clear the selected value.
             function value_reset() {
                 dirs = [];
                 send_dirs = [];
                 $("#select_now").empty();
             }
-    
+
             // Display the tree structure and store the selected values in "dirs"
             function createJSTree(jsondata) {
                 $("#SimpleJSTree").jstree({
@@ -184,7 +184,7 @@
                     $(".message").append("<div class='alert alert-danger alert-dismissible fade show' role='alert'>" + message + close_btn + "</div>");
                 }
             }
-            
+
             // update directory information
             function update() {
                 $.ajax("/update", {
@@ -218,6 +218,7 @@
                     }
                 }).done(function (data) {
                     const detail_data = JSON.parse(data.values).detail_data
+                    
                     const message = "Detail directory successful!"
                     const close_btn = "<button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close' onclick='close_message()'></button>"
                     

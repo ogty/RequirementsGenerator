@@ -1,6 +1,7 @@
 import autopep8
 import json
 import os
+import platform
 
 
 # Module Extractor
@@ -114,6 +115,49 @@ class RequirementsGenerator:
                 f.write(data)
             except TypeError:
                 f.write("")
+
+
+def generate_tree():
+    # Get all directory information directly under the default path written in settings.json
+    os_name = platform.system()
+    user_name = os.getlogin()
+    path = settings["os"][os_name].replace("<user_name>", user_name)
+    
+    # Store the retrieved information in a dict
+    main_data = {"data": list()}
+    for data in os.walk(path):
+        base_dict = {
+            "id": "",
+            "parent": "",
+            "text": ""
+            }
+        
+        if os_name == "Windows":
+            dir_constract = data[0]
+            dir_list = dir_constract.split("\\")
+            parent = "\\".join(dir_list[:-1])
+
+        elif os_name == "Darwin":
+            dir_constract = data[0].replace("/", "//")
+            dir_list = dir_constract.split("//")
+            parent = "//".join(dir_list[:-1])
+            
+        child = dir_list[-1]
+
+        base_dict["id"] = dir_constract
+        base_dict["text"] = child
+        base_dict["parent"] = parent
+
+        if path == data[0]:
+            base_dict["parent"] = "#"
+
+        main_data["data"].append(base_dict)
+
+    with open(f"{os.getcwd()}\\static\\tree.json", "w", encoding="utf-8") as f:
+        json.dump(main_data, f, ensure_ascii=False, indent=2)
+
+def get_detail(dirs: list):
+    pass
 
 data = open(f"{os.getcwd()}\\src\\settings.json", "r")
 settings = json.load(data)
