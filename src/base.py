@@ -18,7 +18,7 @@ class ModuleExtractor:
         return result
 
     def go(self, source: str, lang: str) -> list:
-        result = list()
+        result = []
         embedded = settings["languages"][lang][2]
 
         splited_source = source.split()
@@ -78,7 +78,7 @@ class RequirementsGenerator(Operate):
         self.path = path
         self.lang = lang
         self.all_dir = [path]
-        self.all_file = list()
+        self.all_file = []
 
     # Main process(generate)
     def generate(self) -> None:
@@ -86,7 +86,7 @@ class RequirementsGenerator(Operate):
         self.get_files(self.lang)
         # Module extract
         module_extractor = ModuleExtractor()
-        module_list = list()
+        module_list = []
 
         for file_path in self.all_file:
             with open(file_path, "r", encoding="utf-8") as f:
@@ -104,7 +104,7 @@ class RequirementsGenerator(Operate):
                 f.write(data)
 
     def detail(self, dirs: list) -> dict:
-        result = dict()
+        result = {}
         for dir in dirs:
             supported_extension = {
                 "py": 0,
@@ -144,9 +144,9 @@ def generate_tree():
     path = settings["os"][os_name].replace("<user_name>", user_name)
     
     # Store the retrieved information in a dict
-    main_data = {"data": list()}
+    main_data = {"data": []}
     for data in os.walk(path):
-        base_dict = dict()
+        base_dict = {}
         
         dir_constract = data[0]
         dir_list = dir_constract.split(split_word)
