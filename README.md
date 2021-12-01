@@ -12,57 +12,22 @@
 
 ***
 
-## Features
+## 機能
 
  - [x] Basic Features
- - [x] Can be built on Windows
- - [ ] Can be built on MacOS
- - [ ] Creation of original icons
- - [x] Percentage display
- - [ ] Library selection
- - [ ] Execution by command
- - [ ] Display not only folders but also requirements.txt
- - [x] Search function
+ - [x] Windows対応
+ - [ ] MacOS対応
+ - [ ] アイコン作成
+ - [x] 詳細表示
+ - [ ] ライブラリ選択
+ - [ ] コマンドによる実行
+ - [ ] `requirements.txt`の表示
+ - [x] 検索
 
 ***
 
-## Supported languages
+## 対応言語
 
  - Python
  - Julia
  - Go
-
-***
-
-## Install the library and build the app
-
-To build the application and install the required libraries, run the following command. The generated file will be in "exe" format and will work only on Windows. It will take a few minutes to complete execution.
-
- - `>` : Windows
- - `$` : Mac
-
-```console
-> pip install -r requirements.txt
-> pyinstaller -w -F --add-data "templates;templates" --add-data "static;static" --add-data "src;src" main.py
-```
-
-```bash
-$ pip3 install -r requirements.txt
-$ pyinstaller -w -F main.py
-```
-
-However, it is easier to run "install.bat".
-
-```console
-> install.bat
-```
-
-```bash
-$ source install.sh
-```
-
-The built executable will be generated directly under dist.
-
-I don't know, I haven't tried it yet, but you may be able to use the application by downloading this repository and running the exe file...
-
-Note: This RequirementsGenerator is based on the assumption that users will write some clean code.
