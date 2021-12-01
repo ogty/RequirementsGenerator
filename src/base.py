@@ -142,6 +142,7 @@ class RequirementsGenerator(Operate):
                 "ipynb": 0,
                 "other": 0
             }
+            
             if self.all_dir.count(""):
                 self.all_dir.remove("")
 
