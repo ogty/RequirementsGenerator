@@ -33,7 +33,7 @@ def detail():
     selected_dirs = request.form["dir_list"]
     dirs = list(set(selected_dirs.split(",")))
 
-    detail_data = RequirementsGenerator().detail(dirs=dirs)
+    detail_data = RequirementsGenerator().detail(dirs)
     return jsonify(values=json.dumps(detail_data))
 
 # base
