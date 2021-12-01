@@ -8,8 +8,6 @@
  
 </div>
 
-## Demo
-
 ![demo](./static/sample.gif)
 
 ***
