@@ -8,7 +8,7 @@
  
 </div>
 
-![sample](./static/sample.gif)
+![sample](./static/demo.gif)
 
 ***
 
