@@ -129,13 +129,9 @@ class RequirementsGenerator(Operate):
             values = [v for v in supported_extension.values()]
             values_sum = sum(values)
             if values_sum > 0:
-                try:
-                    supported_extension["py"] = round((values[0] / values_sum) * 100, 2)
-                    supported_extension["jl"] = round((values[1] / values_sum) * 100, 2)
-                    supported_extension["go"] = round((values[2] / values_sum) * 100, 2)
-                    supported_extension["other"] = round((values[3] / values_sum) * 100, 2)
-                except ZeroDivisionError:
-                    print("zero division error")
+                supported_extension["py"] = round((values[0] / values_sum) * 100, 2)
+                supported_extension["jl"] = round((values[1] / values_sum) * 100, 2)
+                supported_extension["go"] = round((values[2] / values_sum) * 100, 2)
             else:
                 supported_extension["other"] = 100
 
