@@ -46,5 +46,5 @@ def base():
     return render_template("main.html", data=lang_data)
 
 split_word = "\\" if platform.system() == "Windows" else "/"
-data = open(f"{os.getcwd()}{split_word}src{split_word}settings.json", "r")
+data = open(f"{os.getcwd()}{split_word}static{split_word}settings.json", "r")
 settings = json.load(data)

@@ -1,7 +1,7 @@
 from flask import Flask
 from pyfladesk import init_gui
 
-import routes
+from src import routes
 
 app = Flask(__name__)
 app.register_blueprint(routes.bp)

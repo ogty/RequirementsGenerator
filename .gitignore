@@ -1,4 +1,5 @@
 __pycache__/
 build/
 /static/*.json
+!/static/settings.json
 *.spec

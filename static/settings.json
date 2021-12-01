@@ -211,9 +211,5 @@
     "os": {
         "Windows": "C:\\Users\\<user_name>\\Desktop",
         "Darwin": "/Users/<user_name>/Desktop"
-    },
-    "ignore": [
-        ".git",
-        "__pycache__"
-    ]
+    }
 }
