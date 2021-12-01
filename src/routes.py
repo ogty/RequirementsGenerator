@@ -34,6 +34,7 @@ def detail():
     dirs = list(set(selected_dirs.split(",")))
 
     detail_data = RequirementsGenerator().detail(dirs)
+    print(detail_data)
     return jsonify(values=json.dumps(detail_data))
 
 # base
@@ -42,7 +43,13 @@ def base():
     if not os.path.exists(f"{os.getcwd()}{split_word}static{split_word}tree.json"):
         generate_tree()
 
-    lang_data = {lang.capitalize(): lang for lang in settings["languages"]}
+    lang_data = {}
+    for lang in settings["languages"]:
+        if "-" in lang:
+            lang_data[lang.capitalize()] = lang.replace("-", "")
+        else:
+            lang_data[lang.capitalize()] = lang
+
     return render_template("main.html", data=lang_data)
 
 split_word = "\\" if platform.system() == "Windows" else "/"

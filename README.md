@@ -28,5 +28,7 @@
 ## 対応言語
 
  - Python
+ - Python-ipynb
  - Julia
+ - Julia-ipynb
  - Go

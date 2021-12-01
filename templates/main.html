@@ -197,22 +197,22 @@
                         },
                         dataType: "json",
                     }).done(function (data) {
-                        const message = "Communication successful!"
+                        const message = "Generate successful!"
                         const close_btn = "<button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close' onclick='close_message()'></button>"
 
                         value_reset()
                         $(".message").empty();
                         $(".message").append("<div class='alert alert-success alert-dismissible fade show' role='alert'>" + message + close_btn + "</div>");
 
-                        console.log("Communication successful!");
+                        console.log("Generate successful!");
                     }).fail(function (data) {
-                        const message = "Communication failed!"
+                        const message = "Generate failed!"
                         const close_btn = "<button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close' onclick='close_message()'></button>"
 
                         $(".message").empty();
                         $(".message").append("<div class='alert alert-danger alert-dismissible fade show' role='alert'>" + message + close_btn + "</div>");
                         
-                        console.log("Communication failed!");
+                        console.log("Generate failed!");
                     });
                 } else {
                     const message = "No directory selected!"
@@ -265,6 +265,7 @@
                         let python = 0;
                         let julia = 0;
                         let go = 0;
+                        let ipynb = 0;
                         let other = 0;
 
                         Object.keys(this[value]).forEach( function(value) {
@@ -275,6 +276,8 @@
                                     julia = this[value];
                                 case "go":
                                     go = this[value];
+                                case "ipynb":
+                                    ipynb = this[value];
                                 case "other":
                                     other = this[value];
                             }
@@ -284,11 +287,12 @@
                             + value + "</h6><div class='chart'><span class='block' title='Python' style='width:" + python + "%;'><span class='value'>"
                             + python + "%</span></span><span class='block' title='Julia' style='width:" + julia + "%;'><span class='value'>"
                             + julia + "%</span></span><span class='block' title='Go' style='width:" + go + "%;'><span class='value'>"
-                            + go + "%</span></span><span class='block' title='Other' style='width:" + other + "%;'><span class='value'>"
+                            + go + "%</span></span><span class='block' title='Ipynb' style='width:" + ipynb + "%;'><span class='value'>"
+                            + ipynb + "%</span></span><span class='block' title='Other' style='width:" + other + "%;'><span class='value'>"
                             + other + "%</span></span></div></div>");
                     }, result)
 
-                    $(".x-axis").append("<h3>Language</h3><ul class='legend'><li>Python</li><li>Julia</li><li>Go</li><li>Ohter</li></ul>");
+                    $(".x-axis").append("<h3>Language</h3><ul class='legend'><li>Python</li><li>Julia</li><li>Go</li><li>Ipynb</li><li>Ohter</li></ul>");
                     console.log("Detail directory successful!");
                 }).fail(function (data) {
                     console.log("Detail directory failed!");

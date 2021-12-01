@@ -11,15 +11,26 @@ class ModuleExtractor:
         result = list(map(lambda m: "" if m in embedded else m, result))
         return result
     
+    def pythonipynb(self, ipynb_data: str) -> list:
+        result, embedded = self.common(ipynb_data, ipynb=True)
+        result = list(map(lambda m: "" if m in embedded else m, result))
+        return result
+    
     def julia(self, source: str) -> list:
         result, embedded = self.common(source)
         result = list(map(lambda m: m.replace(":", "").replace(";", ""), result))
         result = list(map(lambda m: "" if m in embedded else m, result))
         return result
 
-    def go(self, source: str, lang: str) -> list:
+    def juliaipynb(self, ipynb_data: str) -> list:
+        result, embedded = self.common(ipynb_data, ipynb=True)
+        result = list(map(lambda m: m.replace(":", "").replace(";", ""), result))
+        result = list(map(lambda m: "" if m in embedded else m, result))
+        return result
+
+    def go(self, source: str) -> list:
         result = []
-        embedded = settings["languages"][lang][2]
+        embedded = settings["languages"]["go"][2]
 
         splited_source = source.split()
         start = splited_source.index("import")
@@ -40,9 +51,21 @@ class ModuleExtractor:
 
         return result
 
-    def common(self, source: str) -> tuple:
-        prefixes: list = settings["languages"][str(inspect.stack()[1].function)][1]
-        embedded: list = settings["languages"][str(inspect.stack()[1].function)][2]
+    def common(self, source: str, ipynb=False) -> tuple:
+        if ipynb:
+            ipynb_data = json.loads(source)
+            source_list = []
+            for cell in ipynb_data["cells"]:
+                source_list += cell["source"]
+            source = "".join(source_list)
+
+        if "python" in str(inspect.stack()[1].function):
+            prefixes: list = settings["languages"]["python"][1]
+            embedded: list = settings["languages"]["python"][2]
+        elif "julia" in str(inspect.stack()[1].function):
+            prefixes: list = settings["languages"]["julia"][1]
+            embedded: list = settings["languages"]["julia"][2]
+
         process = [f"x.startswith('{prefix}')" for prefix in prefixes]
         process_word = " or ".join(process)
 
@@ -50,6 +73,7 @@ class ModuleExtractor:
         module_line = [x for x in splited_source if eval(process_word)]
         modules = list(map(lambda m: m.split()[1], module_line))
         result = list(filter(lambda m: m.split(".")[0] if not m.startswith(".") else "", modules))
+
         return (result, embedded)
 
 class Operate:
@@ -64,6 +88,10 @@ class Operate:
 
     # Retrieves a specific file in the retrieved directory.
     def get_files(self, lang: str) -> None:
+        if "ipynb" in lang:
+            index = lang.find("ipynb")
+            lang = f"{lang[:index]}-{lang[index:]}"
+
         for dir in self.all_dir:
             base = os.listdir(dir)
             files = [f for f in base if os.path.isfile(os.path.join(dir, f))]
@@ -84,6 +112,7 @@ class RequirementsGenerator(Operate):
     def generate(self) -> None:
         self.get_dirs(self.path)
         self.get_files(self.lang)
+
         # Module extract
         module_extractor = ModuleExtractor()
         module_list = []
@@ -91,7 +120,6 @@ class RequirementsGenerator(Operate):
         for file_path in self.all_file:
             with open(file_path, "r", encoding="utf-8") as f:
                 source = f.read()
-
             module_list += getattr(module_extractor, self.lang)(source)
 
         # Generate
@@ -105,11 +133,13 @@ class RequirementsGenerator(Operate):
 
     def detail(self, dirs: list) -> dict:
         result = {}
+
         for dir in dirs:
             supported_extension = {
                 "py": 0,
                 "jl": 0,
                 "go": 0,
+                "ipynb": 0,
                 "other": 0
             }
             if self.all_dir.count(""):
@@ -117,6 +147,7 @@ class RequirementsGenerator(Operate):
 
             self.all_dir.append(dir)
             self.get_dirs(dir)
+
             for middle_dir in self.all_dir:
                 base = os.listdir(middle_dir)
                 files = [f for f in base if os.path.isfile(os.path.join(middle_dir, f))]
@@ -126,6 +157,7 @@ class RequirementsGenerator(Operate):
 
             values = [v for v in supported_extension.values()]
             values_sum = sum(values)
+
             if values_sum > 0:
                 supported_extension = {e: round((v/values_sum)*100, 2) for e, v in zip(supported_extension, values)}
             else:

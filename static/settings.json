@@ -34,6 +34,9 @@
                 "inspect"
             ]
         ],
+        "python-ipynb": [
+            "ipynb"
+        ],
         "julia": [
             "jl",
             [
@@ -43,6 +46,9 @@
             [
                 "Base"
             ]
+        ],
+        "julia-ipynb": [
+            "ipynb"
         ],
         "go": [
             "go",
