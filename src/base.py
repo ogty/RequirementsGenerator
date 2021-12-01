@@ -1,4 +1,3 @@
-import autopep8
 import json
 import os
 import platform
@@ -8,8 +7,7 @@ import inspect
 # Module Extractor
 class ModuleExtractor:
     def python(self, source: str) -> list:
-        fixed_source = autopep8.fix_code(source)
-        result, embedded = self.common(fixed_source)
+        result, embedded = self.common(source)
         result = list(map(lambda m: "" if m in embedded else m, result))
         return result
     
