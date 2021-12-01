@@ -45,14 +45,14 @@
                     
                     <div id="setting_box">
                         <div class="mb-3">
-                            <span class="setting_title">Search directory</span>
-                            <input id="deliverable_search" class="form-control" type="text">
+                            <span class="setting_title">Search</span>
+                            <input id="deliverable_search" class="form-control" type="text" autocomplete="off">
                         </div>
                     </div>
 
                     <!-- show selected directory -->
                     <div id="setting_box">
-                        <span class="setting_title">Selected directory</span>
+                        <span class="setting_title">Selected</span>
                         <div>
                             <ul id="select_now" class="list-group"></ul>
                         </div>
@@ -235,6 +235,7 @@
                     $(".message").append("<div class='alert alert-success alert-dismissible fade show' role='alert'>" + message + close_btn + "</div>");
                     
                     console.log("Update directory successful!");
+                    location.reload();
                 }).fail(function (data) {
                     const message = "Update directory failed!"
                     const close_btn = "<button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close' onclick='close_message()'></button>"

@@ -142,22 +142,25 @@ def generate_tree():
     os_name = platform.system()
     user_name = os.getlogin()
     path = settings["os"][os_name].replace("<user_name>", user_name)
-    
+    ignores: list = settings["ignore"]
+
     # Store the retrieved information in a dict
     main_data = {"data": []}
     for data in os.walk(path):
         base_dict = {}
         
-        dir_constract = data[0]
-        dir_list = dir_constract.split(split_word)
-        base_dict["id"] = dir_constract
-        base_dict["text"] = dir_list[-1]
-        base_dict["parent"] = split_word.join(dir_list[:-1])
+        for ignore in ignores:
+            if not ignore in data[0]:
+                dir_constract = data[0]
+                dir_list = dir_constract.split(split_word)
+                base_dict["id"] = dir_constract
+                base_dict["text"] = dir_list[-1]
+                base_dict["parent"] = split_word.join(dir_list[:-1])
 
-        if path == data[0]:
-            base_dict["parent"] = "#"
+                if path == data[0]:
+                    base_dict["parent"] = "#"
 
-        main_data["data"].append(base_dict)
+                main_data["data"].append(base_dict)
 
     with open(f"{os.getcwd()}{split_word}static{split_word}tree.json", "w", encoding="utf-8") as f:
         json.dump(main_data, f, ensure_ascii=False, indent=2)
