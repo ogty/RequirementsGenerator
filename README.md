@@ -14,7 +14,7 @@
 
 ## 機能
 
- - [x] Basic Features
+ - [x] 言語選択
  - [x] Windows対応
  - [ ] MacOS対応
  - [x] 詳細表示
