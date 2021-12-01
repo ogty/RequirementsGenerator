@@ -26,8 +26,8 @@ class ModuleExtractor:
         splited_source = source.split()
         start = splited_source.index("import")
 
-        if splited_source[start + 1] == "(":
-            count = start + 2
+        if splited_source[start+1] == "(":
+            count = start+2
             while True:
                 module = splited_source[count]
                 if module == ")":
@@ -35,7 +35,7 @@ class ModuleExtractor:
                 result.append(module)
                 count += 1
         else:
-            result.append(splited_source[start + 1])
+            result.append(splited_source[start+1])
 
         result = list(map(lambda x: x.replace("\"", ""), result))
         result = list(map(lambda x: "" if x.split("/")[0] in embedded else x, result))
@@ -129,9 +129,9 @@ class RequirementsGenerator(Operate):
             values = [v for v in supported_extension.values()]
             values_sum = sum(values)
             if values_sum > 0:
-                supported_extension["py"] = round((values[0] / values_sum) * 100, 2)
-                supported_extension["jl"] = round((values[1] / values_sum) * 100, 2)
-                supported_extension["go"] = round((values[2] / values_sum) * 100, 2)
+                supported_extension["py"] = round((values[0]/values_sum)*100, 2)
+                supported_extension["jl"] = round((values[1]/values_sum)*100, 2)
+                supported_extension["go"] = round((values[2]/values_sum)*100, 2)
             else:
                 supported_extension["other"] = 100
 
