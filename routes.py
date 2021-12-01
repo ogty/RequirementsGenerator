@@ -6,7 +6,7 @@ import platform
 
 from src.base import RequirementsGenerator, generate_tree
 
-bp = Blueprint("foutes", __name__, url_prefix="/")
+bp = Blueprint("routes", __name__, url_prefix="/")
 
 
 # generate requirements.txt(main)
