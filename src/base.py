@@ -8,24 +8,24 @@ import inspect
 class ModuleExtractor:
     def python(self, source: str) -> list:
         result, embedded = self.common(source)
-        result = list(map(lambda m: "" if m in embedded else m, result))
+        result = list(filter(lambda m: False if m in embedded else m, result))
         return result
     
     def pythonipynb(self, ipynb_data: str) -> list:
         result, embedded = self.common(ipynb_data, ipynb=True)
-        result = list(map(lambda m: "" if m in embedded else m, result))
+        result = list(filter(lambda m: False if m in embedded else m, result))
         return result
     
     def julia(self, source: str) -> list:
         result, embedded = self.common(source)
         result = list(map(lambda m: m.replace(":", "").replace(";", ""), result))
-        result = list(map(lambda m: "" if m in embedded else m, result))
+        result = list(filter(lambda m: False if m in embedded else m, result))
         return result
 
     def juliaipynb(self, ipynb_data: str) -> list:
         result, embedded = self.common(ipynb_data, ipynb=True)
         result = list(map(lambda m: m.replace(":", "").replace(";", ""), result))
-        result = list(map(lambda m: "" if m in embedded else m, result))
+        result = list(filter(lambda m: False if m in embedded else m, result))
         return result
 
     def go(self, source: str) -> list:
@@ -47,7 +47,7 @@ class ModuleExtractor:
             result.append(splited_source[start+1])
 
         result = list(map(lambda x: x.replace("\"", ""), result))
-        result = list(map(lambda x: "" if x.split("/")[0] in embedded else x, result))
+        result = list(filter(lambda x: False if x.split("/")[0] in embedded else x, result))
 
         return result
 
