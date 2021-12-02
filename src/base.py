@@ -72,7 +72,7 @@ class ModuleExtractor:
         splited_source = source.split("\n")
         module_line = [x for x in splited_source if eval(process_word)]
         modules = list(map(lambda m: m.split()[1], module_line))
-        result = list(filter(lambda m: m.split(".")[0] if not m.startswith(".") else "", modules))
+        result = list(map(lambda m: m.split(".")[0] if not m.startswith(".") else "", modules))
 
         return (result, embedded)
 
