@@ -40,14 +40,15 @@ def base():
         generate_tree()
 
     lang_data = {}
-    for lang in settings["languages"]:
-        if "-" in lang:
-            lang_data[lang.capitalize()] = lang.replace("-", "")
+    for lang_name in settings["languages"]:
+        if "-" in lang_name:
+            lang_data[lang_name.capitalize()] = lang_name.replace("-", "")
         else:
-            lang_data[lang.capitalize()] = lang
+            lang_data[lang_name.capitalize()] = lang_name
 
     return render_template("main.html", data=lang_data)
 
+# Frequently referenced data
 split_word = "\\" if platform.system() == "Windows" else "/"
 data = open(f"{os.getcwd()}{split_word}static{split_word}settings.json", "r")
 settings = json.load(data)
