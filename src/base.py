@@ -101,7 +101,7 @@ class Operate:
         directories = [f for f in parent if os.path.isdir(os.path.join(path, f))]
 
         for dir in directories:
-            dir_full_path = f"{path}{split_word}{dir}"
+            dir_full_path = path + split_word + dir
             self.all_directory.append(dir_full_path)
             self.get_directories(dir_full_path)
 
@@ -111,12 +111,12 @@ class Operate:
             index = lang.find("ipynb")
             lang = f"{lang[:index]}-{lang[index:]}"
 
+        # selected supported language extension only
         for dir in self.all_directory:
             parent: list = os.listdir(dir)
             files = [f for f in parent if os.path.isfile(os.path.join(dir, f))]
-            filtered_files = list(filter(lambda f: f.endswith(settings["languages"][lang][0]), files))
-            file_full_path = list(map(lambda f: f"{dir}{split_word}{f}", filtered_files))
-
+            filtered_files_path = list(filter(lambda path: path.endswith(settings["languages"][lang][0]), files))
+            file_full_path = list(map(lambda path: dir + split_word + path, filtered_files_path))
             self.all_file += file_full_path
 
 class RequirementsGenerator(Operate):
