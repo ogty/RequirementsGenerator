@@ -9,13 +9,15 @@ from src.base import RequirementsGenerator, generate_tree
 bp = Blueprint("routes", __name__, url_prefix="/")
 
 
-# generate requirements.txt(main)
+# generate requirements.txt
 @bp.route("/generate", methods=["POST"])
 def generate():
     language = request.form["language"]
-    selected_dirs = request.form["dir_list"]
-    dirs = list(set(selected_dirs.split(",")))
-    [RequirementsGenerator(dir, language).generate() for dir in dirs]
+    selected_directories = request.form["dir_list"]
+    directories = list(set(selected_directories.split(",")))
+
+    # generate
+    [RequirementsGenerator(dir, language).generate() for dir in directories]
 
     return jsonify()
 
@@ -28,9 +30,9 @@ def update():
 # get selected directory detail
 @bp.route("/detail", methods=["POST"])
 def detail():
-    selected_dirs = request.form["dir_list"]
-    dirs = list(set(selected_dirs.split(",")))
-    detail_data = RequirementsGenerator().detail(dirs)
+    selected_directories = request.form["dir_list"]
+    directories = list(set(selected_directories.split(",")))
+    detail_data = RequirementsGenerator().detail(directories)
     return jsonify(values=json.dumps(detail_data))
 
 # base
