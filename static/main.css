@@ -16,12 +16,12 @@ main {
     width: 40%;
     padding: 30px;
 }
-.select_dirs {
+.select-dirs {
     width: 60%;
     padding: 30px;
     border-left: 1px dotted black;
 }
-.setting_title {
+.setting-title {
     font-weight: bold;
 }
 #setting_box {

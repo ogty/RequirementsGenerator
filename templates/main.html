@@ -26,8 +26,8 @@
             <div class="container">
                 <div class="settings">
                     <!-- show language -->
-                    <span class="setting_title">Language</span>
-                    <div class="select_language">
+                    <span class="setting-title">Language</span>
+                    <div>
                         {% for k, v in data.items() %}
                             {% if k == "Python" %}
                                 <div class="form-check-inline">
@@ -45,14 +45,14 @@
                     
                     <div id="setting_box">
                         <div class="mb-3">
-                            <span class="setting_title">Search</span>
+                            <span class="setting-title">Search</span>
                             <input id="deliverable_search" class="form-control" type="text" autocomplete="off">
                         </div>
                     </div>
 
                     <!-- show selected directory -->
                     <div id="setting_box">
-                        <span class="setting_title">Selected</span>
+                        <span class="setting-title">Selected</span>
                         <div>
                             <ul id="select_now" class="list-group"></ul>
                         </div>
@@ -80,7 +80,7 @@
                     </div>
                 </div>
                 <!-- display tree -->
-                <div class="select_dirs">
+                <div class="select-dirs">
                     <div id="SimpleJSTree"></div>
                 </div>
             </div>
@@ -260,7 +260,6 @@
                     $(".x-axis").empty();
 
                     Object.keys(result).forEach( function(value) {
-                        console.log( value + '：' + this[value] );
                         let path = value;
                         let python = 0;
                         let julia = 0;
