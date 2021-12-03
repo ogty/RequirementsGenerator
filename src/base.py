@@ -42,7 +42,7 @@ class LibraryExtractor:
 
     def go(self, source: str) -> list:
         result = []
-        embedded_libraries = settings["languages"]["go"][2]
+        embedded_libraries: list = settings["languages"]["go"][2]
 
         splited_source = source.split()
         library_prefix_index = splited_source.index("import")
@@ -72,7 +72,7 @@ class LibraryExtractor:
 
         # If it's ipynb, process it like normal source code.
         if ipynb:
-            ipynb_data = json.loads(source)
+            ipynb_data: object = json.loads(source)
             source_list = [cell["source"] for cell in ipynb_data["cells"]]
             source = "".join(source_list)
 
@@ -97,7 +97,7 @@ class LibraryExtractor:
 class Operate:
     # Get all directories in the selected directory.
     def get_directories(self, path: str) -> None:
-        parent = os.listdir(path)
+        parent: list = os.listdir(path)
         directories = [f for f in parent if os.path.isdir(os.path.join(path, f))]
 
         for dir in directories:
@@ -112,7 +112,7 @@ class Operate:
             lang = f"{lang[:index]}-{lang[index:]}"
 
         for dir in self.all_directory:
-            parent = os.listdir(dir)
+            parent: list = os.listdir(dir)
             files = [f for f in parent if os.path.isfile(os.path.join(dir, f))]
             filtered_files = list(filter(lambda f: f.endswith(settings["languages"][lang][0]), files))
             file_full_path = list(map(lambda f: f"{dir}{split_word}{f}", filtered_files))
@@ -171,7 +171,7 @@ class RequirementsGenerator(Operate):
 
             # Count supported language extensions.
             for middle_dir in self.all_directory:
-                parent = os.listdir(middle_dir)
+                parent: list = os.listdir(middle_dir)
                 files = [f for f in parent if os.path.isfile(os.path.join(middle_dir, f))]
 
                 for extension in supported_extension:
