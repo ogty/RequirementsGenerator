@@ -7,6 +7,11 @@ import platform
 # Sorry: many SPLIT_WORD and many f-string
 # list(), dict() -> [], {} Because it's faster
 
+SPLIT_WORD = "\\" if platform.system() == "Windows" else "/"
+data = open(f"{os.getcwd()}{SPLIT_WORD}static{SPLIT_WORD}settings.json", "r")
+SETTINGS = json.load(data)
+
+
 class ModuleExtractor:
     """
     Supported Languages
@@ -229,7 +234,3 @@ def generate_tree():
 
     with open(f"{os.getcwd()}{SPLIT_WORD}static{SPLIT_WORD}tree.json", "w", encoding="utf-8") as f:
         json.dump(tree_data, f, ensure_ascii=False, indent=2)
-
-SPLIT_WORD = "\\" if platform.system() == "Windows" else "/"
-data = open(f"{os.getcwd()}{SPLIT_WORD}static{SPLIT_WORD}settings.json", "r")
-SETTINGS = json.load(data)

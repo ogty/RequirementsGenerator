@@ -8,6 +8,10 @@ from src.base import SPLIT_WORD, RequirementsGenerator, generate_tree
 
 bp = Blueprint("routes", __name__, url_prefix="/")
 
+SPLIT_WORD = "\\" if platform.system() == "Windows" else "/"
+data = open(f"{os.getcwd()}{SPLIT_WORD}static{SPLIT_WORD}settings.json", "r")
+SETTINGS = json.load(data)
+
 
 # generate requirements.txt
 @bp.route("/generate", methods=["POST"])
@@ -50,7 +54,3 @@ def base():
             lang_data[lang_name.capitalize()] = lang_name
 
     return render_template("main.html", data=lang_data)
-
-SPLIT_WORD = "\\" if platform.system() == "Windows" else "/"
-data = open(f"{os.getcwd()}{SPLIT_WORD}static{SPLIT_WORD}settings.json", "r")
-SETTINGS = json.load(data)
