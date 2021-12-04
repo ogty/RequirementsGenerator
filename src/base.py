@@ -4,7 +4,9 @@ import platform
 import inspect
 
 
-# Library Extractor
+# Sorry: many SPLIT_WORD and many f-string
+# list(), dict() -> [], {} Because it's faster
+
 class LibraryExtractor:
     """
     Supported Languages
@@ -17,36 +19,32 @@ class LibraryExtractor:
 
     Note: Use common functions to handle everything except Go.
     """
-    # Python
+
     def python(self, source: str) -> list:
         result, embedded_libraries = self.common(source)
         filtered_result = list(filter(lambda m: False if m in embedded_libraries else m, result))
         return filtered_result
     
-    # Python(ipynb)
     def pythonipynb(self, ipynb_data: str) -> list:
         result, embedded_libraries = self.common(ipynb_data, ipynb=True)
         filtered_result = list(filter(lambda m: False if m in embedded_libraries else m, result))
         return filtered_result
     
-    # Julia
     def julia(self, source: str) -> list:
         result, embedded_libraries = self.common(source)
         replaced_result = list(map(lambda m: m.replace(":", "").replace(";", ""), result))
         filtered_result = list(filter(lambda m: False if m in embedded_libraries else m, replaced_result))
         return filtered_result
 
-    # Julia(ipynb)
     def juliaipynb(self, ipynb_data: str) -> list:
         result, embedded_libraries = self.common(ipynb_data, ipynb=True)
         replaced_result = list(map(lambda m: m.replace(":", "").replace(";", ""), result))
         filtered_result = list(filter(lambda m: False if m in embedded_libraries else m, replaced_result))
         return filtered_result
 
-    # Go
     def go(self, source: str) -> list:
         result = []
-        embedded_libraries: list = settings["languages"]["go"][2]
+        embedded_libraries: list = SETTINGS["languages"]["go"][2]
         splited_source = source.split()
         library_prefix_index = splited_source.index("import")
 
@@ -82,8 +80,8 @@ class LibraryExtractor:
 
         # Because everything except ipynb is common
         language = "python" if "python" in called_function_name else "julia"
-        prefixes: list = settings["languages"][language][1]
-        embedded: list = settings["languages"][language][2]
+        prefixes: list = SETTINGS["languages"][language][1]
+        embedded: list = SETTINGS["languages"][language][2]
 
         # Process it so that it can be executed by the eval method
         process = [f"x.startswith('{pref}')" for pref in prefixes]
@@ -100,13 +98,13 @@ class LibraryExtractor:
 # Get data in a hierarchical directory structure
 class Operate:
     # Get all directories in the selected directory
-    # Get all hierarchical data by calling recursively
     def get_directories(self, path: str) -> None:
         parent: list = os.listdir(path)
         directories = [f for f in parent if os.path.isdir(os.path.join(path, f))]
 
+        # Get all hierarchical data by calling recursively
         for dir in directories:
-            dir_full_path = path + split_word + dir
+            dir_full_path = path + SPLIT_WORD + dir
             self.all_directory.append(dir_full_path)
             self.get_directories(dir_full_path)
 
@@ -120,8 +118,8 @@ class Operate:
         for dir in self.all_directory:
             parent: list = os.listdir(dir)
             files = [f for f in parent if os.path.isfile(os.path.join(dir, f))]
-            filtered_files_path = list(filter(lambda path: path.endswith(settings["languages"][lang][0]), files))
-            file_full_path = list(map(lambda path: dir + split_word + path, filtered_files_path))
+            filtered_files_path = list(filter(lambda path: path.endswith(SETTINGS["languages"][lang][0]), files))
+            file_full_path = list(map(lambda path: dir + SPLIT_WORD + path, filtered_files_path))
             self.all_file += file_full_path
 
 class RequirementsGenerator(Operate):
@@ -141,6 +139,7 @@ class RequirementsGenerator(Operate):
         library_extractor = LibraryExtractor()
         library_list = []
 
+        # Extract libraries from the source code of all files obtained from the selected directory
         for file_path in self.all_file:
             with open(file_path, "r", encoding="utf-8") as f:
                 source = f.read()
@@ -152,7 +151,7 @@ class RequirementsGenerator(Operate):
             library_list = list(set(library_list))
             library_list.sort()
 
-            with open(f"{self.path}{split_word}requirements.txt", "w", encoding="utf-8") as f:
+            with open(f"{self.path}{SPLIT_WORD}requirements.txt", "w", encoding="utf-8") as f:
                 labraries = "\n".join(library_list)
                 f.write(labraries)
 
@@ -195,7 +194,7 @@ class RequirementsGenerator(Operate):
             else:
                 supported_extension["other"] = 100
 
-            display_dir_name = dir.split(split_word)[-1]
+            display_dir_name = dir.split(SPLIT_WORD)[-1]
             result[display_dir_name] = supported_extension
             self.all_directory.clear()
         
@@ -206,7 +205,7 @@ def generate_tree():
     # Get all directory information directly under the default path written in settings.json
     os_name = platform.system()
     user_name = os.getlogin()
-    path = settings["os"][os_name].replace("<user_name>", user_name)
+    path = SETTINGS["os"][os_name].replace("<user_name>", user_name)
 
     # Store the retrieved information in a dict
     tree_data = {"data": []}
@@ -215,10 +214,10 @@ def generate_tree():
 
         dir_path = directory_stracture[0]
         if not ".git" in dir_path:                                      # .git is ignore
-            dir_list = dir_path.split(split_word)
+            dir_list = dir_path.split(SPLIT_WORD)
             tree_information["id"] = dir_path                           # full directory path
             tree_information["text"] = dir_list[-1]                     # displayed name
-            tree_information["parent"] = split_word.join(dir_list[:-1]) # directory parent
+            tree_information["parent"] = SPLIT_WORD.join(dir_list[:-1]) # directory parent
 
             # Since we are starting from Desktop, its parents are not there
             if path == dir_path:
@@ -226,10 +225,9 @@ def generate_tree():
 
             tree_data["data"].append(tree_information)
 
-    with open(f"{os.getcwd()}{split_word}static{split_word}tree.json", "w", encoding="utf-8") as f:
+    with open(f"{os.getcwd()}{SPLIT_WORD}static{SPLIT_WORD}tree.json", "w", encoding="utf-8") as f:
         json.dump(tree_data, f, ensure_ascii=False, indent=2)
 
-# Frequently referenced data
-split_word = "\\" if platform.system() == "Windows" else "/"
-data = open(f"{os.getcwd()}{split_word}static{split_word}settings.json", "r")
-settings = json.load(data)
+SPLIT_WORD = "\\" if platform.system() == "Windows" else "/"
+data = open(f"{os.getcwd()}{SPLIT_WORD}static{SPLIT_WORD}settings.json", "r")
+SETTINGS = json.load(data)

@@ -4,7 +4,7 @@ import os
 import json
 import platform
 
-from src.base import RequirementsGenerator, generate_tree
+from src.base import SPLIT_WORD, RequirementsGenerator, generate_tree
 
 bp = Blueprint("routes", __name__, url_prefix="/")
 
@@ -38,11 +38,11 @@ def detail():
 # base
 @bp.route("/")
 def base():
-    if not os.path.exists(f"{os.getcwd()}{split_word}static{split_word}tree.json"):
+    if not os.path.exists(f"{os.getcwd()}{SPLIT_WORD}static{SPLIT_WORD}tree.json"):
         generate_tree()
 
     lang_data = {}
-    for lang_name in settings["languages"]:
+    for lang_name in SETTINGS["languages"]:
         if "-" in lang_name:
             lang_data[lang_name.capitalize()] = lang_name.replace("-", "")
         else:
@@ -50,7 +50,6 @@ def base():
 
     return render_template("main.html", data=lang_data)
 
-# Frequently referenced data
-split_word = "\\" if platform.system() == "Windows" else "/"
-data = open(f"{os.getcwd()}{split_word}static{split_word}settings.json", "r")
-settings = json.load(data)
+SPLIT_WORD = "\\" if platform.system() == "Windows" else "/"
+data = open(f"{os.getcwd()}{SPLIT_WORD}static{SPLIT_WORD}settings.json", "r")
+SETTINGS = json.load(data)
