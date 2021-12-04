@@ -1,7 +1,7 @@
+import inspect
 import json
 import os
 import platform
-import inspect
 
 
 # Sorry: many SPLIT_WORD and many f-string

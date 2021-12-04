@@ -1,7 +1,7 @@
 from flask import Blueprint
 from flask import jsonify, request, render_template
-import os
 import json
+import os
 import platform
 
 from src.base import SPLIT_WORD, RequirementsGenerator, generate_tree
