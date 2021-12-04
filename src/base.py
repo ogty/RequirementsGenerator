@@ -17,33 +17,36 @@ class LibraryExtractor:
 
     Note: Use common functions to handle everything except Go.
     """
-
+    # Python
     def python(self, source: str) -> list:
         result, embedded_libraries = self.common(source)
         filtered_result = list(filter(lambda m: False if m in embedded_libraries else m, result))
         return filtered_result
     
+    # Python(ipynb)
     def pythonipynb(self, ipynb_data: str) -> list:
         result, embedded_libraries = self.common(ipynb_data, ipynb=True)
         filtered_result = list(filter(lambda m: False if m in embedded_libraries else m, result))
         return filtered_result
     
+    # Julia
     def julia(self, source: str) -> list:
         result, embedded_libraries = self.common(source)
         replaced_result = list(map(lambda m: m.replace(":", "").replace(";", ""), result))
         filtered_result = list(filter(lambda m: False if m in embedded_libraries else m, replaced_result))
         return filtered_result
 
+    # Julia(ipynb)
     def juliaipynb(self, ipynb_data: str) -> list:
         result, embedded_libraries = self.common(ipynb_data, ipynb=True)
         replaced_result = list(map(lambda m: m.replace(":", "").replace(";", ""), result))
         filtered_result = list(filter(lambda m: False if m in embedded_libraries else m, replaced_result))
         return filtered_result
 
+    # Go
     def go(self, source: str) -> list:
         result = []
         embedded_libraries: list = settings["languages"]["go"][2]
-
         splited_source = source.split()
         library_prefix_index = splited_source.index("import")
 
@@ -54,6 +57,7 @@ class LibraryExtractor:
                 maybe_library = splited_source[library_count]
                 if maybe_library == ")":
                     break
+
                 result.append(maybe_library)
                 library_count += 1
         # If you have only one library
@@ -70,7 +74,7 @@ class LibraryExtractor:
     def common(self, source: str, ipynb=False) -> tuple:
         called_function_name = str(inspect.stack()[1].function)
 
-        # If it's ipynb, process it like normal source code.
+        # If it's ipynb, process it like normal source code
         if ipynb:
             ipynb_data: object = json.loads(source)
             source_list = [cell["source"] for cell in ipynb_data["cells"]]
@@ -81,7 +85,7 @@ class LibraryExtractor:
         prefixes: list = settings["languages"][language][1]
         embedded: list = settings["languages"][language][2]
 
-        # Process it so that it can be executed by the eval method.
+        # Process it so that it can be executed by the eval method
         process = [f"x.startswith('{pref}')" for pref in prefixes]
         process_word = " or ".join(process)
 
@@ -93,9 +97,10 @@ class LibraryExtractor:
 
         return (result, embedded)
 
-# Get data in a hierarchical directory structure.
+# Get data in a hierarchical directory structure
 class Operate:
-    # Get all directories in the selected directory.
+    # Get all directories in the selected directory
+    # Get all hierarchical data by calling recursively
     def get_directories(self, path: str) -> None:
         parent: list = os.listdir(path)
         directories = [f for f in parent if os.path.isdir(os.path.join(path, f))]
@@ -105,7 +110,7 @@ class Operate:
             self.all_directory.append(dir_full_path)
             self.get_directories(dir_full_path)
 
-    # Retrieves a specific file in the retrieved directory.
+    # Retrieves a specific file in the retrieved directory
     def get_files(self, lang: str) -> None:
         if "ipynb" in lang:
             index = lang.find("ipynb")
@@ -124,8 +129,8 @@ class RequirementsGenerator(Operate):
     def __init__(self, path="", lang="") -> None:
         self.path = path
         self.lang = lang
-        self.all_directory = [path]
         self.all_file = []
+        self.all_directory = [path]
 
     # Main process(generate requirements.txt)
     def generate(self) -> None:
@@ -139,10 +144,10 @@ class RequirementsGenerator(Operate):
         for file_path in self.all_file:
             with open(file_path, "r", encoding="utf-8") as f:
                 source = f.read()
+
             library_list += getattr(library_extractor, self.lang)(source)
 
-        # Generate
-        # = library_list is not empty
+        # if library_list is not empty
         if library_list:
             library_list = list(set(library_list))
             library_list.sort()
@@ -157,19 +162,22 @@ class RequirementsGenerator(Operate):
 
         for dir in directories:
             supported_extension = {
-                "py": 0, "jl": 0, "go": 0,
-                "ipynb": 0, "other": 0
+                "py"   : 0, 
+                "jl"   : 0, 
+                "go"   : 0,
+                "ipynb": 0, 
+                "other": 0
             }
             
             # Because an empty string will cause an error
             if self.all_directory.count(""):
                 self.all_directory.remove("")
 
-            # Get the hierarchical directory.
+            # Get the hierarchical directory
             self.all_directory.append(dir)
             self.get_directories(dir)
 
-            # Count supported language extensions.
+            # Count supported language extensions
             for middle_dir in self.all_directory:
                 parent: list = os.listdir(middle_dir)
                 files = [f for f in parent if os.path.isfile(os.path.join(middle_dir, f))]
@@ -177,11 +185,11 @@ class RequirementsGenerator(Operate):
                 for extension in supported_extension:
                     supported_extension[extension] += len(list(filter(lambda f: f.endswith(extension), files)))
 
-            # Process it so that it is easy to handle in the next process.
+            # Process it so that it is easy to handle in the next process
             extension_counted = [v for v in supported_extension.values()]
             sum_extension_counted = sum(extension_counted)
 
-            # Process the data so that it can be displayed as a percentage.
+            # Process the data so that it can be displayed as a percentage
             if sum_extension_counted > 0:
                 supported_extension = {e: round((v/sum_extension_counted)*100, 2) for e, v in zip(supported_extension, extension_counted)}
             else:
@@ -212,7 +220,7 @@ def generate_tree():
             tree_information["text"] = dir_list[-1]                     # displayed name
             tree_information["parent"] = split_word.join(dir_list[:-1]) # directory parent
 
-            # Since we are starting from Desktop, its parents are not there.
+            # Since we are starting from Desktop, its parents are not there
             if path == dir_path:
                 tree_information["parent"] = "#"
 
