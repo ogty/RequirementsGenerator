@@ -109,16 +109,16 @@ class Operate:
             self.get_directories(dir_full_path)
 
     # Retrieves a specific file in the retrieved directory
-    def get_files(self, lang: str) -> None:
-        if "ipynb" in lang:
-            index = lang.find("ipynb")
-            lang = f"{lang[:index]}-{lang[index:]}"
+    def get_files(self, selected_lang: str) -> None:
+        if "ipynb" in selected_lang:
+            index = selected_lang.find("ipynb")
+            selected_lang = f"{selected_lang[:index]}-{selected_lang[index:]}"
 
         # selected supported language extension only
         for dir in self.all_directory:
             parent: list = os.listdir(dir)
             files = [f for f in parent if os.path.isfile(os.path.join(dir, f))]
-            filtered_files_path = list(filter(lambda path: path.endswith(SETTINGS["languages"][lang][0]), files))
+            filtered_files_path = list(filter(lambda path: path.endswith(SETTINGS["languages"][selected_lang][0]), files))
             file_full_path = list(map(lambda path: dir + SPLIT_WORD + path, filtered_files_path))
             self.all_file += file_full_path
 
