@@ -7,7 +7,7 @@ import platform
 # Sorry: many SPLIT_WORD and many f-string
 # list(), dict() -> [], {} Because it's faster
 
-class LibraryExtractor:
+class ModuleExtractor:
     """
     Supported Languages
     =====================
@@ -21,50 +21,50 @@ class LibraryExtractor:
     """
 
     def python(self, source: str) -> list:
-        result, embedded_libraries = self.common(source)
-        filtered_result = list(filter(lambda m: False if m in embedded_libraries else m, result))
+        result, embedded_modules = self.common(source)
+        filtered_result = list(filter(lambda m: False if m in embedded_modules else m, result))
         return filtered_result
     
     def pythonipynb(self, ipynb_data: str) -> list:
-        result, embedded_libraries = self.common(ipynb_data, ipynb=True)
-        filtered_result = list(filter(lambda m: False if m in embedded_libraries else m, result))
+        result, embedded_modules = self.common(ipynb_data, ipynb=True)
+        filtered_result = list(filter(lambda m: False if m in embedded_modules else m, result))
         return filtered_result
     
     def julia(self, source: str) -> list:
-        result, embedded_libraries = self.common(source)
+        result, embedded_modules = self.common(source)
         replaced_result = list(map(lambda m: m.replace(":", "").replace(";", ""), result))
-        filtered_result = list(filter(lambda m: False if m in embedded_libraries else m, replaced_result))
+        filtered_result = list(filter(lambda m: False if m in embedded_modules else m, replaced_result))
         return filtered_result
 
     def juliaipynb(self, ipynb_data: str) -> list:
-        result, embedded_libraries = self.common(ipynb_data, ipynb=True)
+        result, embedded_modules = self.common(ipynb_data, ipynb=True)
         replaced_result = list(map(lambda m: m.replace(":", "").replace(";", ""), result))
-        filtered_result = list(filter(lambda m: False if m in embedded_libraries else m, replaced_result))
+        filtered_result = list(filter(lambda m: False if m in embedded_modules else m, replaced_result))
         return filtered_result
 
     def go(self, source: str) -> list:
         result = []
-        embedded_libraries: list = SETTINGS["languages"]["go"][2]
+        embedded_modules: list = SETTINGS["languages"]["go"][2]
         splited_source = source.split()
-        library_prefix_index = splited_source.index("import")
+        module_prefix_index = splited_source.index("import")
 
-        # If you have multiple libraries
-        if splited_source[library_prefix_index+1] == "(":
-            library_count = library_prefix_index+2
+        # If you have multiple modules
+        if splited_source[module_prefix_index+1] == "(":
+            module_count = module_prefix_index+2
             while True:
-                maybe_library = splited_source[library_count]
-                if maybe_library == ")":
+                maybe_module = splited_source[module_count]
+                if maybe_module == ")":
                     break
 
-                result.append(maybe_library)
-                library_count += 1
-        # If you have only one library
+                result.append(maybe_module)
+                module_count += 1
+        # If you have only one module
         else:
-            result.append(splited_source[library_prefix_index+1])
+            result.append(splited_source[module_prefix_index+1])
 
-        # Remove unwanted strings and exclude built-in libraries
+        # Remove unwanted strings and exclude built-in modules
         filtered_result = list(map(lambda x: x.replace("\"", ""), result))
-        filtered_result = list(filter(lambda x: False if x.split("/")[0] in embedded_libraries else x, filtered_result))
+        filtered_result = list(filter(lambda x: False if x.split("/")[0] in embedded_modules else x, filtered_result))
 
         return filtered_result
 
@@ -74,8 +74,10 @@ class LibraryExtractor:
 
         # If it's ipynb, process it like normal source code
         if ipynb:
+            source_list = []
             ipynb_data: object = json.loads(source)
-            source_list = [cell["source"] for cell in ipynb_data["cells"]]
+            for cell in ipynb_data["cells"]:
+                source_list += cell
             source = "".join(source_list)
 
         # Because everything except ipynb is common
@@ -87,11 +89,11 @@ class LibraryExtractor:
         process = [f"x.startswith('{pref}')" for pref in prefixes]
         process_word = " or ".join(process)
 
-        # Retrieve just the library from the line containing it
+        # Retrieve just the module from the line containing it
         splited_source = source.split("\n")
-        library_line = [x for x in splited_source if eval(process_word)]
-        libraries = list(map(lambda m: m.split()[1], library_line))
-        result = list(map(lambda m: m.split(".")[0] if not m.startswith(".") else "", libraries))
+        module_line = [x for x in splited_source if eval(process_word)]
+        modules = list(map(lambda m: m.split()[1], module_line))
+        result = list(map(lambda m: m.split(".")[0] if not m.startswith(".") else "", modules))
 
         return (result, embedded)
 
@@ -135,25 +137,25 @@ class RequirementsGenerator(Operate):
         self.get_directories(self.path)
         self.get_files(self.lang)
 
-        # Library extract
-        library_extractor = LibraryExtractor()
-        library_list = []
+        # module extract
+        module_extractor = ModuleExtractor()
+        module_list = []
 
-        # Extract libraries from the source code of all files obtained from the selected directory
+        # Extract modules from the source code of all files obtained from the selected directory
         for file_path in self.all_file:
             with open(file_path, "r", encoding="utf-8") as f:
                 source = f.read()
 
-            library_list += getattr(library_extractor, self.lang)(source)
+            module_list += getattr(module_extractor, self.lang)(source)
 
-        # if library_list is not empty
-        if library_list:
-            library_list = list(set(library_list))
-            library_list.sort()
+        # if module_list is not empty
+        if module_list:
+            module_list = list(set(module_list))
+            module_list.sort()
 
             with open(f"{self.path}{SPLIT_WORD}requirements.txt", "w", encoding="utf-8") as f:
-                labraries = "\n".join(library_list)
-                f.write(labraries)
+                modules = "\n".join(module_list)
+                f.write(modules)
 
     # Get detailed information about a selected directory
     def detail(self, directories: list) -> dict:
