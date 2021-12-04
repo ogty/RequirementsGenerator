@@ -17,7 +17,8 @@ def generate():
     directories = list(set(selected_directories.split(",")))
 
     # generate
-    [RequirementsGenerator(dir, language).generate() for dir in directories]
+    for dir in directories:
+        RequirementsGenerator(dir, language).generate()
 
     return jsonify()
 
