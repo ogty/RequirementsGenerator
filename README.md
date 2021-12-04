@@ -20,7 +20,10 @@
  - [x] 詳細表示
  - [ ] ライブラリ選択
  - [ ] コマンドによる実行
+ - [ ] version指定の選択
  - [ ] `requirements.txt`の表示
+ - [ ] `requirements-core.txt`の作成
+ - [ ] `requirements-update.sh`の作成（もしくは`.bat`）
  - [x] 検索
 
 ***
