@@ -15,7 +15,7 @@ SETTINGS = json.load(data)
 
 # generate requirements.txt
 @bp.route("/generate", methods=["POST"])
-def generate():
+def generate() -> None:
     language = request.form["language"]
     selected_directories = request.form["dir_list"]
     directories = list(set(selected_directories.split(",")))
@@ -28,13 +28,13 @@ def generate():
 
 # update directory information
 @bp.route("/update", methods=["POST"])
-def update():
+def update() -> None:
     generate_tree()
     return jsonify()
 
 # get selected directory detail
 @bp.route("/detail", methods=["POST"])
-def detail():
+def detail() -> None:
     selected_directories = request.form["dir_list"]
     directories = list(set(selected_directories.split(",")))
     detail_data = RequirementsGenerator().detail(directories)
@@ -42,7 +42,7 @@ def detail():
 
 # base
 @bp.route("/")
-def base():
+def base() -> None:
     if not os.path.exists(f"{os.getcwd()}{SPLIT_WORD}static{SPLIT_WORD}tree.json"):
         generate_tree()
 

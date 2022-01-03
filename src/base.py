@@ -208,7 +208,7 @@ class RequirementsGenerator(Operate):
         return result
 
 # Generate the tree structure needed for directory selection
-def generate_tree():
+def generate_tree() -> None:
     # Get all directory information directly under the default path written in settings.json
     os_name = platform.system()
     user_name = os.getlogin()
