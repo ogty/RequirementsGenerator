@@ -105,7 +105,7 @@ class Operate:
 
         # Get all hierarchical data by calling recursively
         for dir in directories:
-            dir_full_path = f"{path}/{dir}"
+            dir_full_path = os.path.join(path, dir)
             self.all_directory.append(dir_full_path)
             self.get_directories(dir_full_path)
 
@@ -120,7 +120,7 @@ class Operate:
             parent: list = os.listdir(dir)
             files = [f for f in parent if os.path.isfile(os.path.join(dir, f))]
             filtered_files_path = list(filter(lambda path: path.endswith(settings.CONFIG["languages"][selected_lang][0]), files))
-            file_full_path = list(map(lambda path: f"{dir}/{path}", filtered_files_path))
+            file_full_path = list(map(lambda path: os.path.join(dir, path), filtered_files_path))
             self.all_file += file_full_path
 
 class RequirementsGenerator(Operate):
@@ -152,7 +152,7 @@ class RequirementsGenerator(Operate):
             module_list = list(set(module_list))
             module_list.sort()
 
-            with open(f"{self.path}/requirements.txt", "w", encoding="utf-8") as f:
+            with open(os.path.join(self.path, "requirements.txt"), "w", encoding="utf-8") as f:
                 modules = "\n".join(module_list)
                 f.write(modules)
 
