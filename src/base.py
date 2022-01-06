@@ -48,8 +48,8 @@ class ModuleExtractor:
         module_prefix_index = splited_source.index("import")
 
         # If you have multiple modules
-        if splited_source[module_prefix_index+1] == "(":
-            module_count = module_prefix_index+2
+        if splited_source[module_prefix_index + 1] == "(":
+            module_count = module_prefix_index + 2
             while True:
                 maybe_module = splited_source[module_count]
                 if maybe_module == ")":
@@ -59,7 +59,7 @@ class ModuleExtractor:
                 module_count += 1
         # If you have only one module
         else:
-            result.append(splited_source[module_prefix_index+1])
+            result.append(splited_source[module_prefix_index + 1])
 
         # Remove unwanted strings and exclude built-in modules
         filtered_result = list(map(lambda x: x.replace("\"", ""), result))
