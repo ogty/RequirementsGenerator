@@ -1,16 +1,15 @@
-from flask import Blueprint
-from flask import jsonify, request, render_template
 import json
 import os
-import platform
 
-from src.base import SPLIT_WORD, RequirementsGenerator, generate_tree
+from flask import Blueprint
+from flask import jsonify
+from flask import request
+from flask import render_template
+
+from src.base import RequirementsGenerator, generate_tree
+import settings
 
 bp = Blueprint("routes", __name__, url_prefix="/")
-
-SPLIT_WORD = "\\" if platform.system() == "Windows" else "/"
-data = open(f"{os.getcwd()}{SPLIT_WORD}static{SPLIT_WORD}settings.json", "r")
-SETTINGS = json.load(data)
 
 
 # generate requirements.txt
@@ -43,11 +42,11 @@ def detail() -> None:
 # base
 @bp.route("/")
 def base() -> None:
-    if not os.path.exists(f"{os.getcwd()}{SPLIT_WORD}static{SPLIT_WORD}tree.json"):
+    if not os.path.exists(settings.TREE_PATH):
         generate_tree()
 
     lang_data = {}
-    for lang_name in SETTINGS["languages"]:
+    for lang_name in settings.SETTINGS["languages"]:
         if "-" in lang_name:
             lang_data[lang_name.capitalize()] = lang_name.replace("-", "")
         else:
