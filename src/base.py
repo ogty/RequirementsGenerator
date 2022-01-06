@@ -43,7 +43,7 @@ class ModuleExtractor:
 
     def go(self, source: str) -> list:
         result = []
-        embedded_modules: list = settings.SETTINGS["languages"]["go"][2]
+        embedded_modules: list = settings.CONFIG["languages"]["go"][2]
         splited_source = source.split()
         module_prefix_index = splited_source.index("import")
 
@@ -81,8 +81,8 @@ class ModuleExtractor:
 
         # Because everything except ipynb is common
         language = "python" if "python" in called_function_name else "julia"
-        prefixes: list = settings.SETTINGS["languages"][language][1]
-        embedded: list = settings.SETTINGS["languages"][language][2]
+        prefixes: list = settings.CONFIG["languages"][language][1]
+        embedded: list = settings.CONFIG["languages"][language][2]
 
         # Process it so that it can be executed by the eval method
         process = [f"x.startswith('{pref}')" for pref in prefixes]
@@ -119,7 +119,7 @@ class Operate:
         for dir in self.all_directory:
             parent: list = os.listdir(dir)
             files = [f for f in parent if os.path.isfile(os.path.join(dir, f))]
-            filtered_files_path = list(filter(lambda path: path.endswith(settings.SETTINGS["languages"][selected_lang][0]), files))
+            filtered_files_path = list(filter(lambda path: path.endswith(settings.CONFIG["languages"][selected_lang][0]), files))
             file_full_path = list(map(lambda path: dir + settings.SPLIT_WORD + path, filtered_files_path))
             self.all_file += file_full_path
 
@@ -206,7 +206,7 @@ def generate_tree() -> None:
     # Get all directory information directly under the default path written in settings.json
     os_name = platform.system()
     user_name = os.getlogin()
-    path = settings.SETTINGS["os"][os_name].replace("<user_name>", user_name)
+    path = settings.CONFIG["os"][os_name].replace("<user_name>", user_name)
 
     # Store the retrieved information in a dict
     tree_data = {"data": []}
