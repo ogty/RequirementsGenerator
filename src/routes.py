@@ -46,7 +46,7 @@ def base() -> None:
         generate_tree()
 
     lang_data = {}
-    for lang_name in settings.SETTINGS["languages"]:
+    for lang_name in settings.CONFIG["languages"]:
         if "-" in lang_name:
             lang_data[lang_name.capitalize()] = lang_name.replace("-", "")
         else:
