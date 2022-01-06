@@ -105,7 +105,7 @@ class Operate:
 
         # Get all hierarchical data by calling recursively
         for dir in directories:
-            dir_full_path = path + settings.SPLIT_WORD + dir
+            dir_full_path = f"{path}/{dir}"
             self.all_directory.append(dir_full_path)
             self.get_directories(dir_full_path)
 
@@ -120,7 +120,7 @@ class Operate:
             parent: list = os.listdir(dir)
             files = [f for f in parent if os.path.isfile(os.path.join(dir, f))]
             filtered_files_path = list(filter(lambda path: path.endswith(settings.CONFIG["languages"][selected_lang][0]), files))
-            file_full_path = list(map(lambda path: dir + settings.SPLIT_WORD + path, filtered_files_path))
+            file_full_path = list(map(lambda path: f"{dir}/{path}", filtered_files_path))
             self.all_file += file_full_path
 
 class RequirementsGenerator(Operate):
@@ -152,7 +152,7 @@ class RequirementsGenerator(Operate):
             module_list = list(set(module_list))
             module_list.sort()
 
-            with open(f"{self.path}{settings.SPLIT_WORD}requirements.txt", "w", encoding="utf-8") as f:
+            with open(f"{self.path}/requirements.txt", "w", encoding="utf-8") as f:
                 modules = "\n".join(module_list)
                 f.write(modules)
 
@@ -195,7 +195,7 @@ class RequirementsGenerator(Operate):
             else:
                 supported_extension["other"] = 100
 
-            display_dir_name = dir.split(settings.SPLIT_WORD)[-1]
+            display_dir_name = dir.split("/")[-1]
             result[display_dir_name] = supported_extension
             self.all_directory.clear()
         
@@ -214,11 +214,11 @@ def generate_tree() -> None:
         tree_information = {}
 
         dir_path = directory_stracture[0]
-        if not ".git" in dir_path:                                      # .git is ignore
-            dir_list = dir_path.split(settings.SPLIT_WORD)
-            tree_information["id"] = dir_path                           # full directory path
-            tree_information["text"] = dir_list[-1]                     # displayed name
-            tree_information["parent"] = settings.SPLIT_WORD.join(dir_list[:-1]) # directory parent
+        if not ".git" in dir_path:                               # .git is ignore
+            dir_list = dir_path.split("/")
+            tree_information["id"] = dir_path                    # full directory path
+            tree_information["text"] = dir_list[-1]              # displayed name
+            tree_information["parent"] = "/".join(dir_list[:-1]) # directory parent
 
             # Since we are starting from Desktop, its parents are not there
             if path == dir_path:
