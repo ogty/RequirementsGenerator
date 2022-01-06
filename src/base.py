@@ -3,13 +3,7 @@ import json
 import os
 import platform
 
-
-# Sorry: many SPLIT_WORD and many f-string
-# list(), dict() -> [], {} Because it's faster
-
-SPLIT_WORD = "\\" if platform.system() == "Windows" else "/"
-data = open(f"{os.getcwd()}{SPLIT_WORD}static{SPLIT_WORD}settings.json", "r")
-SETTINGS = json.load(data)
+import settings
 
 
 class ModuleExtractor:
@@ -49,7 +43,7 @@ class ModuleExtractor:
 
     def go(self, source: str) -> list:
         result = []
-        embedded_modules: list = SETTINGS["languages"]["go"][2]
+        embedded_modules: list = settings.SETTINGS["languages"]["go"][2]
         splited_source = source.split()
         module_prefix_index = splited_source.index("import")
 
@@ -87,8 +81,8 @@ class ModuleExtractor:
 
         # Because everything except ipynb is common
         language = "python" if "python" in called_function_name else "julia"
-        prefixes: list = SETTINGS["languages"][language][1]
-        embedded: list = SETTINGS["languages"][language][2]
+        prefixes: list = settings.SETTINGS["languages"][language][1]
+        embedded: list = settings.SETTINGS["languages"][language][2]
 
         # Process it so that it can be executed by the eval method
         process = [f"x.startswith('{pref}')" for pref in prefixes]
@@ -111,7 +105,7 @@ class Operate:
 
         # Get all hierarchical data by calling recursively
         for dir in directories:
-            dir_full_path = path + SPLIT_WORD + dir
+            dir_full_path = path + settings.SPLIT_WORD + dir
             self.all_directory.append(dir_full_path)
             self.get_directories(dir_full_path)
 
@@ -125,8 +119,8 @@ class Operate:
         for dir in self.all_directory:
             parent: list = os.listdir(dir)
             files = [f for f in parent if os.path.isfile(os.path.join(dir, f))]
-            filtered_files_path = list(filter(lambda path: path.endswith(SETTINGS["languages"][selected_lang][0]), files))
-            file_full_path = list(map(lambda path: dir + SPLIT_WORD + path, filtered_files_path))
+            filtered_files_path = list(filter(lambda path: path.endswith(settings.SETTINGS["languages"][selected_lang][0]), files))
+            file_full_path = list(map(lambda path: dir + settings.SPLIT_WORD + path, filtered_files_path))
             self.all_file += file_full_path
 
 class RequirementsGenerator(Operate):
@@ -158,7 +152,7 @@ class RequirementsGenerator(Operate):
             module_list = list(set(module_list))
             module_list.sort()
 
-            with open(f"{self.path}{SPLIT_WORD}requirements.txt", "w", encoding="utf-8") as f:
+            with open(f"{self.path}{settings.SPLIT_WORD}requirements.txt", "w", encoding="utf-8") as f:
                 modules = "\n".join(module_list)
                 f.write(modules)
 
@@ -197,11 +191,11 @@ class RequirementsGenerator(Operate):
 
             # Process the data so that it can be displayed as a percentage
             if sum_extension_counted > 0:
-                supported_extension = {e: round((v/sum_extension_counted)*100, 2) for e, v in zip(supported_extension, extension_counted)}
+                supported_extension = {e: round((v / sum_extension_counted) * 100, 2) for e, v in zip(supported_extension, extension_counted)}
             else:
                 supported_extension["other"] = 100
 
-            display_dir_name = dir.split(SPLIT_WORD)[-1]
+            display_dir_name = dir.split(settings.SPLIT_WORD)[-1]
             result[display_dir_name] = supported_extension
             self.all_directory.clear()
         
@@ -212,7 +206,7 @@ def generate_tree() -> None:
     # Get all directory information directly under the default path written in settings.json
     os_name = platform.system()
     user_name = os.getlogin()
-    path = SETTINGS["os"][os_name].replace("<user_name>", user_name)
+    path = settings.SETTINGS["os"][os_name].replace("<user_name>", user_name)
 
     # Store the retrieved information in a dict
     tree_data = {"data": []}
@@ -221,10 +215,10 @@ def generate_tree() -> None:
 
         dir_path = directory_stracture[0]
         if not ".git" in dir_path:                                      # .git is ignore
-            dir_list = dir_path.split(SPLIT_WORD)
+            dir_list = dir_path.split(settings.SPLIT_WORD)
             tree_information["id"] = dir_path                           # full directory path
             tree_information["text"] = dir_list[-1]                     # displayed name
-            tree_information["parent"] = SPLIT_WORD.join(dir_list[:-1]) # directory parent
+            tree_information["parent"] = settings.SPLIT_WORD.join(dir_list[:-1]) # directory parent
 
             # Since we are starting from Desktop, its parents are not there
             if path == dir_path:
@@ -232,5 +226,5 @@ def generate_tree() -> None:
 
             tree_data["data"].append(tree_information)
 
-    with open(f"{os.getcwd()}{SPLIT_WORD}static{SPLIT_WORD}tree.json", "w", encoding="utf-8") as f:
+    with open(settings.TREE_PATH, "w", encoding="utf-8") as f:
         json.dump(tree_data, f, ensure_ascii=False, indent=2)
