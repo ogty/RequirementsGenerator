@@ -2,6 +2,9 @@ import json
 import os
 
 
-data = open(f"{os.getcwd()}/static/config.json", "r")
-CONFIG = json.load(data)
-TREE_PATH = f"{os.getcwd()}/static/tree.json"
+TOP_DIR = os.path.dirname(__file__)
+STATIC_DIR = os.path.join(TOP_DIR, "static")
+TREE_PATH = os.path.join(STATIC_DIR, "tree.json")
+
+with open(os.path.join(STATIC_DIR, "config.json"), "r") as config_file:
+    CONFIG = json.load(config_file)
