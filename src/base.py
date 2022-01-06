@@ -190,7 +190,7 @@ class RequirementsGenerator(Operate):
             sum_extension_counted = sum(extension_counted)
 
             # Process the data so that it can be displayed as a percentage
-            if sum_extension_counted > 0:
+            if 0 > sum_extension_counted:
                 supported_extension = {e: round((v / sum_extension_counted) * 100, 2) for e, v in zip(supported_extension, extension_counted)}
             else:
                 supported_extension["other"] = 100
