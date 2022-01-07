@@ -203,15 +203,9 @@ class RequirementsGenerator(Operate):
 
 # Generate the tree structure needed for directory selection
 def generate_tree() -> None:
-    # TODO: Implemented in a different way
-    # Get all directory information directly under the default path written in settings.json
-    os_name = platform.system()
-    user_name = os.getlogin()
-    path = settings.CONFIG["os"][os_name].replace("<user_name>", user_name)
-
     # Store the retrieved information in a dict
     tree_data = {"data": []}
-    for directory_stracture in os.walk(path):
+    for directory_stracture in os.walk(settings.DESKTOP_PATH):
         tree_information = {}
 
         dir_path = directory_stracture[0]
@@ -222,7 +216,7 @@ def generate_tree() -> None:
             tree_information["parent"] = "/".join(dir_list[:-1]) # directory parent
 
             # Since we are starting from Desktop, its parents are not there
-            if path == dir_path:
+            if settings.DESKTOP_PATH == dir_path:
                 tree_information["parent"] = "#"
 
             tree_data["data"].append(tree_information)
