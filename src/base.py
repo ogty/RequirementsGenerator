@@ -161,13 +161,7 @@ class RequirementsGenerator(Operate):
         result = {}
 
         for dir in directories:
-            supported_extension = {
-                "py"   : 0, 
-                "jl"   : 0, 
-                "go"   : 0,
-                "ipynb": 0, 
-                "other": 0
-            }
+            supported_extension = {"py": 0, "jl": 0, "go": 0, "ipynb": 0, "other": 0}
             
             # Because an empty string will cause an error
             if self.all_directory.count(""):
