@@ -1,7 +1,6 @@
 import inspect
 import json
 import os
-import platform
 
 import settings
 
