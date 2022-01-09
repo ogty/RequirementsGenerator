@@ -24,9 +24,7 @@
 
 ## 機能
 
- - [x] Windows対応
- - [x] Mac対応
- - [x] Linux対応
+ - [x] Windows・Mac・Linux対応
  - [x] 言語選択
  - [x] フォルダ検索
  - [x] 詳細表示
