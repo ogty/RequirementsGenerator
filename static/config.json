@@ -7,7 +7,7 @@
                 "from"
             ],
             [
-                "ats",
+                "ast",
                 "csv",
                 "datetime",
                 "email",
