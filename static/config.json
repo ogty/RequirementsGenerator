@@ -31,7 +31,8 @@
                 "json",
                 "logging",
                 "platform",
-                "inspect"
+                "inspect",
+                "ats"
             ]
         ],
         "python-ipynb": [
