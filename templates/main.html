@@ -110,6 +110,8 @@
             let send_dirs = [];
             let confirm_dirs = {};
 
+            const close_btn = "<button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close' onclick='close_message()'></button>"
+
             // Asynchronous processing for JSON data acquisition
             $.ajax({
                 type: "GET",
@@ -201,25 +203,36 @@
                         },
                 }).done(function (data) {
                     $("#select_modules").empty()
+                    $(".message").empty()
 
+                    let module_empty_directories = []
                     const result = JSON.parse(data.values)
 
                     let count = 0
                     Object.keys(result).forEach(function(value) {
                         confirm_dirs[count] = value
-
-                        $("#select_modules").append("<p class='h6 mt-3'>" + value + "</p>")
-
-                        for (let i = 0; i < result[value].length; i++) {
-                            $("#select_modules").append(
-                            "<div class='form-check'><input name='xxx" + count + "' class='form-check-input' type='checkbox' value='" + 
-                            result[value][i] + "' id='module' checked>" + 
-                            "<label class='form-check-label' for='module'>" + result[value][i] + "</label></div>")
+                        
+                        if (result[value].length == 0) {
+                            module_empty_directories.push(value)
+                        } else {
+                            $("#select_modules").append("<p class='h6 mt-3'>" + value + "</p>")
+                            for (let i = 0; i < result[value].length; i++) {
+                                $("#select_modules").append(
+                                "<div class='form-check'><input name='xxx" + count + "' class='form-check-input' type='checkbox' value='" + 
+                                result[value][i] + "' id='module' checked>" + 
+                                "<label class='form-check-label' for='module'>" + result[value][i] + "</label></div>")
+                            }
+                            count += 1
                         }
-                        count += 1
-
                     })
-                    $("#select_modules").append("<div style='float: right;'><button type='button' class='btn btn-dark' onclick='generate()'>OK</button></div>")
+                    let message = module_empty_directories.join(", ")
+
+                    if (count == 0) {
+                        $(".message").append("<div class='alert alert-info alert-dismissible fade show' role='alert'>Could not find a module to write to requirements.txt.<br>" + message + close_btn + "</div>")
+                    } else {
+                        $(".message").append("<div class='alert alert-info alert-dismissible fade show' role='alert'>Could not find a module to write to requirements.txt.<br>" + message + close_btn + "</div>")
+                        $("#select_modules").append("<div style='float: right;'><button type='button' class='btn btn-dark' onclick='generate()'>OK</button></div>")
+                    }
                 })
             }
 
@@ -248,7 +261,6 @@
                         dataType: "json",
                     }).done(function (data) {
                         const message = "Generate successful!"
-                        const close_btn = "<button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close' onclick='close_message()'></button>"
 
                         value_reset()
                         $("#select_modules").empty();
@@ -258,7 +270,6 @@
                         console.log("Generate successful!");
                     }).fail(function (data) {
                         const message = "Generate failed!"
-                        const close_btn = "<button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close' onclick='close_message()'></button>"
 
                         $("#select_modules").empty();
                         $(".message").empty();
@@ -268,7 +279,7 @@
                     });
                 } else {
                     const message = "No directory selected!"
-                    const close_btn = "<button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close' onclick='close_message()'></button>"
+
                     $(".message").empty();
                     $(".message").append("<div class='alert alert-danger alert-dismissible fade show' role='alert'>" + message + close_btn + "</div>");
                 }
@@ -281,7 +292,6 @@
                     dataType: "json",
                 }).done(function (data) {
                     const message = "Update directory successful!"
-                    const close_btn = "<button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close' onclick='close_message()'></button>"
                     
                     $(".message").empty();
                     $(".message").append("<div class='alert alert-success alert-dismissible fade show' role='alert'>" + message + close_btn + "</div>");
@@ -290,7 +300,6 @@
                     location.reload();
                 }).fail(function (data) {
                     const message = "Update directory failed!"
-                    const close_btn = "<button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close' onclick='close_message()'></button>"
                     
                     $(".message").empty();
                     $(".message").append("<div class='alert alert-danger alert-dismissible fade show' role='alert'>" + message + close_btn + "</div>");
