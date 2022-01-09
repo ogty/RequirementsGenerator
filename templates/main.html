@@ -61,7 +61,7 @@
                     <!-- button -->
                     <div id="setting_box" class="btn-group" style="width: 100%;">
                         <button onclick="value_reset()" class="btn btn-outline-dark">Reset</button>
-                        <button onclick="generate()" class="btn btn-outline-dark">Generate</button>
+                        <button onclick="confirm()" class="btn btn-outline-dark">Generate</button>
                         <button onclick="update()" class="btn btn-outline-dark">Update</button>
                         <button onclick="detail()" class="btn btn-outline-dark">Detail</button>
                     </div>
@@ -76,6 +76,11 @@
                             <div class="x-axis">
                             </div>
                         </figure>
+                    </div>
+
+                    <!-- select modules -->
+                    <div id="select_modules">
+
                     </div>
                 </div>
                 <!-- display tree -->
@@ -105,6 +110,7 @@
             // Array to store the selected directory names.
             let dirs = [];
             let send_dirs = [];
+            let confirm_dirs = {};
 
             // Asynchronous processing for JSON data acquisition
             $.ajax({
@@ -126,9 +132,11 @@
             function value_reset() {
                 dirs = [];
                 send_dirs = [];
+                confirm_dirs = [];
                 $("#select_now").empty();
                 $(".row_group").empty();
                 $(".x-axis").empty();
+                $("#select_modules").empty();
             }
 
             // Display the tree structure and store the selected values in "dirs"
@@ -184,14 +192,60 @@
             function close_message() {
                 $(".message").empty();
             }
+
+            function confirm() {
+                $.ajax("/confirm", {
+                    type: "POST",
+                    dataType: "json",
+                    data: {
+                            "language": $("input:radio[name='lang']:checked").val(),
+                            "dir_list": send_dirs.join(',')
+                        },
+                }).done(function (data) {
+                    $("#select_modules").empty()
+
+                    const result = JSON.parse(data.values)
+
+                    let count = 0
+                    Object.keys(result).forEach(function(value) {
+                        confirm_dirs[count] = value
+
+                        $("#select_modules").append("<h5>" + value + "</h5>")
+
+                        for (let i = 0; i < result[value].length; i++) {
+                            $("#select_modules").append(
+                            "<div class='form-check'><input name='xxx" + count + "' class='form-check-input' type='checkbox' value='" + 
+                            result[value][i] + "' id='module' checked>" + 
+                            "<label class='form-check-label' for='module'>" + result[value][i] + "</label></div>")
+                        }
+                        count += 1
+
+                    })
+                    $("#select_modules").append("<button onclick='generate()'>OK</button>")
+                })
+            }
+
             // Function to send data to the backend(Main Function)
             function generate() {
+                let result = {}
+
+                Object.keys(confirm_dirs).forEach(function(value) {
+                    result[confirm_dirs[value]] = []
+                    const tmp = document.getElementsByName("xxx" + parseInt(value))
+
+                    for (let i = 0; i < tmp.length; i++) {
+                        if (tmp[i].checked) {
+                            result[confirm_dirs[value]].push(tmp[i].value);
+                        }
+                    }
+                })
+
                 if (dirs.length >= 1) {
                     $.ajax("/generate", {
                         type: "POST",
                         data: {
                             "language": $("input:radio[name='lang']:checked").val(),
-                            "dir_list": send_dirs.join(',')
+                            "confirmed_data": JSON.stringify(result)
                         },
                         dataType: "json",
                     }).done(function (data) {
@@ -199,6 +253,7 @@
                         const close_btn = "<button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close' onclick='close_message()'></button>"
 
                         value_reset()
+                        $("#select_modules").empty();
                         $(".message").empty();
                         $(".message").append("<div class='alert alert-success alert-dismissible fade show' role='alert'>" + message + close_btn + "</div>");
 
@@ -207,6 +262,7 @@
                         const message = "Generate failed!"
                         const close_btn = "<button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close' onclick='close_message()'></button>"
 
+                        $("#select_modules").empty();
                         $(".message").empty();
                         $(".message").append("<div class='alert alert-danger alert-dismissible fade show' role='alert'>" + message + close_btn + "</div>");
                         

@@ -132,12 +132,10 @@ class RequirementsGenerator(Operate):
         self.all_file = []
         self.all_directory = [path]
 
-    # Main process(generate requirements.txt)
-    def generate(self) -> None:
+    def confirm(self) -> list:
         self.get_directories(self.path)
         self.get_files(self.lang)
 
-        # module extract
         module_extractor = ModuleExtractor()
         module_list = []
 
@@ -148,14 +146,17 @@ class RequirementsGenerator(Operate):
 
             module_list += getattr(module_extractor, self.lang)(source)
 
-        # if module_list is not empty
         if module_list:
             module_list = list(set(module_list))
             module_list.sort()
 
-            with open(os.path.join(self.path, "requirements.txt"), "w", encoding="utf-8") as f:
-                modules = "\n".join(module_list)
-                f.write(modules)
+        return module_list
+
+    # Main process(generate requirements.txt)
+    def generate(self, module_list: list) -> None:
+        with open(os.path.join(self.path, "requirements.txt"), "w", encoding="utf-8") as f:
+            modules = "\n".join(module_list)
+            f.write(modules)
 
     # Get detailed information about a selected directory
     def detail(self, directories: list) -> dict:
