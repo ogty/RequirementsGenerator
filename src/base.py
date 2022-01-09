@@ -115,7 +115,7 @@ class Operate:
             index = selected_lang.find("ipynb")
             selected_lang = f"{selected_lang[:index]}-{selected_lang[index:]}"
 
-        # selected supported language extension only
+        # Selected supported language extension only
         for dir in self.all_directory:
             parent: list = os.listdir(dir)
             files = [f for f in parent if os.path.isfile(os.path.join(dir, f))]
@@ -125,7 +125,7 @@ class Operate:
 
             
 class RequirementsGenerator(Operate):
-    # initialize valiables and run function
+    # Initialize valiables and run function
     def __init__(self, path: str="", lang: str="") -> None:
         self.path = path
         self.lang = lang
