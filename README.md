@@ -12,6 +12,16 @@
 
 ***
 
+## 対応言語
+
+ - Python
+ - Python-ipynb
+ - Julia
+ - Julia-ipynb
+ - Go
+
+***
+
 ## 機能
 
  - [x] Windows対応
@@ -22,13 +32,3 @@
  - [x] 詳細表示
  - [x] ライブラリ選択 
  - [x] コマンド実行
-
-***
-
-## 対応言語
-
- - Python
- - Python-ipynb
- - Julia
- - Julia-ipynb
- - Go
