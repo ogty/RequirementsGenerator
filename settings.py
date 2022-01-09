@@ -3,9 +3,8 @@ import os
 import platform
 
 
-# TODO: Anything other than darwin and windows will cause an error
 os_name = platform.system()
-if os_name == "Darwin":
+if os_name == "Darwin" or "Linux":
     DESKTOP_PATH = os.path.join(os.path.join(os.environ["HOME"]), "Desktop")
 elif os_name == "Windows":
     DESKTOP_PATH = os.path.join(os.path.join(os.environ["USERPROFILE"]), "Desktop")
