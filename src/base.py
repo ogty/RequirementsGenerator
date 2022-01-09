@@ -67,7 +67,7 @@ class ModuleExtractor:
         return filtered_result
 
     # Handle the parts common to python and julia
-    def common(self, source: str, ipynb=False) -> tuple:
+    def common(self, source: str, ipynb: bool=False) -> tuple:
         called_function_name = str(inspect.stack()[1].function)
 
         # If it's ipynb, process it like normal source code
@@ -95,6 +95,7 @@ class ModuleExtractor:
 
         return (result, embedded)
 
+    
 # Get data in a hierarchical directory structure
 class Operate:
     # Get all directories in the selected directory
@@ -122,9 +123,10 @@ class Operate:
             file_full_path = list(map(lambda path: os.path.join(dir, path), filtered_files_path))
             self.all_file += file_full_path
 
+            
 class RequirementsGenerator(Operate):
     # initialize valiables and run function
-    def __init__(self, path="", lang="") -> None:
+    def __init__(self, path: str="", lang: str="") -> None:
         self.path = path
         self.lang = lang
         self.all_file = []
@@ -194,6 +196,7 @@ class RequirementsGenerator(Operate):
         
         return result
 
+    
 # Generate the tree structure needed for directory selection
 def generate_tree() -> None:
     # Store the retrieved information in a dict
