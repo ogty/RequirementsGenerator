@@ -44,7 +44,10 @@ class ModuleExtractor:
         result = []
         embedded_modules: list = settings.CONFIG["languages"]["go"][2]
         splited_source = source.split()
-        module_prefix_index = splited_source.index("import")
+        try:
+            module_prefix_index = splited_source.index("import")
+        except ValueError:
+            return []
 
         # If you have multiple modules
         if splited_source[module_prefix_index + 1] == "(":

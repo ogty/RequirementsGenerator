@@ -102,7 +102,7 @@
                 var text = $(this).text();
                 $(this).parent().css('width', text);
             });
-            $('.block').tooltip();
+            // $('.block').tooltip();
         </script>
         <script>
             // Array to store the selected directory names.
@@ -120,11 +120,7 @@
             })
             .then(
                 function (json) {
-                    console.log("Success");
                     createJSTree(json)
-                },
-                function() {
-                    console.log("Failure");
                 }
             );
 
@@ -272,16 +268,12 @@
                         $("#select_modules").empty();
                         $(".message").empty();
                         $(".message").append("<div class='alert alert-success alert-dismissible fade show' role='alert'>" + message + close_btn + "</div>");
-
-                        console.log("Generate successful!");
                     }).fail(function (data) {
                         const message = "Generate failed!"
 
                         $("#select_modules").empty();
                         $(".message").empty();
                         $(".message").append("<div class='alert alert-danger alert-dismissible fade show' role='alert'>" + message + close_btn + "</div>");
-                        
-                        console.log("Generate failed!");
                     });
                 } else {
                     const message = "No directory selected!"
@@ -302,15 +294,12 @@
                     $(".message").empty();
                     $(".message").append("<div class='alert alert-success alert-dismissible fade show' role='alert'>" + message + close_btn + "</div>");
                     
-                    console.log("Update directory successful!");
                     location.reload();
                 }).fail(function (data) {
                     const message = "Update directory failed!"
                     
                     $(".message").empty();
                     $(".message").append("<div class='alert alert-danger alert-dismissible fade show' role='alert'>" + message + close_btn + "</div>");
-                    
-                    console.log("Update directory failed!");
                 });
             }
             // get detail
@@ -359,10 +348,7 @@
                     }, result)
 
                     $(".x-axis").append("<h3>Language</h3><ul class='legend'><li>Python</li><li>Julia</li><li>Go</li><li>Ipynb</li><li>Ohter</li></ul>");
-                    console.log("Detail directory successful!");
-                }).fail(function (data) {
-                    console.log("Detail directory failed!");
-                });
+                })
             }
         </script>
     </footer>
