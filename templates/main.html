@@ -208,9 +208,9 @@
                     let module_empty_directories = []
                     const result = JSON.parse(data.values)
 
-                    let count = 0
+                    let include_modules_directories_count = 0
                     Object.keys(result).forEach(function(value) {
-                        confirm_dirs[count] = value
+                        confirm_dirs[include_modules_directories_count] = value
                         
                         if (result[value].length == 0) {
                             module_empty_directories.push(value)
@@ -218,20 +218,26 @@
                             $("#select_modules").append("<p class='h6 mt-3'>" + value + "</p>")
                             for (let i = 0; i < result[value].length; i++) {
                                 $("#select_modules").append(
-                                "<div class='form-check'><input name='xxx" + count + "' class='form-check-input' type='checkbox' value='" + 
+                                "<div class='form-check'><input name='xxx" + include_modules_directories_count + "' class='form-check-input' type='checkbox' value='" + 
                                 result[value][i] + "' id='module' checked>" + 
                                 "<label class='form-check-label' for='module'>" + result[value][i] + "</label></div>")
                             }
-                            count += 1
+                            include_modules_directories_count += 1
                         }
                     })
                     let message = module_empty_directories.join(", ")
 
-                    if (count == 0) {
-                        $(".message").append("<div class='alert alert-info alert-dismissible fade show' role='alert'>Could not find a module to write to requirements.txt.<br>" + message + close_btn + "</div>")
+                    if (send_dirs.length == 0) {
+                        $(".message").append("<div class='alert alert-danger alert-dismissible fade show' role='alert'>No directory selected!" + close_btn + "</div>")
                     } else {
-                        $(".message").append("<div class='alert alert-info alert-dismissible fade show' role='alert'>Could not find a module to write to requirements.txt.<br>" + message + close_btn + "</div>")
-                        $("#select_modules").append("<div style='float: right;'><button type='button' class='btn btn-dark' onclick='generate()'>OK</button></div>")
+                        if (module_empty_directories.length >= 1 && include_modules_directories_count == 0) {
+                            $(".message").append("<div class='alert alert-info alert-dismissible fade show' role='alert'>Could not find a module to write to requirements.txt.<br>" + message + close_btn + "</div>")
+                        } else if (module_empty_directories.length == 0 && include_modules_directories_count >= 1) {
+                            $("#select_modules").append("<div style='float: right;'><button type='button' class='btn btn-dark' onclick='generate()'>OK</button></div>")
+                        } else if (module_empty_directories.length >= 1 && include_modules_directories_count >= 1) {
+                            $(".message").append("<div class='alert alert-info alert-dismissible fade show' role='alert'>Could not find a module to write to requirements.txt.<br>" + message + close_btn + "</div>")
+                            $("#select_modules").append("<div style='float: right;'><button type='button' class='btn btn-dark' onclick='generate()'>OK</button></div>")
+                        }
                     }
                 })
             }

@@ -4,7 +4,9 @@ import platform
 
 
 os_name = platform.system()
-if os_name == "Darwin" or "Linux":
+if os_name == "Darwin":
+    DESKTOP_PATH = os.path.join(os.path.join(os.environ["HOME"]), "Desktop")
+elif os_name == "Linux":
     DESKTOP_PATH = os.path.join(os.path.join(os.environ["HOME"]), "Desktop")
 elif os_name == "Windows":
     DESKTOP_PATH = os.path.join(os.path.join(os.environ["USERPROFILE"]), "Desktop")
