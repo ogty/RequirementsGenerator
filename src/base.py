@@ -130,12 +130,12 @@ class Operate:
             
 class RequirementsGenerator(Operate):
     # Initialize valiables and run function
-    def __init__(self, path: str="", lang: str="", version: bool=True) -> None:
+    def __init__(self, path: str="", lang: str="", version: bool=False) -> None:
         self.path = path
         self.lang = lang
         self.version = version
 
-        if version and lang == "python" or "pythonipynb":
+        if version and lang == "python":
             self.pip_freezed = []
             stdout_result = subprocess.run(["pip3", "freeze"], capture_output=True)
             pip_freezed = stdout_result.stdout.decode("utf-8").split("\n")
@@ -159,7 +159,9 @@ class RequirementsGenerator(Operate):
                 source = f.read()
 
             module_list += getattr(module_extractor, self.lang)(source)
-            module_list += list(set(module_list))
+        
+        if module_list:
+            module_list = list(set(module_list))
             module_list.sort()
 
         if hasattr(self, "pip_freezed"):

@@ -66,6 +66,15 @@
                         <button onclick="detail()" class="btn btn-outline-dark">Detail</button>
                     </div>
 
+                    <div id="version_checkbox" class="py-2" style="width: 100%;">
+                        <div class="form-check" style="float: right;">
+                            <input class="form-check-input" name="version" type="checkbox" value="" id="versionCheckBox">
+                            <label class="form-check-label" for="versionCheckBox">
+                                Version(Python only)
+                            </label>
+                        </div>
+                    </div>
+
                     <!-- show detail -->
                     <div id="setting_box">
                         <figure>
@@ -190,12 +199,25 @@
             }
 
             function confirm() {
+                // version_checkbox = document.getElementsByName("version_checkbox")
+                // version_checkbox[i].checked
+                let version_checkbox = $("input:checkbox[name='version']:checked").val()
+
+                if (version_checkbox == "") {
+                    version_checkbox = true
+                    console.log("True")
+                } else {
+                    version_checkbox = false
+                    console.log("False")
+                }
+                
                 $.ajax("/confirm", {
                     type: "POST",
                     dataType: "json",
                     data: {
                             "language": $("input:radio[name='lang']:checked").val(),
-                            "dir_list": send_dirs.join(',')
+                            "dir_list": send_dirs.join(','),
+                            "version": version_checkbox
                         },
                 }).done(function (data) {
                     $("#select_modules").empty()

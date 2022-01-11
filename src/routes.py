@@ -1,4 +1,5 @@
 import ast
+from distutils.util import strtobool
 import json
 import os
 
@@ -19,11 +20,15 @@ bp = Blueprint("routes", __name__, url_prefix="/")
 def confirm() -> None:
     language = request.form["language"]
     selected_directories = request.form["dir_list"]
+    version = request.form["version"]
     directories = list(set(selected_directories.split(",")))
+
+    if directories.count(""):
+        directories.remove("")
 
     directory_and_module = {}
     for dir in directories:
-        module_list = RequirementsGenerator(dir, language).confirm()
+        module_list = RequirementsGenerator(dir, language, version=strtobool(version)).confirm()
         directory_and_module[dir] = module_list
 
     return jsonify(values=json.dumps(directory_and_module))

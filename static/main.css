@@ -20,11 +20,11 @@ main {
     display: flex;
 }
 .settings {
-    width: 50%;
+    width: 60%;
     padding: 30px;
 }
 .select-dirs {
-    width: 50%;
+    width: 40%;
     padding: 30px;
     border-left: 1px dotted black;
 }
