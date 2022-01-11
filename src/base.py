@@ -1,6 +1,7 @@
 import inspect
 import json
 import os
+import subprocess
 
 import settings
 
@@ -78,7 +79,7 @@ class ModuleExtractor:
             source_list = []
             ipynb_data: object = json.loads(source)
             for cell in ipynb_data["cells"]:
-                source_list += cell
+                source_list += cell["source"]
             source = "".join(source_list)
 
         # Because everything except ipynb is common
@@ -129,9 +130,19 @@ class Operate:
             
 class RequirementsGenerator(Operate):
     # Initialize valiables and run function
-    def __init__(self, path: str="", lang: str="") -> None:
+    def __init__(self, path: str="", lang: str="", version: bool=True) -> None:
         self.path = path
         self.lang = lang
+        self.version = version
+
+        if version and lang == "python" or "pythonipynb":
+            self.pip_freezed = []
+            stdout_result = subprocess.run(["pip3", "freeze"], capture_output=True)
+            pip_freezed = stdout_result.stdout.decode("utf-8").split("\n")
+            for installed_libary in pip_freezed:
+                if "==" in installed_libary:
+                    self.pip_freezed.append(installed_libary)
+
         self.all_file = []
         self.all_directory = [path]
 
@@ -148,10 +159,30 @@ class RequirementsGenerator(Operate):
                 source = f.read()
 
             module_list += getattr(module_extractor, self.lang)(source)
-
-        if module_list:
-            module_list = list(set(module_list))
+            module_list += list(set(module_list))
             module_list.sort()
+
+        if hasattr(self, "pip_freezed"):
+            tmp_module_list = []
+            match = []
+            for module in module_list:
+                for installed_library in self.pip_freezed:
+                    library_name = installed_library.split("==")[0]
+                    if module == library_name.lower():
+                        match.append(module)
+                        tmp_module_list.append(installed_library)
+                    else:
+                        tmp_module_list.append(module)
+            
+            tmp_module_list = list(set(tmp_module_list))
+            module_list = tmp_module_list
+            module_list.sort()
+
+            for matched_module in match:
+                try:
+                    module_list.remove(matched_module)
+                except:
+                    pass
 
         return module_list
 
