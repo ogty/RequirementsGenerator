@@ -45,7 +45,34 @@
                 "using"
             ],
             [
-                "Base"
+                "Base",
+                "Base64",
+                "CRC32c",
+                "Dates",
+                "DelimitedFiles",
+                "Distributed",
+                "FileWatching",
+                "Future",
+                "InteractiveUtils",
+                "LibGit2",
+                "Libdl",
+                "LinearAlgebra",
+                "Logging",
+                "Markdown",
+                "Mmap",
+                "Pkg",
+                "Printf",
+                "Profile",
+                "Random",
+                "SHA",
+                "Serialization",
+                "SharedArrays",
+                "Sockets",
+                "SparseArrays",
+                "Statistics",
+                "Test",
+                "UUIDs",
+                "Unicode"
             ]
         ],
         "julia-ipynb": [
