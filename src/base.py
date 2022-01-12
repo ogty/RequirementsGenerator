@@ -168,6 +168,7 @@ class RequirementsGenerator(Operate):
             tmp_module_list = []
             match = []
             for module in module_list:
+                module = module.replace("_", "-")
                 for installed_library in self.pip_freezed:
                     library_name = installed_library.split("==")[0]
                     if module == library_name.lower():
@@ -190,6 +191,7 @@ class RequirementsGenerator(Operate):
 
     # Main process(generate requirements.txt)
     def generate(self, module_list: list) -> None:
+        module_list = list(map(lambda x: x.replace("\n", ""), module_list))
         with open(os.path.join(self.path, "requirements.txt"), "w", encoding="utf-8") as f:
             modules = "\n".join(module_list)
             f.write(modules)
