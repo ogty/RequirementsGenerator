@@ -240,11 +240,12 @@ class RequirementsGenerator(Operate):
 def generate_tree() -> None:
     # Store the retrieved information in a dict
     tree_data = {"data": []}
+
     for directory_stracture in os.walk(settings.DESKTOP_PATH):
         tree_information = {}
 
         dir_path = directory_stracture[0]
-        if not ".git" in dir_path:                                               # .git is ignore
+        if not list(filter(lambda x: True if x in dir_path else False, settings.IGNORE_DIRECTORIES)):
             dir_list = dir_path.split(settings.SPLIT_WORD)
             tree_information["id"] = dir_path                                    # full directory path
             tree_information["text"] = dir_list[-1]                              # displayed name

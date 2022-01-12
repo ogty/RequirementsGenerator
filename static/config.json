@@ -243,5 +243,9 @@
                 "zlib"
             ]
         ]
-    }
+    },
+    "ignores": [
+        ".git",
+        "__pycache__"
+    ]
 }
