@@ -242,11 +242,11 @@ def generate_tree() -> None:
         tree_information = {}
 
         dir_path = directory_stracture[0]
-        if not ".git" in dir_path:                               # .git is ignore
-            dir_list = dir_path.split("/")
-            tree_information["id"] = dir_path                    # full directory path
-            tree_information["text"] = dir_list[-1]              # displayed name
-            tree_information["parent"] = "/".join(dir_list[:-1]) # directory parent
+        if not ".git" in dir_path:                                               # .git is ignore
+            dir_list = dir_path.split(settings.SPLIT_WORD)
+            tree_information["id"] = dir_path                                    # full directory path
+            tree_information["text"] = dir_list[-1]                              # displayed name
+            tree_information["parent"] = settings.SPLIT_WORD.join(dir_list[:-1]) # directory parent
 
             # Since we are starting from Desktop, its parents are not there
             if settings.DESKTOP_PATH == dir_path:
