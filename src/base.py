@@ -46,13 +46,13 @@ class ModuleExtractor:
         embedded_modules: list = settings.CONFIG["languages"]["go"][2]
         splited_source = source.split()
         try:
-            module_prefix_index = splited_source.index("import")
+            index_with_module_prefix = splited_source.index("import")
         except ValueError:
             return []
 
         # If you have multiple modules
-        if splited_source[module_prefix_index + 1] == "(":
-            module_count = module_prefix_index + 2
+        if splited_source[index_with_module_prefix + 1] == "(":
+            module_count = index_with_module_prefix + 2
             while True:
                 maybe_module = splited_source[module_count]
                 if maybe_module == ")":
@@ -62,7 +62,7 @@ class ModuleExtractor:
                 module_count += 1
         # If you have only one module
         else:
-            result.append(splited_source[module_prefix_index + 1])
+            result.append(splited_source[index_with_module_prefix + 1])
 
         # Remove unwanted strings and exclude built-in modules
         filtered_result = list(map(lambda x: x.replace("\"", ""), result))
@@ -88,13 +88,13 @@ class ModuleExtractor:
         embedded: list = settings.CONFIG["languages"][language][2]
 
         # Process it so that it can be executed by the eval method
-        process = [f"x.startswith('{pref}')" for pref in prefixes]
+        process = [f"x.startswith('{prefix}')" for prefix in prefixes]
         process_word = " or ".join(process)
 
         # Retrieve just the module from the line containing it
         splited_source = source.split("\n")
-        module_line = [x for x in splited_source if eval(process_word)]
-        modules = list(map(lambda m: m.split()[1], module_line))
+        line_with_module = [x for x in splited_source if eval(process_word)]
+        modules = list(map(lambda m: m.split()[1], line_with_module))
         result = list(map(lambda m: m.split(".")[0] if not m.startswith(".") else "", modules))
 
         return (result, embedded)
@@ -116,8 +116,8 @@ class Operate:
     # Retrieves a specific file in the retrieved directory
     def get_files(self, selected_lang: str) -> None:
         if "ipynb" in selected_lang:
-            index = selected_lang.find("ipynb")
-            selected_lang = f"{selected_lang[:index]}-{selected_lang[index:]}"
+            ipynb_index = selected_lang.find("ipynb")
+            selected_lang = f"{selected_lang[:ipynb_index]}-{selected_lang[ipynb_index:]}"
 
         # Selected supported language extension only
         for dir in self.all_directory:
@@ -147,6 +147,7 @@ class RequirementsGenerator(Operate):
         self.all_directory = [path]
 
     def confirm(self) -> list:
+        # Get all file paths directly under the selected directory
         self.get_directories(self.path)
         self.get_files(self.lang)
 
@@ -155,10 +156,10 @@ class RequirementsGenerator(Operate):
 
         # Extract modules from the source code of all files obtained from the selected directory
         for file_path in self.all_file:
-            with open(file_path, "r", encoding="utf-8") as f:
-                source = f.read()
+            with open(file_path, "r", encoding="utf-8") as file:
+                file_contents = file.read()
 
-            module_list += getattr(module_extractor, self.lang)(source)
+            module_list += getattr(module_extractor, self.lang)(file_contents)
         
         if module_list:
             module_list = list(set(module_list))
@@ -166,12 +167,12 @@ class RequirementsGenerator(Operate):
 
         if hasattr(self, "pip_freezed"):
             tmp_module_list = []
-            match = []
+            matched_module_list = []
             for module in module_list:
                 for installed_library in self.pip_freezed:
                     library_name = installed_library.split("==")[0]
                     if module == library_name.lower():
-                        match.append(module)
+                        matched_module_list.append(module)
                         tmp_module_list.append(installed_library)
                     else:
                         tmp_module_list.append(module)
@@ -180,7 +181,7 @@ class RequirementsGenerator(Operate):
             module_list = tmp_module_list
             module_list.sort()
 
-            for matched_module in match:
+            for matched_module in matched_module_list:
                 try:
                     module_list.remove(matched_module)
                 except:
