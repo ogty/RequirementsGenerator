@@ -8,11 +8,7 @@
  
 </div>
 
-<<<<<<< HEAD
-![sample](./static/sample.gif)
-=======
-https://user-images.githubusercontent.com/92501820/149293499-af5f8af9-d7fc-4854-b7bf-4d61931f0f74.mp4
->>>>>>> bd891cd6a5297e9761fe59932aa52eba5fac0084
+![sample](static/sample.gif)
 
 ***
 
@@ -34,14 +30,6 @@ https://user-images.githubusercontent.com/92501820/149293499-af5f8af9-d7fc-4854-
  - [x] 詳細表示
  - [x] ライブラリ選択 
  - [ ] コマンド実行
-
-***
-
-### `config.json`
-
-`static/config.json`ファイルの`ignores`に非表示にしたいディレクトリ名を追記すると、
-そのディレクトリ名を含むパスが表示されなくなります。
-また、パスを格納している`tree.json`の容量が小さくなります。
 
 ***
 
