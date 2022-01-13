@@ -8,14 +8,6 @@
  
 </div>
 
-<div align="center">
-
-[![download for windows](static/images/unnamed.png)](https://docs.google.com/document/d/1-NhverMwnAXz5J6IUXP9EVQkzaVdE9J029yKG3DFM0s/edit?usp=sharing&export=download)
-
-</div>
-
-***
-
 ![sample](static/images/sample.gif)
 
 ***
