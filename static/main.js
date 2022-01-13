@@ -238,6 +238,6 @@ function detail() {
                 + other + "%</span></span></div></div>");
         }, result)
 
-        $(".x-axis").append("<h3>Language</h3><ul class='legend'><li>Python</li><li>Julia</li><li>Go</li><li>Ipynb</li><li>Ohter</li></ul>");
+        $(".x-axis").append("<h3>Languages</h3><ul class='legend'><li>Python</li><li>Julia</li><li>Go</li><li>Ipynb</li><li>Ohter</li></ul>");
     })
 }
