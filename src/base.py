@@ -133,21 +133,27 @@ class RequirementsGenerator(Operate):
     def __init__(self, path: str = "", lang: str = "", version: bool = False) -> None:
         self.path = path
         self.lang = lang
-        self.version = version
-
-        # TODO: Correspond to python-ipynb, julia and julia-ipynb
-        # TODO: Define them as separate functions or do them together in confirm
-        if version and lang == "python":
-            self.pip_freezed = []
-            stdout_result = subprocess.run(["pip3", "freeze"], capture_output=True)
-            pip_freezed = stdout_result.stdout.decode("utf-8").split("\n")
-            for installed_libary in pip_freezed:
-                if "==" in installed_libary:
-                    self.pip_freezed.append(installed_libary)
-
         self.all_file = []
         self.all_directory = [path]
 
+        # If a version is specified, get the information of the installed module
+        if version:
+            if "python" in self.lang:
+                stdout_result_splited = self.command_runner(["pip3", "freeze"])
+                self.installed_modules = [x for x in stdout_result_splited if "==" in x]
+                self.version_split_word = "=="
+            elif "julia" in self.lang:
+                stdout_result_splited = self.command_runner(["julia", os.path.join(settings.SRC_DIR, "package_status.jl")])
+                installed_packages = list(map(lambda x: x.lstrip("  "), stdout_result_splited))
+                installed_packages.remove("")
+                self.installed_modules = ["@".join(package_info.split(" ")[1:]) for package_info in installed_packages[1:]]
+                self.version_split_word = "@"
+        
+    def command_runner(self, command: list) -> list:
+        stdout_result = subprocess.run(command, capture_output=True)
+        stdout_result_splited = stdout_result.stdout.decode("utf-8").split("\n")
+        return stdout_result_splited
+    
     def confirm(self) -> list:
         # Get all file paths directly under the selected directory
         self.get_directories(self.path)
@@ -163,23 +169,35 @@ class RequirementsGenerator(Operate):
 
             module_list += getattr(module_extractor, self.lang)(file_contents)
         
+        # TODO: set()...
         if module_list:
             module_list = list(set(module_list))
             module_list.sort()
 
-        if hasattr(self, "pip_freezed"):
+        if hasattr(self, "installed_modules"):
             tmp_module_list = []
             matched_module_list = []
+
             for module in module_list:
-                module = module.replace("_", "-") # TODO: Only Python
-                for installed_library in self.pip_freezed:
-                    library_name = installed_library.split("==")[0]
-                    if module == library_name.lower():
-                        matched_module_list.append(module)
-                        tmp_module_list.append(installed_library)
-                    else:
-                        tmp_module_list.append(module)
-            
+                module = module.replace("_", "-") # TODO: It doesn't affect julia, but I want to do something about it
+                for installed_library in self.installed_modules:
+                    library_name = installed_library.split(self.version_split_word)[0]
+
+                    # TODO: I don't like something about it
+                    if "python" in self.lang:
+                        if module == library_name.lower():
+                            matched_module_list.append(module)
+                            tmp_module_list.append(installed_library)
+                        else:
+                            tmp_module_list.append(module)
+                    elif "julia" in self.lang:
+                        if module == library_name:
+                            matched_module_list.append(module)
+                            tmp_module_list.append(installed_library)
+                        else:
+                            tmp_module_list.append(module)
+
+            # TODO: I don't like something about it
             tmp_module_list = list(set(tmp_module_list))
             module_list = tmp_module_list
             module_list.sort()
@@ -187,8 +205,8 @@ class RequirementsGenerator(Operate):
             for matched_module in matched_module_list:
                 try:
                     module_list.remove(matched_module)
-                except:
-                    pass
+                except Exception as ex:
+                    print(f"Error: {ex}")
 
         return module_list
 
@@ -249,10 +267,10 @@ def generate_tree() -> None:
 
         dir_path = directory_stracture[0]
         if not list(filter(lambda x: True if x in dir_path else False, settings.IGNORE_DIRECTORIES)):
-            dir_list = dir_path.split(settings.SPLIT_WORD)
-            tree_information["id"] = dir_path                                    # Full directory path
-            tree_information["text"] = dir_list[-1]                              # Displayed name
-            tree_information["parent"] = settings.SPLIT_WORD.join(dir_list[:-1]) # Directory parent
+            dir_list = dir_path.split(settings.PATH_SPLIT_WORD)
+            tree_information["id"] = dir_path                                         # Full directory path
+            tree_information["text"] = dir_list[-1]                                   # Displayed name
+            tree_information["parent"] = settings.PATH_SPLIT_WORD.join(dir_list[:-1]) # Directory parent
 
             # Since you are starting from Desktop, its parents are not there
             if settings.DESKTOP_PATH == dir_path:
