@@ -248,11 +248,11 @@ def generate_tree() -> None:
         dir_path = directory_stracture[0]
         if not list(filter(lambda x: True if x in dir_path else False, settings.IGNORE_DIRECTORIES)):
             dir_list = dir_path.split(settings.SPLIT_WORD)
-            tree_information["id"] = dir_path                                    # full directory path
-            tree_information["text"] = dir_list[-1]                              # displayed name
-            tree_information["parent"] = settings.SPLIT_WORD.join(dir_list[:-1]) # directory parent
+            tree_information["id"] = dir_path                                    # Full directory path
+            tree_information["text"] = dir_list[-1]                              # Displayed name
+            tree_information["parent"] = settings.SPLIT_WORD.join(dir_list[:-1]) # Directory parent
 
-            # Since we are starting from Desktop, its parents are not there
+            # Since you are starting from Desktop, its parents are not there
             if settings.DESKTOP_PATH == dir_path:
                 tree_information["parent"] = "#"
 

@@ -15,7 +15,7 @@ import settings
 bp = Blueprint("routes", __name__, url_prefix="/")
 
 
-# confirm modules
+# Confirm modules
 @bp.route("/confirm", methods=["POST"])
 def confirm() -> None:
     language = request.form["language"]
@@ -33,7 +33,7 @@ def confirm() -> None:
 
     return jsonify(values=json.dumps(directory_and_module))
 
-# generate requirements.txt
+# Generate requirements.txt
 @bp.route("/generate", methods=["POST"])
 def generate() -> None:
     language = request.form["language"]
@@ -45,13 +45,13 @@ def generate() -> None:
 
     return jsonify()
 
-# update directory information
+# Update directory information
 @bp.route("/update", methods=["POST"])
 def update() -> None:
     generate_tree()
     return jsonify()
 
-# get selected directory detail
+# Get selected directory detail
 @bp.route("/detail", methods=["POST"])
 def detail() -> None:
     selected_directories = request.form["dir_list"]
@@ -59,7 +59,6 @@ def detail() -> None:
     detail_data = RequirementsGenerator().detail(directories)
     return jsonify(values=json.dumps(detail_data))
 
-# base
 @bp.route("/")
 def base() -> None:
     if not os.path.exists(settings.TREE_PATH):
