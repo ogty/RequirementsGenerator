@@ -12,7 +12,7 @@
 
 ***
 
-### Supported languages
+## Supported languages
 
  - Python
  - Python-ipynb
@@ -22,7 +22,7 @@
 
 ***
 
-### Features
+## Features
 
  - [x] Windows, Mac, and Linux compatible
  - [x] Select Language
@@ -33,6 +33,6 @@
 
 ***
 
-### Note
+## Note
 
 If you have a large number of folders on your desktop, it may not work properly.
