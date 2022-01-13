@@ -25,7 +25,7 @@
 ### Features
 
  - [x] Windows, Mac, and Linux compatible
- - [x] SSelect Language
+ - [x] Select Language
  - [x] Search Folders
  - [x] Detail view
  - [x] Select library
