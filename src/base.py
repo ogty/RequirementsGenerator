@@ -46,7 +46,7 @@ class ModuleExtractor:
         try:
             index_with_module_prefix = splited_source.index("import")
         except ValueError:
-            return []
+            return set()
 
         # If you have multiple modules
         if splited_source[index_with_module_prefix + 1] == "(":
@@ -162,20 +162,20 @@ class RequirementsGenerator(Operate):
         self.get_files(self.lang)
 
         module_extractor = ModuleExtractor()
-        modules = set()
+        modules_for_return = set()
 
         # Extract modules from the source code of all files obtained from the selected directory
         for file_path in self.all_file:
             with open(file_path, "r", encoding="utf-8") as file:
                 file_contents = file.read()
 
-            modules = modules.union(getattr(module_extractor, self.lang)(file_contents))
+            modules_for_return = modules_for_return.union(getattr(module_extractor, self.lang)(file_contents))
 
         if hasattr(self, "installed_modules"):
             tmp_modules = set()
             matched_modules = set()
 
-            for module in modules:
+            for module in modules_for_return:
                 for installed_module in self.installed_modules:
                     module_name = installed_module.split(self.version_split_word)[0] # Note: Used in eval
 
@@ -192,7 +192,7 @@ class RequirementsGenerator(Operate):
                 except ValueError as ex:
                     print(f"Error: {ex}")
         else:
-            module_list = list(modules)
+            module_list = list(modules_for_return)
 
         module_list.sort()
         return module_list
