@@ -71,7 +71,7 @@ class ModuleExtractor:
         return filtered_result
 
     # Handle the parts common to python and julia
-    def common(self, source: str, ipynb: bool=False) -> tuple:
+    def common(self, source: str, ipynb: bool = False) -> tuple:
         called_function_name = str(inspect.stack()[1].function)
 
         # If it's ipynb, process it like normal source code
@@ -130,11 +130,13 @@ class Operate:
             
 class RequirementsGenerator(Operate):
     # Initialize valiables and run function
-    def __init__(self, path: str="", lang: str="", version: bool=False) -> None:
+    def __init__(self, path: str = "", lang: str = "", version: bool = False) -> None:
         self.path = path
         self.lang = lang
         self.version = version
 
+        # TODO: Correspond to python-ipynb, julia and julia-ipynb
+        # TODO: Define them as separate functions or do them together in confirm
         if version and lang == "python":
             self.pip_freezed = []
             stdout_result = subprocess.run(["pip3", "freeze"], capture_output=True)
@@ -169,7 +171,7 @@ class RequirementsGenerator(Operate):
             tmp_module_list = []
             matched_module_list = []
             for module in module_list:
-                module = module.replace("_", "-")
+                module = module.replace("_", "-") # TODO: Only Python
                 for installed_library in self.pip_freezed:
                     library_name = installed_library.split("==")[0]
                     if module == library_name.lower():
