@@ -15,8 +15,6 @@ class ModuleExtractor:
      - Julia
      - Julia(ipynb)
      - Go
-
-    Note: Use common functions to handle everything except Go.
     """
 
     def python(self, source: str) -> set:
@@ -191,7 +189,7 @@ class RequirementsGenerator(Operate):
             for matched_module in matched_modules:
                 try:
                     module_list.remove(matched_module)
-                except Exception as ex:
+                except ValueError as ex:
                     print(f"Error: {ex}")
         else:
             module_list = list(modules)
