@@ -10,7 +10,7 @@
 
 <div align="center">
 
-![download for windows](static/images/unnamed.png)
+[![download for windows](static/images/unnamed.png)](https://github.com/ogty)
 
 </div>
 
