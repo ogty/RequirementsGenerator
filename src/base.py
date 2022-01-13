@@ -19,29 +19,29 @@ class ModuleExtractor:
     Note: Use common functions to handle everything except Go.
     """
 
-    def python(self, source: str) -> list:
+    def python(self, source: str) -> set:
         result, embedded_modules = self.common(source)
-        filtered_result = list(filter(lambda m: False if m in embedded_modules else m, result))
+        filtered_result = set(filter(lambda m: False if m in embedded_modules else m, result))
         return filtered_result
     
-    def pythonipynb(self, ipynb_data: str) -> list:
+    def pythonipynb(self, ipynb_data: str) -> set:
         result, embedded_modules = self.common(ipynb_data, ipynb=True)
-        filtered_result = list(filter(lambda m: False if m in embedded_modules else m, result))
+        filtered_result = set(filter(lambda m: False if m in embedded_modules else m, result))
         return filtered_result
     
-    def julia(self, source: str) -> list:
+    def julia(self, source: str) -> set:
         result, embedded_modules = self.common(source)
         replaced_result = list(map(lambda m: m.replace(":", "").replace(";", ""), result))
-        filtered_result = list(filter(lambda m: False if m in embedded_modules else m, replaced_result))
+        filtered_result = set(filter(lambda m: False if m in embedded_modules else m, replaced_result))
         return filtered_result
 
-    def juliaipynb(self, ipynb_data: str) -> list:
+    def juliaipynb(self, ipynb_data: str) -> set:
         result, embedded_modules = self.common(ipynb_data, ipynb=True)
         replaced_result = list(map(lambda m: m.replace(":", "").replace(";", ""), result))
-        filtered_result = list(filter(lambda m: False if m in embedded_modules else m, replaced_result))
+        filtered_result = set(filter(lambda m: False if m in embedded_modules else m, replaced_result))
         return filtered_result
 
-    def go(self, source: str) -> list:
+    def go(self, source: str) -> set:
         result = []
         embedded_modules: list = settings.CONFIG["languages"]["go"][2]
         splited_source = source.split()
@@ -66,7 +66,7 @@ class ModuleExtractor:
 
         # Remove unwanted strings and exclude built-in modules
         filtered_result = list(map(lambda x: x.replace("\"", ""), result))
-        filtered_result = list(filter(lambda x: False if x.split("/")[0] in embedded_modules else x, filtered_result))
+        filtered_result = set(filter(lambda x: False if x.split("/")[0] in embedded_modules else x, filtered_result))
 
         return filtered_result
 
@@ -95,7 +95,7 @@ class ModuleExtractor:
         splited_source = source.split("\n")
         line_with_module = [x for x in splited_source if eval(process_word)]
         modules = list(map(lambda m: m.split()[1], line_with_module))
-        result = list(map(lambda m: m.split(".")[0] if not m.startswith(".") else "", modules))
+        result = set(map(lambda m: m.split(".")[0] if not m.startswith(".") else "", modules))
 
         return (result, embedded)
 
@@ -153,8 +153,6 @@ class RequirementsGenerator(Operate):
                 self.version_split_word = "@"
                 self.is_module_match_process = "module == module_name"
                 
-            print(self.is_module_match_process)
-        
     def command_runner(self, command: list) -> list:
         stdout_result = subprocess.run(command, capture_output=True)
         stdout_result_splited = stdout_result.stdout.decode("utf-8").split("\n")
@@ -166,45 +164,39 @@ class RequirementsGenerator(Operate):
         self.get_files(self.lang)
 
         module_extractor = ModuleExtractor()
-        module_list = []
+        modules = set()
 
         # Extract modules from the source code of all files obtained from the selected directory
         for file_path in self.all_file:
             with open(file_path, "r", encoding="utf-8") as file:
                 file_contents = file.read()
 
-            module_list += getattr(module_extractor, self.lang)(file_contents)
-        
-        # TODO: set()...
-        if module_list:
-            module_list = list(set(module_list))
-            module_list.sort()
+            modules = modules.union(getattr(module_extractor, self.lang)(file_contents))
 
         if hasattr(self, "installed_modules"):
-            tmp_module_list = []
-            matched_module_list = []
+            tmp_modules = set()
+            matched_modules = set()
 
-            for module in module_list:
+            for module in modules:
                 for installed_module in self.installed_modules:
                     module_name = installed_module.split(self.version_split_word)[0] # Note: Used in eval
 
                     if eval(self.is_module_match_process):
-                        matched_module_list.append(module)
-                        tmp_module_list.append(installed_module)
+                        matched_modules.add(module)
+                        tmp_modules.add(installed_module)
                     else:
-                        tmp_module_list.append(module)
+                        tmp_modules.add(module)
 
-            # TODO: I don't like something about it
-            tmp_module_list = list(set(tmp_module_list))
-            module_list = tmp_module_list
-            module_list.sort()
-
-            for matched_module in matched_module_list:
+            module_list = list(tmp_modules)
+            for matched_module in matched_modules:
                 try:
                     module_list.remove(matched_module)
                 except Exception as ex:
                     print(f"Error: {ex}")
+        else:
+            module_list = list(modules)
 
+        module_list.sort()
         return module_list
 
     # Main process(generate requirements.txt)
