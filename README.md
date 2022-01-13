@@ -8,6 +8,14 @@
  
 </div>
 
+<div align="center">
+
+![download for windows](static/images/unnamed.png)
+
+</div>
+
+***
+
 ![sample](static/images/sample.gif)
 
 ***
