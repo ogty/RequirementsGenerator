@@ -71,8 +71,6 @@ function close_message() {
 }
 
 function confirm() {
-    // version_checkbox = document.getElementsByName("version_checkbox")
-    // version_checkbox[i].checked
     let version_checkbox = $("input:checkbox[name='version']:checked").val()
 
     if (version_checkbox == "") {
