@@ -140,14 +140,20 @@ class RequirementsGenerator(Operate):
         if version:
             if "python" in self.lang:
                 stdout_result_splited = self.command_runner(["pip3", "freeze"])
+
                 self.installed_modules = [x for x in stdout_result_splited if "==" in x]
                 self.version_split_word = "=="
+                self.is_module_match_process = "module.replace('_', '-') == module_name.lower()"
             elif "julia" in self.lang:
                 stdout_result_splited = self.command_runner(["julia", os.path.join(settings.SRC_DIR, "package_status.jl")])
                 installed_packages = list(map(lambda x: x.lstrip("  "), stdout_result_splited))
                 installed_packages.remove("")
+
                 self.installed_modules = ["@".join(package_info.split(" ")[1:]) for package_info in installed_packages[1:]]
                 self.version_split_word = "@"
+                self.is_module_match_process = "module == module_name"
+                
+            print(self.is_module_match_process)
         
     def command_runner(self, command: list) -> list:
         stdout_result = subprocess.run(command, capture_output=True)
@@ -179,23 +185,14 @@ class RequirementsGenerator(Operate):
             matched_module_list = []
 
             for module in module_list:
-                module = module.replace("_", "-") # TODO: It doesn't affect julia, but I want to do something about it
-                for installed_library in self.installed_modules:
-                    library_name = installed_library.split(self.version_split_word)[0]
+                for installed_module in self.installed_modules:
+                    module_name = installed_module.split(self.version_split_word)[0] # Note: Used in eval
 
-                    # TODO: I don't like something about it
-                    if "python" in self.lang:
-                        if module == library_name.lower():
-                            matched_module_list.append(module)
-                            tmp_module_list.append(installed_library)
-                        else:
-                            tmp_module_list.append(module)
-                    elif "julia" in self.lang:
-                        if module == library_name:
-                            matched_module_list.append(module)
-                            tmp_module_list.append(installed_library)
-                        else:
-                            tmp_module_list.append(module)
+                    if eval(self.is_module_match_process):
+                        matched_module_list.append(module)
+                        tmp_module_list.append(installed_module)
+                    else:
+                        tmp_module_list.append(module)
 
             # TODO: I don't like something about it
             tmp_module_list = list(set(tmp_module_list))
