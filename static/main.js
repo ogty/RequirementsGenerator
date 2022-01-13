@@ -10,6 +10,7 @@ function value_reset() {
     dirs = [];
     send_dirs = [];
     confirm_dirs = [];
+
     $("#select_now").empty();
     $(".row_group").empty();
     $(".x-axis").empty();
@@ -60,7 +61,7 @@ function createJSTree(jsondata) {
         }
     })
 }
-$('#deliverable_search').keyup(function(){
+$('#deliverable_search').keyup(function () {
     $('#SimpleJSTree').jstree(true).show_all();
     $('#SimpleJSTree').jstree('search', $(this).val());
 });            
@@ -75,10 +76,8 @@ function confirm() {
 
     if (version_checkbox == "") {
         version_checkbox = true
-        console.log("True")
     } else {
         version_checkbox = false
-        console.log("False")
     }
     
     $.ajax("/confirm", {
@@ -97,7 +96,7 @@ function confirm() {
         const result = JSON.parse(data.values)
 
         let include_modules_directories_count = 0
-        Object.keys(result).forEach(function(value) {
+        Object.keys(result).forEach(function (value) {
             confirm_dirs[include_modules_directories_count] = value
             
             if (result[value].length == 0) {
@@ -134,7 +133,7 @@ function confirm() {
 function generate() {
     let result = {}
 
-    Object.keys(confirm_dirs).forEach(function(value) {
+    Object.keys(confirm_dirs).forEach(function (value) {
         result[confirm_dirs[value]] = []
         const tmp = document.getElementsByName("xxx" + parseInt(value))
 
@@ -207,7 +206,7 @@ function detail() {
         $(".row_group").empty();
         $(".x-axis").empty();
 
-        Object.keys(result).forEach( function(value) {
+        Object.keys(result).forEach(function (value) {
             let path = value;
             let python = 0;
             let julia = 0;
@@ -215,7 +214,7 @@ function detail() {
             let ipynb = 0;
             let other = 0;
 
-            Object.keys(this[value]).forEach( function(value) {
+            Object.keys(this[value]).forEach(function (value) {
                 switch (value) {
                     case "py":
                         python = this[value];
