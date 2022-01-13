@@ -9,7 +9,7 @@ if os_name == "Darwin":
 elif os_name == "Linux":
     DESKTOP_PATH = os.path.join(os.path.join(os.environ["HOME"]), "Desktop")
 elif os_name == "Windows":
-    DESKTOP_PATH = os.path.join(os.path.join(os.environ["USERPROFILE"]), "Desktop")
+    DESKTOP_PATH = os.path.join(os.path.join(os.environ["USERPROFILE"]), "Desktop", "DemoDesktop")
 
 PATH_SPLIT_WORD = "\\" if os_name == "Windows" else "/"
 
