@@ -2,7 +2,10 @@
 
 <div align="center">
 
- [![Download Now](https://img.shields.io/badge/-Download%20Now!-%2322A6F2)](https://github.com/ogty/RequirementsGenerator/releases/download/v1.1.0/RequirementsGenerator.zip)
+ [![Download for Windows](https://img.shields.io/badge/-Download%20for%20Windows-%2322A6F3)](https://github.com/ogty/RequirementsGenerator/releases/download/v1.1.1/Windows.zip)
+  
+  [![Download for Mac](https://img.shields.io/badge/-Download%20for%20Mac-%2322A6F3)](https://github.com/ogty/RequirementsGenerator/releases/download/v1.1.1/Mac.zip)
+
  ![release](https://img.shields.io/github/v/release/ogty/RequirementsGenerator?style=social)
  ![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/ogty/RequirementsGenerator?style=social)
  
