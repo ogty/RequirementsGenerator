@@ -66,9 +66,6 @@ def base() -> None:
 
     lang_data = {}
     for lang_name in settings.CONFIG["languages"]:
-        if "-" in lang_name:
-            lang_data[lang_name.capitalize()] = lang_name.replace("-", "")
-        else:
-            lang_data[lang_name.capitalize()] = lang_name
+        lang_data[lang_name.capitalize()] = lang_name.replace("-", "") if "-" in lang_name else lang_name
 
     return render_template("main.html", data=lang_data)
