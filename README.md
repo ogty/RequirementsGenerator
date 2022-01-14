@@ -33,6 +33,26 @@
 
 ***
 
+## How to install packages
+
+**Python**
+
+```
+$ pip install -r requirements.txt
+```
+
+**Julia**
+
+```julia
+# install.jl
+using Pkg; Pkg.add(open(f->readlines(f), "./requirements.txt"))
+```
+
+```
+$ julia install.jl
+```
+***
+
 ## Note
 
 If you have a large number of folders on your desktop, it may not work properly.
