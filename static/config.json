@@ -35,6 +35,7 @@
                 "timeit",
                 "tkinter",
                 "unicodedata",
+                "unittest",
                 "urllib",
                 "zipfile"
             ]

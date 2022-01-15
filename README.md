@@ -33,7 +33,7 @@
 
 ***
 
-## How to install packages
+## How to install packages for each language
 
 **Python**
 
