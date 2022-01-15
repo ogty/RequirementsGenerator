@@ -30,7 +30,7 @@
  - [x] Detail view
  - [x] Select library
  - [x] Select multiple folders
- - [] Add version
+ - [x] Add version
  - [ ] Execute command
 
 ***
