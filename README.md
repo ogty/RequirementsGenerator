@@ -29,6 +29,8 @@
  - [x] Search Folders
  - [x] Detail view
  - [x] Select library
+ - [x] Select multiple folders
+ - [] Add version
  - [ ] Execute command
 
 ***
