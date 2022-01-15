@@ -28,9 +28,9 @@
 ## Supported languages
 
  - Python
- - Python-ipynb
+ - Python(ipynb)
  - Julia
- - Julia-ipynb
+ - Julia(ipynb)
  - Go
 
 ***
