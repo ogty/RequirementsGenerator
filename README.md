@@ -12,16 +12,6 @@
 
 ***
 
-## Supported languages
-
- - Python
- - Python-ipynb
- - Julia
- - Julia-ipynb
- - Go
-
-***
-
 ## Features
 
  - [x] Windows, Mac, and Linux compatible
@@ -32,6 +22,16 @@
  - [x] Select multiple folders
  - [x] Add version
  - [ ] Execute command
+
+***
+
+## Supported languages
+
+ - Python
+ - Python-ipynb
+ - Julia
+ - Julia-ipynb
+ - Go
 
 ***
 
