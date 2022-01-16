@@ -12,16 +12,6 @@
 
 ***
 
-## Supported languages
-
- - Python
- - Python-ipynb
- - Julia
- - Julia-ipynb
- - Go
-
-***
-
 ## Features
 
  - [x] Windows, Mac, and Linux compatible
@@ -29,7 +19,19 @@
  - [x] Search Folders
  - [x] Detail view
  - [x] Select library
+ - [x] Select multiple folders
+ - [x] Add version
  - [ ] Execute command
+
+***
+
+## Supported languages
+
+ - Python
+ - Python(ipynb)
+ - Julia
+ - Julia(ipynb)
+ - Go
 
 ***
 
@@ -55,4 +57,5 @@ $ julia install.jl
 
 ## Note
 
-If you have a large number of folders on your desktop, it may not work properly.
+If you have a large number of folders on your desktop, it may not work properly.  
+If you download it, there is a good chance it won't work. If you want to use it, please clone it.
