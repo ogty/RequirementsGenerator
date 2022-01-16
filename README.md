@@ -59,3 +59,11 @@ $ julia install.jl
 
 If you have a large number of folders on your desktop, it may not work properly.  
 If you download it, there is a good chance it won't work. If you want to use it, please clone it.
+
+***
+
+For Python and Julia, you can check the version checkbox to verify that the generated `requirements.txt` can successfully install the package.
+For example, if you install `python-dotenv` in Python, the call to `python-dotenv` will be `dotenv`, 
+which means you cannot install `python-dotenv`(because the name of the package is different when it is installed). 
+So, by checking the version checkbox, we indicate that if the version is not marked, 
+the package cannot be installed correctly.
