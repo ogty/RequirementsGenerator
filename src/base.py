@@ -142,6 +142,7 @@ class RequirementsGenerator(Operate):
                 self.installed_modules = [x for x in stdout_result_splited if "==" in x]
                 self.version_split_word = "=="
                 self.is_module_match_process = "module.replace('_', '-') == module_name.lower()"
+
             elif "julia" in self.lang:
                 stdout_result_splited = self.command_runner(["julia", os.path.join(settings.SRC_DIR, "package_status.jl")])
                 installed_packages = list(map(lambda x: x.lstrip("  "), stdout_result_splited))
@@ -233,7 +234,7 @@ class RequirementsGenerator(Operate):
 
             # Process the data so that it can be displayed as a percentage
             if 0 < sum_extension_counted:
-                supported_extension = {e: round((v / sum_extension_counted) * 100, 2) for e, v in zip(supported_extension, extension_counted)}
+                supported_extension = {k: round((v / sum_extension_counted) * 100, 2) for k, v in zip(supported_extension, extension_counted)}
             else:
                 supported_extension["other"] = 100
 
