@@ -35,7 +35,7 @@
 
 ***
 
-## How to install packages for each language
+## How to install packages in each language using requirements.txt
 
 **Python**
 
