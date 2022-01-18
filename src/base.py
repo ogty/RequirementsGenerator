@@ -144,7 +144,7 @@ class RequirementsGenerator(Operate):
                 self.is_module_match_process = "module.replace('_', '-') == module_name.lower()"
 
             elif "julia" in self.lang:
-                stdout_result_splited = self.command_runner(["julia", os.path.join(settings.SRC_DIR, "package_status.jl")])
+                stdout_result_splited = self.command_runner(["julia", "-e", "using Pkg; Pkg.status()"])
                 installed_packages = list(map(lambda x: x.lstrip("  "), stdout_result_splited))
                 installed_packages.remove("")
 
