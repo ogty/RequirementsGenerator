@@ -18,7 +18,7 @@
  - [x] Select Language
  - [x] Search Folders
  - [x] Detail view
- - [x] Select library
+ - [x] Select package
  - [x] Select multiple folders
  - [x] Add version
  - [ ] Execute command
