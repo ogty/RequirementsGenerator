@@ -68,7 +68,7 @@ the package cannot be installed correctly.
 
 ## Note
 
- - If you have a large number of folders on your desktop, it may not work properly.  
+ - If you have a large number of folders on your `Desktop`, it may not work properly.  
  - If you download it, there is a good chance it won't work. If you want to use it, please clone it.
  - It is assumed that you have a Python and Julia runtime environment built.
 
