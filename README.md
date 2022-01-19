@@ -47,7 +47,7 @@ $ pip install -r requirements.txt
 
 ```julia
 # install.jl
-using Pkg; Pkg.add(open(f->readlines(f), "./requirements.txt"))
+using Pkg; Pkg.add(open(f -> readlines(f), "./requirements.txt"))
 ```
 
 ```
