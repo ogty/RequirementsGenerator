@@ -41,6 +41,13 @@ main {
 }
 #setting_box {
     margin-top: 20px;
+    width: 100%;
+}
+#version_checkbox {
+    width: 100%;
+}
+.form-checkbox {
+    float: right;
 }
 .outer {
     background-color: black;
