@@ -141,7 +141,7 @@ class RequirementsGenerator(Operate):
 
                 self.installed_modules = [x for x in stdout_result_splited if "==" in x]
                 self.version_split_word = "=="
-                self.is_module_match_process = "module.replace('_', '-') == module_name.lower()"
+                self.module_match_process_word = "module.replace('_', '-') == module_name.lower()"
 
             elif "julia" in self.lang:
                 stdout_result_splited = self.command_runner(["julia", "-e", "using Pkg; Pkg.status()"])
@@ -150,7 +150,7 @@ class RequirementsGenerator(Operate):
 
                 self.installed_modules = ["@".join(package_info.split(" ")[1:]) for package_info in installed_packages[1:]]
                 self.version_split_word = "@"
-                self.is_module_match_process = "module == module_name"
+                self.module_match_process_word = "module == module_name"
                 
     def command_runner(self, command: list) -> list:
         stdout_result = subprocess.run(command, capture_output=True)
@@ -180,7 +180,7 @@ class RequirementsGenerator(Operate):
                 for installed_module in self.installed_modules:
                     module_name = installed_module.split(self.version_split_word)[0] # Note: Used in eval
 
-                    if eval(self.is_module_match_process):
+                    if eval(self.module_match_process_word):
                         matched_modules.add(module)
                         tmp_modules.add(installed_module)
                     else:
