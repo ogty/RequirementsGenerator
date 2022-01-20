@@ -4,12 +4,12 @@
 
 [![Download for Windows](static/images/download_for_windows.png)](https://github.com/ogty/RequirementsGenerator/releases/download/v1.0.0/requirementstxt_generator_for_windows.zip)&nbsp;&nbsp;&nbsp;[![Download for Mac](static/images/download_for_mac.png)](https://github.com/ogty/RequirementsGenerator/releases/download/v1.0.0/requirementstxt_generator_for_mac.zip)&nbsp;&nbsp;&nbsp;[![Download for Linux](static/images/download_for_linux.png)](https://github.com/ogty/RequirementsGenerator)
 
-![release](https://img.shields.io/github/v/release/ogty/RequirementsGenerator?style=social)&nbsp;![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/ogty/RequirementsGenerator?style=social)
-
 or
 
 [![Launch in browser](static/images/launch_in_browser.png)](https://reqgene.vercel.app/)
 
+![release](https://img.shields.io/github/v/release/ogty/RequirementsGenerator?style=social)&nbsp;![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/ogty/RequirementsGenerator?style=social)
+ 
 </div>
 
 ![demo](static/images/demo.gif)
