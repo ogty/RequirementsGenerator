@@ -46,9 +46,6 @@ main {
 #version_checkbox {
     width: 100%;
 }
-.form-check {
-    float: right;
-}
 .outer {
     background-color: black;
     height: 100px;

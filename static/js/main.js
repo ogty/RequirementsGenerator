@@ -105,7 +105,7 @@ function confirm() {
                 $("#select_modules").append("<p class='h6 mt-3'>" + value + "</p>")
                 for (let i = 0; i < result[value].length; i++) {
                     $("#select_modules").append(
-                    "<div class='form-check'><input name='xxx" + include_modules_directories_count + "' class='form-check-input' type='checkbox' value='" + 
+                    "<div class='form-check'><input name='module" + include_modules_directories_count + "' class='form-check-input' type='checkbox' value='" + 
                     result[value][i] + "' id='module' checked>" + 
                     "<label class='form-check-label' for='module'>" + result[value][i] + "</label></div>")
                 }
@@ -135,7 +135,7 @@ function generate() {
 
     Object.keys(confirm_dirs).forEach(function (value) {
         result[confirm_dirs[value]] = []
-        const tmp = document.getElementsByName("xxx" + parseInt(value))
+        const tmp = document.getElementsByName("module" + parseInt(value))
 
         for (let i = 0; i < tmp.length; i++) {
             if (tmp[i].checked) {
