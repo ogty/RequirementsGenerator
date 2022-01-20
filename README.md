@@ -8,7 +8,7 @@
 
 or
 
-<a href="https://reqgene.vercel.app/">reqGene</a>
+[![Launch in browser](static/images/launch_in_browser.png)](https://reqgene.vercel.app/)
 
 </div>
 
