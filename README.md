@@ -25,11 +25,11 @@ or
  - [x] Windows, Mac, and Linux compatible
  - [x] Select Language
  - [x] Search Folders
- - [x] Detail view
- - [x] Select package
- - [x] Select multiple folders
- - [x] Add version
- - [ ] Execute command
+ - [x] Detail View
+ - [x] Select Package
+ - [x] Select Multiple Folders
+ - [x] Add Version
+ - [ ] Execute Command
 
 ***
 
