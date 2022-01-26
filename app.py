@@ -9,4 +9,4 @@ app.register_blueprint(routes.bp)
 
 
 if __name__ == "__main__":
-    init_gui(app, window_title="Requirements.txt Generator")
+    init_gui(app, window_title="Requirements.txt Generator", icon="./static/images/file_type_pip.png")
