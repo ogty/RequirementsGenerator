@@ -2,6 +2,7 @@ import inspect
 import json
 import os
 import subprocess
+from typing import List
 
 import settings
 
@@ -128,9 +129,9 @@ class Operate:
             
 class RequirementsGenerator(Operate):
     # Initialize valiables and run function
-    def __init__(self, path: str = "", lang: str = "", version: bool = False) -> None:
-        self.path = path
-        self.lang = lang
+    def __init__(self, path: str = None, lang: str = None, version: bool = False) -> None:
+        self.path = "" if path is None else path
+        self.lang = "" if lang is None else lang 
         self.all_file = []
         self.all_directory = [path]
 
@@ -152,7 +153,7 @@ class RequirementsGenerator(Operate):
                 self.version_split_word = "@"
                 self.module_match_process_word = "module == module_name"
                 
-    def command_runner(self, command: list) -> list:
+    def command_runner(self, command: List[str]) -> list:
         stdout_result = subprocess.run(command, capture_output=True)
         stdout_result_splited = stdout_result.stdout.decode("utf-8").split("\n")
         return stdout_result_splited
@@ -199,14 +200,14 @@ class RequirementsGenerator(Operate):
         return module_list
 
     # Main process(generate requirements.txt)
-    def generate(self, module_list: list) -> None:
+    def generate(self, module_list: List[str]) -> None:
         module_list = list(map(lambda x: x.replace("\n", ""), module_list))
         with open(os.path.join(self.path, "requirements.txt"), "w", encoding="utf-8") as f:
             modules = "\n".join(module_list)
             f.write(modules)
 
     # Get detailed information about a selected directory
-    def detail(self, directories: list) -> dict:
+    def detail(self, directories: List[str]) -> dict:
         result = {}
 
         for dir in directories:
