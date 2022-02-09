@@ -2,7 +2,7 @@ import inspect
 import json
 import os
 import subprocess
-from typing import List
+from typing import List, Dict, Tuple, Set
 
 import settings
 
@@ -18,29 +18,29 @@ class ModuleExtractor:
      - Go
     """
 
-    def python(self, source: str) -> set:
+    def python(self, source: str) -> Set[str]:
         result, embedded_modules = self.common(source)
         filtered_result = set(filter(lambda m: False if m in embedded_modules else m, result))
         return filtered_result
     
-    def pythonipynb(self, ipynb_data: str) -> set:
+    def pythonipynb(self, ipynb_data: str) -> Set[str]:
         result, embedded_modules = self.common(ipynb_data, ipynb=True)
         filtered_result = set(filter(lambda m: False if m in embedded_modules else m, result))
         return filtered_result
     
-    def julia(self, source: str) -> set:
+    def julia(self, source: str) -> Set[str]:
         result, embedded_modules = self.common(source)
         replaced_result = list(map(lambda m: m.replace(":", "").replace(";", ""), result))
         filtered_result = set(filter(lambda m: False if m in embedded_modules else m, replaced_result))
         return filtered_result
 
-    def juliaipynb(self, ipynb_data: str) -> set:
+    def juliaipynb(self, ipynb_data: str) -> Set[str]:
         result, embedded_modules = self.common(ipynb_data, ipynb=True)
         replaced_result = list(map(lambda m: m.replace(":", "").replace(";", ""), result))
         filtered_result = set(filter(lambda m: False if m in embedded_modules else m, replaced_result))
         return filtered_result
 
-    def go(self, source: str) -> set:
+    def go(self, source: str) -> Set[str]:
         result = []
         embedded_modules: list = settings.CONFIG["languages"]["go"][2]
         splited_source = source.split()
@@ -70,7 +70,7 @@ class ModuleExtractor:
         return filtered_result
 
     # Handle the parts common to python and julia
-    def common(self, source: str, ipynb: bool = False) -> tuple:
+    def common(self, source: str, ipynb: bool = False) -> Tuple[Set[str], List[str]]:
         called_function_name = str(inspect.stack()[1].function)
 
         # If it's ipynb, process it like normal source code
@@ -153,12 +153,12 @@ class RequirementsGenerator(Operate):
                 self.version_split_word = "@"
                 self.module_match_process_word = "module == module_name"
                 
-    def command_runner(self, command: List[str]) -> list:
+    def command_runner(self, command: List[str]) -> List[str]:
         stdout_result = subprocess.run(command, capture_output=True)
         stdout_result_splited = stdout_result.stdout.decode("utf-8").split("\n")
         return stdout_result_splited
     
-    def confirm(self) -> list:
+    def confirm(self) -> List[str]:
         # Get all file paths directly under the selected directory
         self.get_directories(self.path)
         self.get_files(self.lang)
@@ -207,7 +207,7 @@ class RequirementsGenerator(Operate):
             f.write(modules)
 
     # Get detailed information about a selected directory
-    def detail(self, directories: List[str]) -> dict:
+    def detail(self, directories: List[str]) -> Dict[str, Dict[str, int]]:
         result = {}
 
         for dir in directories:
