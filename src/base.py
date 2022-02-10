@@ -224,10 +224,12 @@ class RequirementsGenerator(Operate):
             # Count supported language extensions
             for middle_dir in self.all_directory:
                 parent: list = os.listdir(middle_dir)
-                files = [f for f in parent if os.path.isfile(os.path.join(middle_dir, f))]
-
-                for extension in supported_extension:
-                    supported_extension[extension] += len(list(filter(lambda f: f.endswith(extension), files)))
+                try:
+                    files = [f for f in parent if os.path.isfile(os.path.join(middle_dir, f))]
+                    for extension in supported_extension:
+                        supported_extension[extension] += len(list(filter(lambda f: f.endswith(extension), files)))
+                except TypeError as ex:
+                    print(f"Error: {ex}")
 
             # Process it so that it is easy to handle in the next process
             extension_counted = [v for v in supported_extension.values()]
