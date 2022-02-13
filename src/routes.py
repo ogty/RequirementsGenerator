@@ -3,17 +3,21 @@ from distutils.util import strtobool
 import json
 import os
 
-from flask import Blueprint
-from flask import jsonify
-from flask import request
-from flask import render_template
+from flask import (
+    Blueprint, 
+    jsonify, 
+    request, 
+    render_template
+)
 
-from src.base import RequirementsGenerator
-from src.base import generate_tree
 import settings
+from src.base import (
+    RequirementsGenerator, 
+    generate_tree
+)
+
 
 bp = Blueprint("routes", __name__, url_prefix="/")
-
 
 # Confirm modules
 @bp.route("/confirm", methods=["POST"])
