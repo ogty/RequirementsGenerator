@@ -59,6 +59,7 @@ class ModuleExtractor:
 
                 result.append(maybe_module)
                 module_count += 1
+
         # If you have only one module
         else:
             result.append(splited_source[index_with_module_prefix + 1])
@@ -101,6 +102,7 @@ class ModuleExtractor:
     
 # Get data in a hierarchical directory structure
 class Operate:
+    
     # Get all directories in the selected directory
     def get_directories(self, path: str) -> None:
         parent: list = os.listdir(path)
@@ -128,6 +130,7 @@ class Operate:
 
             
 class RequirementsGenerator(Operate):
+    
     # Initialize valiables and run function
     def __init__(self, path: str = None, lang: str = None, version: bool = False) -> None:
         self.path = "" if path is None else path
@@ -250,6 +253,7 @@ class RequirementsGenerator(Operate):
     
 # Generate the tree structure needed for directory selection
 def generate_tree() -> None:
+    
     # Store the retrieved information in a dict
     tree_data = {"data": []}
 
