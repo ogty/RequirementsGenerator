@@ -30,13 +30,11 @@ class ModuleExtractor:
     
     def julia(self, source: str) -> Set[str]:
         result, embedded_modules = self.common(source)
-        replaced_result = list(map(lambda m: m.replace(":", "").replace(";", ""), result))
         filtered_result = set(filter(lambda m: False if m in embedded_modules else m, replaced_result))
         return filtered_result
 
     def juliaipynb(self, ipynb_data: str) -> Set[str]:
         result, embedded_modules = self.common(ipynb_data, ipynb=True)
-        replaced_result = list(map(lambda m: m.replace(":", "").replace(";", ""), result))
         filtered_result = set(filter(lambda m: False if m in embedded_modules else m, replaced_result))
         return filtered_result
 
@@ -95,6 +93,7 @@ class ModuleExtractor:
         splited_source = source.split("\n")
         line_with_module = [x for x in splited_source if eval(process_word)]
         modules = list(map(lambda m: m.split()[1], line_with_module))
+        modules = list(map(lambda m: m.replace(":", "").replace(";", ""), modules))
         result = set(map(lambda m: m.split(".")[0] if not m.startswith(".") else "", modules))
 
         return (result, embedded)
@@ -162,6 +161,7 @@ class RequirementsGenerator(Operate):
         return stdout_result_splited
     
     def confirm(self) -> List[str]:
+
         # Get all file paths directly under the selected directory
         self.get_directories(self.path)
         self.get_files(self.lang)
