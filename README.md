@@ -19,7 +19,6 @@
  - [x] Select Package
  - [x] Select Multiple Folders
  - [x] Add Version
- - [ ] Execute Command
 
 ***
 
