@@ -61,7 +61,7 @@ which means you cannot install `python-dotenv`(because the name of the package i
 So, by checking the version checkbox, we indicate that if the version is not marked, 
 the package cannot be installed correctly.
 
-***
+---
 
 ## Note
 
