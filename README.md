@@ -8,7 +8,7 @@
 
 ![demo](static/images/demo.gif)
 
-***
+---
 
 ## Features
 
@@ -20,7 +20,7 @@
  - [x] Select Multiple Folders
  - [x] Add Version
 
-***
+---
 
 ## Supported languages
 
@@ -30,7 +30,7 @@
  - Julia(ipynb)
  - Go
 
-***
+---
 
 ## How to install packages in each language using requirements.txt
 
@@ -51,7 +51,7 @@ using Pkg; Pkg.add(open(f -> readlines(f), "./requirements.txt"))
 $ julia install.jl
 ```
 
-***
+---
 
 ## Tip
 
