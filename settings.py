@@ -22,3 +22,4 @@ with open(os.path.join(STATIC_DIR, "config.json"), "r") as config_file:
     CONFIG = json.load(config_file)
 
 IGNORE_DIRECTORIES = CONFIG["ignores"]
+
