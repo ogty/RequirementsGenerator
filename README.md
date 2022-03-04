@@ -63,7 +63,7 @@ the package cannot be installed correctly.
 
 ---
 
-## Note
+## Notes
 
  - If you have a large number of folders on your `Desktop`, it may not work properly.  
  - If you download it, there is a good chance it won't work. If you want to use it, please clone it.
