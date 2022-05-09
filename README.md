@@ -53,7 +53,7 @@ $ julia install.jl
 
 ---
 
-## Tip
+## Tips
 
 For Python and Julia, you can check the version checkbox to verify that the generated `requirements.txt` can successfully install the package.
 For example, if you install `python-dotenv` in Python, the call to `python-dotenv` will be `dotenv`, 
