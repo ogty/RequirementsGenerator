@@ -30,18 +30,19 @@ class ModuleExtractor:
     
     def julia(self, source: str) -> Set[str]:
         result, embedded_modules = self.common(source)
-        filtered_result = set(filter(lambda m: False if m in embedded_modules else m, replaced_result))
+        filtered_result = set(filter(lambda m: False if m in embedded_modules else m, result))
         return filtered_result
 
     def juliaipynb(self, ipynb_data: str) -> Set[str]:
         result, embedded_modules = self.common(ipynb_data, ipynb=True)
-        filtered_result = set(filter(lambda m: False if m in embedded_modules else m, replaced_result))
+        filtered_result = set(filter(lambda m: False if m in embedded_modules else m, result))
         return filtered_result
 
     def go(self, source: str) -> Set[str]:
         result = []
         embedded_modules: list = settings.CONFIG["languages"]["go"][2]
         splited_source = source.split()
+
         try:
             index_with_module_prefix = splited_source.index("import")
         except ValueError:
@@ -50,6 +51,7 @@ class ModuleExtractor:
         # If you have multiple modules
         if splited_source[index_with_module_prefix + 1] == "(":
             module_count = index_with_module_prefix + 2
+
             while True:
                 maybe_module = splited_source[module_count]
                 if maybe_module == ")":
@@ -76,8 +78,10 @@ class ModuleExtractor:
         if ipynb:
             source_list = []
             ipynb_data: object = json.loads(source)
+
             for cell in ipynb_data["cells"]:
                 source_list += cell["source"]
+
             source = "".join(source_list)
 
         # Because everything except ipynb is common
@@ -92,8 +96,10 @@ class ModuleExtractor:
         # Retrieve just the module from the line containing it
         splited_source = source.split("\n")
         line_with_module = [x for x in splited_source if eval(process_word)]
+
         modules = list(map(lambda m: m.split()[1], line_with_module))
         modules = list(map(lambda m: m.replace(":", "").replace(";", ""), modules))
+
         result = set(map(lambda m: m.split(".")[0] if not m.startswith(".") else "", modules))
 
         return (result, embedded)
@@ -122,9 +128,11 @@ class Operate:
         # Selected supported language extension only
         for dir in self.all_directory:
             parent: list = os.listdir(dir)
+
             files = [f for f in parent if os.path.isfile(os.path.join(dir, f))]
             filtered_files_path = list(filter(lambda path: path.endswith(settings.CONFIG["languages"][selected_lang][0]), files))
             file_full_path = list(map(lambda path: os.path.join(dir, path), filtered_files_path))
+
             self.all_file += file_full_path
 
             
@@ -138,22 +146,24 @@ class RequirementsGenerator(Operate):
         self.all_directory = [path]
 
         # If a version is specified, get the information of the installed module
-        if version:
-            if "python" in self.lang:
-                stdout_result_splited = self.command_runner(["pip3", "freeze"])
+        if not version:
+            return
 
-                self.installed_modules = [x for x in stdout_result_splited if "==" in x]
-                self.version_split_word = "=="
-                self.module_match_process_word = "module.replace('_', '-') == module_name.lower()"
+        if "python" in self.lang:
+            stdout_result_splited = self.command_runner(["pip3", "freeze"])
 
-            elif "julia" in self.lang:
-                stdout_result_splited = self.command_runner(["julia", "-e", "using Pkg; Pkg.status()"])
-                installed_packages = list(map(lambda x: x.lstrip("  "), stdout_result_splited))
-                installed_packages.remove("")
+            self.installed_modules = [x for x in stdout_result_splited if "==" in x]
+            self.version_split_word = "=="
+            self.module_match_process_word = "module.replace('_', '-') == module_name.lower()"
 
-                self.installed_modules = ["@".join(package_info.split(" ")[1:]) for package_info in installed_packages[1:]]
-                self.version_split_word = "@"
-                self.module_match_process_word = "module == module_name"
+        elif "julia" in self.lang:
+            stdout_result_splited = self.command_runner(["julia", "-e", "using Pkg; Pkg.status()"])
+            installed_packages = list(map(lambda x: x.lstrip("  "), stdout_result_splited))
+            installed_packages.remove("")
+
+            self.installed_modules = ["@".join(package_info.split(" ")[1:]) for package_info in installed_packages[1:]]
+            self.version_split_word = "@"
+            self.module_match_process_word = "module == module_name"
                 
     def command_runner(self, command: List[str]) -> List[str]:
         stdout_result = subprocess.run(command, capture_output=True)
@@ -194,8 +204,8 @@ class RequirementsGenerator(Operate):
             for matched_module in matched_modules:
                 try:
                     module_list.remove(matched_module)
-                except ValueError as ex:
-                    print(f"Error: {ex}")
+                except ValueError as error:
+                    print(f"Error: {error}")
         else:
             module_list = list(modules_for_return)
 
@@ -214,7 +224,13 @@ class RequirementsGenerator(Operate):
         result = {}
 
         for dir in directories:
-            supported_extension = {"py": 0, "jl": 0, "go": 0, "ipynb": 0, "other": 0}
+            supported_extension = {
+                "py": 0, 
+                "jl": 0, 
+                "go": 0, 
+                "ipynb": 0, 
+                "other": 0,
+            }
             
             # Because an empty string will cause an error
             if self.all_directory.count(""):
@@ -227,6 +243,7 @@ class RequirementsGenerator(Operate):
             # Count supported language extensions
             for middle_dir in self.all_directory:
                 parent: list = os.listdir(middle_dir)
+
                 try:
                     files = [f for f in parent if os.path.isfile(os.path.join(middle_dir, f))]
                     for extension in supported_extension:
