@@ -4,9 +4,7 @@ import platform
 
 
 os_name = platform.system()
-if os_name == "Darwin":
-    DESKTOP_PATH = os.path.join(os.path.join(os.environ["HOME"]), "Desktop")
-elif os_name == "Linux":
+if os_name == "Darwin" or os_name == "Linux":
     DESKTOP_PATH = os.path.join(os.path.join(os.environ["HOME"]), "Desktop")
 elif os_name == "Windows":
     DESKTOP_PATH = os.path.join(os.path.join(os.environ["USERPROFILE"]), "Desktop")
@@ -22,4 +20,3 @@ with open(os.path.join(STATIC_DIR, "config.json"), "r") as config_file:
     CONFIG = json.load(config_file)
 
 IGNORE_DIRECTORIES = CONFIG["ignores"]
-
