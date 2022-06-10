@@ -155,7 +155,6 @@ class RequirementsGenerator(Operate):
             self.installed_modules = [x for x in stdout_result_splited if "==" in x]
             self.version_split_word = "=="
             self.module_match_process_word = "module.replace('_', '-') == module_name.lower()"
-
         elif "julia" in self.lang:
             stdout_result_splited = self.command_runner(["julia", "-e", "using Pkg; Pkg.status()"])
             installed_packages = list(map(lambda x: x.lstrip("  "), stdout_result_splited))
