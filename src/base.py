@@ -271,7 +271,9 @@ class RequirementsGenerator(Operate):
 def generate_tree() -> None:
     
     # Store the retrieved information in a dict
-    tree_data = {"data": []}
+    tree_data = {
+        "data": []
+    }
 
     for directory_stracture in os.walk(settings.DESKTOP_PATH):
         tree_information = {}
